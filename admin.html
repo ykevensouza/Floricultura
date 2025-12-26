@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - BellaFlor Artur Nogueira</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-flower"></i>
+                    <span>BellaFlor Admin</span>
+                </div>
+                <nav class="nav">
+                    <a href="index.html"><i class="fas fa-home"></i> Voltar ao Site</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Dashboard -->
+    <section class="admin-dashboard">
+        <div class="container">
+            <h1 class="admin-title">Painel Administrativo</h1>
+            
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('produtos')">
+                    <i class="fas fa-box"></i> Gerenciar Produtos
+                </button>
+                <button class="tab-btn" onclick="showTab('pedidos')">
+                    <i class="fas fa-shopping-bag"></i> Pedidos
+                </button>
+                <button class="tab-btn" onclick="showTab('novo')">
+                    <i class="fas fa-plus"></i> Adicionar Produto
+                </button>
+            </div>
+
+            <!-- Tab Produtos -->
+            <div id="tab-produtos" class="tab-content active">
+                <div class="admin-section">
+                    <h2>Lista de Produtos</h2>
+                    <div class="admin-filters">
+                        <input type="text" id="adminSearchInput" placeholder="Buscar produtos..." class="search-input">
+                        <select id="adminCategoryFilter" class="filter-select">
+                            <option value="">Todas as Categorias</option>
+                            <option value="Buquês">Buquês</option>
+                            <option value="Arranjos">Arranjos</option>
+                            <option value="Cestas">Cestas</option>
+                            <option value="Plantas">Plantas</option>
+                            <option value="Ocasiões Especiais">Ocasiões Especiais</option>
+                        </select>
+                    </div>
+                    <div id="adminProductsList" class="admin-products-list">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Carregando produtos...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Pedidos -->
+            <div id="tab-pedidos" class="tab-content">
+                <div class="admin-section">
+                    <h2>Pedidos Recebidos</h2>
+                    <div id="adminOrdersList" class="admin-orders-list">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Carregando pedidos...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Novo Produto -->
+            <div id="tab-novo" class="tab-content">
+                <div class="admin-section">
+                    <h2>Adicionar Novo Produto</h2>
+                    <form id="formNovoProduto" class="admin-form">
+                        <div class="form-group">
+                            <label for="nome">Nome do Produto*</label>
+                            <input type="text" id="nome" name="nome" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="descricao">Descrição*</label>
+                            <textarea id="descricao" name="descricao" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="preco">Preço (R$)*</label>
+                                <input type="number" id="preco" name="preco" step="0.01" min="0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="estoque">Estoque*</label>
+                                <input type="number" id="estoque" name="estoque" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="categoria">Categoria*</label>
+                            <select id="categoria" name="categoria" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="Buquês">Buquês</option>
+                                <option value="Arranjos">Arranjos</option>
+                                <option value="Cestas">Cestas</option>
+                                <option value="Plantas">Plantas</option>
+                                <option value="Ocasiões Especiais">Ocasiões Especiais</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="imagem">URL da Imagem*</label>
+                            <input type="url" id="imagem" name="imagem" placeholder="https://exemplo.com/imagem.jpg" required>
+                            <small>Cole a URL de uma imagem da internet</small>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="destaque" name="destaque">
+                                Produto em destaque
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Adicionar Produto
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Edição -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeEditModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Editar Produto</h2>
+            <form id="formEditarProduto" class="admin-form">
+                <input type="hidden" id="edit_id">
+                
+                <div class="form-group">
+                    <label for="edit_nome">Nome do Produto*</label>
+                    <input type="text" id="edit_nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_descricao">Descrição*</label>
+                    <textarea id="edit_descricao" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit_preco">Preço (R$)*</label>
+                        <input type="number" id="edit_preco" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_estoque">Estoque*</label>
+                        <input type="number" id="edit_estoque" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_categoria">Categoria*</label>
+                    <select id="edit_categoria" required>
+                        <option value="Buquês">Buquês</option>
+                        <option value="Arranjos">Arranjos</option>
+                        <option value="Cestas">Cestas</option>
+                        <option value="Plantas">Plantas</option>
+                        <option value="Ocasiões Especiais">Ocasiões Especiais</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_imagem">URL da Imagem*</label>
+                    <input type="url" id="edit_imagem" required>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="edit_destaque">
+                        Produto em destaque
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
