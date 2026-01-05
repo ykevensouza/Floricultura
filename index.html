@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BellaFlor | Atelier Floral Premium</title>
-  <meta name="description" content="BellaFlor - Design floral exclusivo e presentes inesquecíveis." />
+  <meta name="description" content="BellaFlor - Arranjos autorais e presentes inesquecíveis. Loja pronta para receber configuração via config.json." />
+  <meta name="robots" content="index,follow" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
 
   <!-- Fonts & Icons -->
@@ -14,15 +15,20 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* ============================
-       THEME VARIABLES (serão sobrescritas pelo config)
-       ============================ */
+    /* ============================================================
+       BellaFlor - index.html (vanilla JS)
+       - Arquivo auto-suficiente, pronto para receber config.json
+       - Segurança: carrega config.json via fetch quando servido por HTTP(S);
+         em file:// usa DEFAULT_CONFIG (sem editor público).
+       - Não há UI para editar o config no cliente.
+       ============================================================ */
+
     :root{
       --primary:#bf6c74;
       --secondary:#2c3e50;
       --accent:#d4a373;
       --background:#fdfbf7;
-      --card-bg:#fff;
+      --card-bg:#ffffff;
       --success:#6ab04c;
       --text-light:#7f8c8d;
       --radius:6px;
@@ -33,7 +39,7 @@
       --page-max-width:1200px;
     }
 
-    /* RESET */
+    /* Reset básico */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body,#root{height:100%}
     body{
@@ -45,41 +51,48 @@
       overflow-y:auto;
       transition:opacity .45s;
       opacity:0;
+      line-height:1.45;
     }
     body.loaded{opacity:1}
 
-    /* SCROLLBAR */
+    /* Scrollbar */
     ::-webkit-scrollbar{width:8px;height:8px}
     ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:6px}
     ::-webkit-scrollbar-track{background:#f1f1f1}
 
-    /* LOADER */
-    .loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#fffdf9;z-index:9999;gap:16px}
+    /* Loader */
+    .loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#fffdf9;z-index:9999;gap:14px}
     .petal{font-size:3rem;color:var(--accent);animation:breathe 2s infinite}
     @keyframes breathe{0%,100%{transform:scale(.9);opacity:.8}50%{transform:scale(1.05);opacity:1}}
 
     /* NAV */
-    header.nav{position:fixed;left:0;right:0;top:0;height:72px;padding:12px 6%;display:flex;align-items:center;justify-content:space-between;z-index:1000;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.03)}
+    header.nav{
+      position:fixed;left:0;right:0;top:0;height:72px;padding:12px 6%;
+      display:flex;align-items:center;justify-content:space-between;z-index:1000;
+      background:rgba(255,255,255,.94);backdrop-filter:blur(6px);
+      border-bottom:1px solid rgba(0,0,0,.04);
+    }
     .brand h1{font-family:var(--font-heading);color:var(--primary);letter-spacing:2px;font-size:1.6rem}
     .brand span{display:block;font-family:var(--font-script);color:var(--accent);margin-top:-6px;font-size:.95rem}
     .nav-actions{display:flex;gap:18px;align-items:center}
     .icon-btn{background:none;border:none;font-size:1.1rem;padding:6px;cursor:pointer;position:relative;color:var(--secondary)}
-    .icon-btn:focus{outline:2px solid rgba(0,0,0,.08);outline-offset:2px;border-radius:6px}
     .icon-btn .badge{position:absolute;top:-6px;right:-6px;background:var(--primary);color:#fff;border-radius:50%;padding:3px 6px;font-size:.65rem}
 
     /* HERO */
-    .hero{height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.08));background-size:cover;background-position:center;margin-top:72px;color:#fff}
+    .hero{
+      height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;
+      background-size:cover;background-position:center;margin-top:72px;color:#fff;
+    }
     .hero h2{font-family:var(--font-script);font-size:clamp(2rem,6vw,4.2rem);margin-bottom:.3rem;text-shadow:0 6px 18px rgba(0,0,0,.35)}
     .lead{font-family:var(--font-heading);letter-spacing:2px;text-transform:uppercase;font-size:1rem;margin-bottom:28px}
+    .cta-group{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
     .btn-primary{padding:14px 34px;border-radius:10px;background:var(--primary);color:#fff;border:none;font-weight:700;cursor:pointer}
-    .btn-primary:focus{outline:3px solid rgba(255,255,255,.14)}
-    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;padding:12px 20px;border-radius:8px}
 
     /* CATEGORIES */
     .cats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:36px 6%;padding:6px 0}
     .cat{background:none;border:none;padding:8px 12px;cursor:pointer;font-family:var(--font-heading);color:#999;border-bottom:3px solid transparent}
     .cat.active{color:var(--primary);border-color:var(--primary);font-weight:700}
-    .cat:focus{outline:2px solid rgba(0,0,0,.05);outline-offset:2px;border-radius:6px}
 
     /* GRID */
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:32px;padding:0 6% 80px;max-width:var(--page-max-width);margin:0 auto}
@@ -96,7 +109,7 @@
     /* SIDEBAR CART */
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:2000;opacity:0;pointer-events:none;transition:.25s}
     .overlay.show{opacity:1;pointer-events:all}
-    .cart{position:fixed;top:0;right:0;height:100vh;width:420px;max-width:96%;background:#fff;z-index:2050;transform:translateX(100%);transition:transform .35s;display:flex;flex-direction:column}
+    .cart{position:fixed;top:0;right:0;height:100vh;width:400px;max-width:96%;background:#fff;z-index:2050;transform:translateX(100%);transition:transform .35s;display:flex;flex-direction:column}
     .cart.open{transform:translateX(0)}
     .cart .header,.cart .footer{padding:20px;border-bottom:1px solid #eee}
     .cart .body{padding:20px;overflow:auto;flex:1}
@@ -116,42 +129,27 @@
     footer.site{background:#f8f8f8;padding:60px 6%;text-align:center;border-top:1px solid #eee}
     footer .social{display:flex;justify-content:center;gap:18px;font-size:1.3rem;color:#888;margin-bottom:18px}
 
-    /* CONFIG MANAGER (floating) */
-    .config-toggle{
-      position:fixed;bottom:28px;left:28px;width:54px;height:54px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;z-index:99999;box-shadow:0 12px 30px rgba(0,0,0,.18);cursor:pointer;
-      transition:transform .15s;
-    }
-    .config-toggle:hover{transform:scale(1.05)}
-    .config-panel{
-      position:fixed;left:28px;bottom:100px;width:380px;max-width:calc(100% - 56px);height:560px;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.18);z-index:99999;display:flex;flex-direction:column;overflow:hidden;
-      transform-origin:bottom left;
-    }
-    .config-panel header{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
-    .config-panel .body{padding:12px;flex:1;display:flex;flex-direction:column;gap:8px}
-    .config-panel textarea{flex:1;width:100%;resize:none;font-family:monospace;padding:12px;border:1px solid #eee;border-radius:8px;height:360px;overflow:auto}
-    .config-panel .actions{display:flex;gap:8px;justify-content:space-between}
-    .config-panel .small{font-size:.85rem;color:#666}
-
-    /* DEBUG ERROR BOX */
-    .debug-error{position:fixed;left:12px;right:12px;bottom:12px;background:#ffefef;border-left:6px solid #d9534f;color:#5a2121;padding:12px;border-radius:6px;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,.1);font-size:.9rem}
-
-    /* RESPONSIVE */
-    @media (max-width:420px){
-      .config-panel{left:12px;right:12px;width:auto;bottom:80px}
-    }
+    /* small visual hint for admin (non-editable) */
+    .admin-hint{position:fixed;left:12px;top:12px;background:rgba(255,255,255,.9);color:#333;padding:6px 10px;border-radius:6px;font-size:.85rem;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    .admin-hint a{color:var(--primary);text-decoration:none}
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
   </style>
 </head>
 <body>
   <div id="root">
-    <!-- Loader inicial -->
+
+    <!-- Loader inicial (removido automaticamente quando app iniciada) -->
     <div class="loader" id="loader" aria-hidden="true">
-      <div class="petal"><i class="fas fa-seedling" aria-hidden="true"></i></div>
+      <div class="petal" aria-hidden="true"><i class="fas fa-seedling"></i></div>
       <div style="font-family:var(--font-heading);letter-spacing:3px;color:#888;font-size:.9rem">CULTIVANDO BELEZA...</div>
     </div>
 
-    <!-- NAV -->
+    <!-- Nota discreta para administradores (não é editor) -->
+    <div class="admin-hint" aria-hidden="true">Configuração via <code>config.json</code> (coloque no mesmo diretório) — não há editor público</div>
+
+    <!-- Nav -->
     <header class="nav" role="banner" aria-label="Navegação principal">
-      <div class="brand" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer" aria-hidden="false">
+      <div class="brand" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer">
         <h1 id="store-name">BellaFlor</h1>
         <span id="store-sub">Atelier Botânico</span>
       </div>
@@ -161,26 +159,26 @@
       </div>
     </header>
 
-    <!-- MAIN -->
+    <!-- Main -->
     <main>
-      <section class="hero" id="hero" aria-label="Apresentação principal">
+      <section class="hero" id="hero" aria-label="Apresentação principal" role="region">
         <div>
           <p class="lead" id="hero-title">A Poesia das Flores</p>
           <h2 id="hero-name">BellaFlor</h2>
           <p class="lead" id="hero-sub" style="font-size:1rem;text-transform:none;max-width:680px;margin:12px auto 26px"></p>
-          <div style="display:flex;gap:12px;justify-content:center">
+          <div class="cta-group">
             <button class="btn-primary" id="hero-cta">Ver Coleção</button>
-            <a id="hero-whatsapp" class="btn-outline" href="#" style="padding:12px 20px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;color:#fff;border:1px solid rgba(255,255,255,.5)"><i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
+            <a id="hero-whatsapp" class="btn-outline" href="#" style="text-decoration:none"><i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
           </div>
         </div>
       </section>
 
       <nav class="cats" id="category-bar" aria-label="Categorias"></nav>
 
-      <section class="grid" id="products" aria-live="polite"></section>
+      <section class="grid" id="products" aria-live="polite" role="list"></section>
     </main>
 
-    <!-- FOOTER -->
+    <!-- Footer -->
     <footer class="site" role="contentinfo">
       <h2 id="footer-name" style="font-family:var(--font-heading);color:var(--primary);margin-bottom:16px">BellaFlor</h2>
       <div class="social" aria-hidden="false">
@@ -191,7 +189,7 @@
       <p style="color:#aaa;font-size:.85rem">© <span id="footer-year"></span> <span id="footer-c-name">BellaFlor</span>. <span id="footer-made">Design Exclusivo</span>.</p>
     </footer>
 
-    <!-- OVERLAY & CART -->
+    <!-- Overlay & Cart -->
     <div class="overlay" id="overlay" tabindex="-1" aria-hidden="true"></div>
     <aside class="cart" id="cart" aria-hidden="true" role="dialog" aria-label="Carrinho de compras">
       <div class="header" style="display:flex;justify-content:space-between;align-items:center">
@@ -207,7 +205,7 @@
       </div>
     </aside>
 
-    <!-- PRODUCT MODAL -->
+    <!-- Product Modal -->
     <div class="modal" id="modal" aria-hidden="true" role="dialog">
       <div class="modal-card" role="document">
         <div class="modal-img" id="modal-img" aria-hidden="true"></div>
@@ -224,66 +222,30 @@
       </div>
     </div>
 
-    <!-- CONFIG MANAGER (floating) -->
-    <button id="config-toggle" class="config-toggle" aria-label="Abrir Configurações" title="Configurações (JSON)"><i class="fas fa-cog" aria-hidden="true"></i></button>
-
-    <div id="config-panel" class="config-panel" style="display:none" role="dialog" aria-label="Gerenciador de Configuração">
-      <header>
-        <strong>Gerenciador de Config (config.json)</strong>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="config-file-input" type="file" accept=".json" style="display:none" />
-          <button id="btn-upload" class="icon-btn" title="Carregar arquivo config.json"><i class="fas fa-file-upload" aria-hidden="true"></i></button>
-          <button id="btn-download" class="icon-btn" title="Baixar config atual"><i class="fas fa-file-download" aria-hidden="true"></i></button>
-          <button id="btn-close-config" class="icon-btn" title="Fechar"><i class="fas fa-times" aria-hidden="true"></i></button>
-        </div>
-      </header>
-      <div class="body">
-        <div class="small">Edite o JSON abaixo e clique em <strong>Aplicar</strong>. Você pode também carregar um <code>config.json</code> do seu repositório ou baixar o atual.</div>
-        <textarea id="config-textarea" aria-label="Editor de configuração JSON" spellcheck="false"></textarea>
-        <div class="actions" style="display:flex;gap:8px;align-items:center">
-          <div style="flex:1;display:flex;gap:8px">
-            <button id="btn-apply" class="btn-primary" style="flex:1">Aplicar</button>
-            <button id="btn-reset" class="btn-outline">Resetar</button>
-          </div>
-          <div style="width:120px;text-align:right">
-            <small id="config-status" class="small" style="color:#666">status: pronto</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- espaço para mensagens de erro JS visíveis -->
-    <div id="debug-errors" aria-live="polite"></div>
   </div>
 
   <script>
-    /*************************************************************************
-     * BellaFlor - index.html
-     * Versão final com Config Manager (editor de config.json embutido)
-     * Instruções:
-     * - Se existir 'config.json' no mesmo diretório e servido por HTTP(S), será carregado.
-     * - Se abrir via file://, o load tenta usar DEFAULT_CONFIG e você pode importar manualmente.
-     * - Use o botão ⚙️ (inferior esquerdo) para abrir o editor JSON, carregar, aplicar e baixar.
-     *
-     * NOTAS:
-     * - Arquivo pronto para GitHub Pages.
-     * - Tudo em vanilla JS (sem dependências além das fontes e font-awesome).
-     *************************************************************************/
+    /*
+      Índice rápido (comentários em PT-BR)
+      - O arquivo tenta carregar "config.json" automaticamente via fetch quando servido por HTTP(S).
+      - Se não houver config.json ou se a página estiver em file://, usa DEFAULT_CONFIG embutido.
+      - Não há editor de config público — você criará o config.json no repositório quando estiver pronto.
+      - Se quiser aplicar a configuração via console (modo dev), existe a função global:
+          window.BellaFlor.applyExternalConfig(obj)
+        que substitui a configuração em tempo de execução (útil apenas para você, administrador).
+    */
 
     (function(){
       'use strict';
 
-      /* ===========================
-         UTILITÁRIOS DOM & FORMATAÇÃO
-         =========================== */
-      const $ = (sel, root=document) => root.querySelector(sel);
-      const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-      const formatMoney = v => Number(v).toLocaleString('pt-BR', {style:'currency',currency:'BRL'});
-      const escapeHtml = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+      /* ---------------------------
+         Utilitários e elementos
+         --------------------------- */
+      const $ = (sel, root = document) => root.querySelector(sel);
+      const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+      const formatMoney = v => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const escapeHtml = s => String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-      /* ===========================
-         ELEMENTOS PRINCIPAIS
-         =========================== */
       const loader = $('#loader');
       const hero = $('#hero');
       const productsEl = $('#products');
@@ -310,39 +272,16 @@
       const heroSub = $('#hero-sub');
       const heroCta = $('#hero-cta');
       const heroWp = $('#hero-whatsapp');
-      const debugEl = $('#debug-errors');
 
-      /* CONFIG MANAGER */
-      const configToggle = $('#config-toggle');
-      const configPanel = $('#config-panel');
-      const configTextarea = $('#config-textarea');
-      const configStatus = $('#config-status');
-      const configFileInput = $('#config-file-input');
-      const btnUpload = $('#btn-upload');
-      const btnDownload = $('#btn-download');
-      const btnApply = $('#btn-apply');
-      const btnReset = $('#btn-reset');
-      const btnCloseConfig = $('#btn-close-config');
-
-      /* ===========================
-         DEFAULT CONFIG (fallback seguro)
-         - Edite este objeto para mudar padrões initiais.
-         =========================== */
+      /* ---------------------------
+         DEFAULT CONFIG — substitua aqui apenas se quiser mudar padrões locais.
+         O usuário final NÃO tem acesso a um editor público neste HTML.
+         --------------------------- */
       const DEFAULT_CONFIG = {
         meta: { version: "2.0", last_updated: "2026-01-05" },
         store: {
-          info: {
-            name: "BellaFlor",
-            subtitle: "Atelier Botânico",
-            city: "Artur Nogueira",
-            since: "Desde 2010",
-            whatsapp_number: "551938279999" // formato internacional sem +
-          },
-          links: {
-            instagram: "https://instagram.com",
-            facebook: "https://facebook.com",
-            email: "mailto:contato@bellaflor.com.br"
-          }
+          info: { name: "BellaFlor", subtitle: "Atelier Botânico", city: "Artur Nogueira", since: "Desde 2010", whatsapp_number: "551938279999" },
+          links: { instagram: "https://instagram.com", facebook: "https://facebook.com", email: "mailto:contato@bellaflor.com.br" }
         },
         theme: {
           colors: {
@@ -354,105 +293,66 @@
             success: "#6ab04c",
             text_light: "#7f8c8d"
           },
-          fonts: {
-            heading: "'Cinzel', serif",
-            script: "'Pinyon Script', cursive",
-            body: "'Lato', sans-serif"
-          },
-          ui: {
-            radius: "6px",
-            shadow: "0 10px 40px -10px rgba(0,0,0,0.08)"
-          }
+          fonts: { heading: "'Cinzel', serif", script: "'Pinyon Script', cursive", body: "'Lato', sans-serif" },
+          ui: { radius: "6px", shadow: "0 10px 40px -10px rgba(0,0,0,0.08)" }
         },
         texts: {
-          hero: {
-            title: "A Poesia das Flores",
-            subtitle: "Arranjos autorais que traduzem sentimentos em Artur Nogueira. Do clássico ao contemporâneo.",
-            cta: "Ver Coleção",
-            bg_image: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1920&q=80"
-          },
-          footer: {
-            copyright: "Todos os direitos reservados.",
-            made_by: "Design Exclusivo"
-          },
-          cart: {
-            title: "Seu Jardim",
-            empty: "Sua cesta de flores está vazia no momento.",
-            checkout: "Finalizar no WhatsApp",
-            total: "Subtotal"
-          },
-          product: {
-            currency: "R$",
-            add_to_cart: "Adicionar à Cesta",
-            quick_view: "Espiar"
-          }
+          hero: { title: "A Poesia das Flores", subtitle: "Arranjos autorais que traduzem sentimentos em Artur Nogueira. Do clássico ao contemporâneo.", cta: "Ver Coleção", bg_image: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1920&q=80" },
+          footer: { copyright: "Todos os direitos reservados.", made_by: "Design Exclusivo" },
+          cart: { title: "Seu Jardim", empty: "Sua cesta de flores está vazia no momento.", checkout: "Finalizar no WhatsApp", total: "Subtotal" },
+          product: { currency: "R$", add_to_cart: "Adicionar à Cesta", quick_view: "Espiar" }
         },
         catalog: {
           categories: ["Todos", "Buquês", "Arranjos", "Box Luxo", "Orquídeas", "Secas & Preservadas"],
-          mock_settings: {
-            count: 24,
-            base_price: 120
-          }
-          // opcional: "products": [ ... ] para fornecer produto real via JSON
+          mock_settings: { count: 24, base_price: 120 }
         }
       };
 
-      /* ===========================
-         ESTADO DA APLICAÇÃO
-         =========================== */
+      /* ---------------------------
+         Estado
+         --------------------------- */
       let CONFIG = DEFAULT_CONFIG;
       let PRODUCTS = [];
       let activeCategory = null;
       let CART = JSON.parse(localStorage.getItem('bellaCart') || '[]');
       let WISH = JSON.parse(localStorage.getItem('bellaWish') || '[]');
 
-      /* ===========================
-         FUNÇÕES AUXILIARES
-         =========================== */
-      function logDebug(msg){ console.info('[BellaFlor]', msg); }
-      function showError(msg){
-        debugEl.innerHTML = `<div class="debug-error" role="alert">${escapeHtml(msg)}</div>`;
-        console.error(msg);
-        setTimeout(()=>{ if(debugEl) debugEl.innerHTML=''; }, 10000);
-      }
-
-      function deepMerge(a,b){
+      /* ---------------------------
+         Helpers
+         --------------------------- */
+      function deepMerge(a, b) {
         const out = JSON.parse(JSON.stringify(a));
-        for(const k in b){
-          if(b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])){
-            out[k] = deepMerge(out[k] || {}, b[k]);
-          } else out[k] = b[k];
+        for (const k in b) {
+          if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) out[k] = deepMerge(out[k] || {}, b[k]);
+          else out[k] = b[k];
         }
         return out;
       }
 
-      /* ===========================
-         TEMA (aplica CSS variables)
-         =========================== */
-      function applyTheme(){
-        try{
+      function applyTheme() {
+        try {
           const t = CONFIG.theme;
-          if(t && t.colors){
-            for(const k in t.colors) document.documentElement.style.setProperty(`--${k}`, t.colors[k]);
+          if (t && t.colors) {
+            for (const k in t.colors) document.documentElement.style.setProperty(`--${k}`, t.colors[k]);
           }
-          if(t && t.fonts){
-            if(t.fonts.heading) document.documentElement.style.setProperty('--font-heading', t.fonts.heading);
-            if(t.fonts.script) document.documentElement.style.setProperty('--font-script', t.fonts.script);
-            if(t.fonts.body) document.documentElement.style.setProperty('--font-body', t.fonts.body);
+          if (t && t.fonts) {
+            if (t.fonts.heading) document.documentElement.style.setProperty('--font-heading', t.fonts.heading);
+            if (t.fonts.script) document.documentElement.style.setProperty('--font-script', t.fonts.script);
+            if (t.fonts.body) document.documentElement.style.setProperty('--font-body', t.fonts.body);
           }
-          if(t && t.ui){
-            if(t.ui.radius) document.documentElement.style.setProperty('--radius', t.ui.radius);
-            if(t.ui.shadow) document.documentElement.style.setProperty('--shadow', t.ui.shadow);
+          if (t && t.ui) {
+            if (t.ui.radius) document.documentElement.style.setProperty('--radius', t.ui.radius);
+            if (t.ui.shadow) document.documentElement.style.setProperty('--shadow', t.ui.shadow);
           }
-        } catch(e){
+        } catch (e) {
           console.warn('applyTheme error', e);
         }
       }
 
-      /* ===========================
-         MOCK DATA (gerador de produtos)
-         =========================== */
-      function generateMock(count = 24, basePrice = 120){
+      /* ---------------------------
+         Mock generator (quando não houver lista real no config)
+         --------------------------- */
+      function generateMock(count = 24, basePrice = 120) {
         const flowers = [
           { name: 'Rosas Colombianas', key: 'rosa', priceMod: 1.5 },
           { name: 'Hortênsias Azuis', key: 'hydrangea', priceMod: 1.2 },
@@ -477,10 +377,10 @@
         return Array.from({ length: count }, (_, i) => {
           const f = flowers[i % flowers.length];
           const adj = adjectives[i % adjectives.length];
-          const container = containers[i % containers.length];
+          const cont = containers[i % containers.length];
           let cat = 'Arranjos';
-          if (container.includes('Kraft') || container.includes('Hand-tied')) cat = 'Buquês';
-          if (container.includes('Box')) cat = 'Box Luxo';
+          if (cont.includes('Kraft') || cont.includes('Hand-tied')) cat = 'Buquês';
+          if (cont.includes('Box')) cat = 'Box Luxo';
           if (f.name.includes('Orquídea')) cat = 'Orquídeas';
           if (f.name.includes('Secas')) cat = 'Secas & Preservadas';
           const price = (basePrice * f.priceMod + (Math.random() * 40)).toFixed(2);
@@ -489,7 +389,7 @@
           return {
             id: `prod_${i + 1}`,
             name: `${f.name} ${adj}`,
-            subtitle: `${container} • Design Exclusivo`,
+            subtitle: `${cont} • Design Exclusivo`,
             category: cat,
             price: price,
             image: image,
@@ -498,10 +398,10 @@
         });
       }
 
-      /* ===========================
-         RENDER / UI
-         =========================== */
-      function renderCategories(categories){
+      /* ---------------------------
+         Render / Eventos UI
+         --------------------------- */
+      function renderCategories(categories) {
         catsEl.innerHTML = '';
         categories.forEach(cat => {
           const btn = document.createElement('button');
@@ -517,21 +417,22 @@
         });
       }
 
-      function getFiltered(){
+      function getFiltered() {
         if (!activeCategory || activeCategory === (CONFIG.catalog.categories[0] || 'Todos')) return PRODUCTS;
         return PRODUCTS.filter(p => p.category === activeCategory);
       }
 
-      function renderProducts(){
+      function renderProducts() {
         productsEl.innerHTML = '';
         const list = getFiltered();
-        if(list.length === 0){
+        if (!list.length) {
           productsEl.innerHTML = `<p style="padding:30px;text-align:center;color:#999;width:100%">Nenhum produto encontrado nessa categoria.</p>`;
           return;
         }
         list.forEach((p, i) => {
           const card = document.createElement('article');
           card.className = 'card';
+          card.setAttribute('role', 'listitem');
           card.innerHTML = `
             <div class="img" role="button" tabindex="0" aria-label="Ver ${escapeHtml(p.name)}">
               <img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.src='https://via.placeholder.com/900x600?text=Imagem'">
@@ -542,13 +443,14 @@
               <div class="price">${formatMoney(p.price)}</div>
             </div>
           `;
-          card.querySelector('.img').addEventListener('click', () => openModal(p));
-          card.querySelector('.img').addEventListener('keydown', (e) => { if (e.key === 'Enter') openModal(p); });
+          const imageBox = card.querySelector('.img');
+          imageBox.addEventListener('click', () => openModal(p));
+          imageBox.addEventListener('keydown', (e) => { if (e.key === 'Enter') openModal(p); });
           productsEl.appendChild(card);
         });
       }
 
-      function openModal(prod){
+      function openModal(prod) {
         modal.currentProduct = prod;
         modalImg.style.backgroundImage = `url('${prod.image}')`;
         modalTitle.textContent = prod.name;
@@ -562,47 +464,50 @@
         overlay.setAttribute('aria-hidden', 'false');
         modalAdd.focus();
       }
-      function closeModal(){
+
+      function closeModal() {
         modal.currentProduct = null;
         modal.classList.remove('show');
         modal.setAttribute('aria-hidden', 'true');
         overlay.classList.remove('show');
         overlay.setAttribute('aria-hidden', 'true');
       }
-      function updateModalWishState(){
+
+      function updateModalWishState() {
         if (!modal.currentProduct) return;
         const exists = WISH.find(i => i.id === modal.currentProduct.id);
         modalWish.innerHTML = exists ? '<i class="fas fa-heart" style="color:var(--primary)"></i>' : '<i class="far fa-heart"></i>';
       }
 
-      /* ===========================
-         CART & WISHLIST
-         =========================== */
-      function persistCart(){ localStorage.setItem('bellaCart', JSON.stringify(CART)); }
-      function persistWish(){ localStorage.setItem('bellaWish', JSON.stringify(WISH)); }
+      /* ---------------------------
+         Cart & Wishlist
+         --------------------------- */
+      function persistCart() { localStorage.setItem('bellaCart', JSON.stringify(CART)); }
+      function persistWish() { localStorage.setItem('bellaWish', JSON.stringify(WISH)); }
 
-      function addToCart(prod){
+      function addToCart(prod) {
         CART.push(prod);
         persistCart();
         renderCart();
         updateCartCount();
       }
-      function removeFromCart(index){
+
+      function removeFromCart(index) {
         CART.splice(index, 1);
         persistCart();
         renderCart();
         updateCartCount();
       }
-      function toggleWish(prod){
-        const exists = WISH.find(i => i.id === prod.id);
-        if (exists) WISH = WISH.filter(i => i.id !== prod.id);
-        else WISH.push(prod);
+
+      function toggleWish(prod) {
+        const idx = WISH.findIndex(i => i.id === prod.id);
+        if (idx === -1) WISH.push(prod); else WISH.splice(idx, 1);
         persistWish();
       }
 
-      function renderCart(){
+      function renderCart() {
         cartBody.innerHTML = '';
-        if (CART.length === 0){
+        if (!CART.length) {
           cartBody.appendChild(cartEmpty);
           cartEmpty.style.display = 'block';
         } else {
@@ -620,8 +525,8 @@
         checkoutWp.href = buildWhatsAppLink();
       }
 
-      function toggleCart(open){
-        if (open){
+      function toggleCart(open) {
+        if (open) {
           cartSidebar.classList.add('open');
           overlay.classList.add('show');
           overlay.setAttribute('aria-hidden', 'false');
@@ -634,147 +539,58 @@
         }
       }
 
-      function updateCartCount(){
-        if (CART.length > 0){
+      function updateCartCount() {
+        if (CART.length > 0) {
           cartCountEl.style.display = 'inline-block';
           cartCountEl.textContent = CART.length;
         } else cartCountEl.style.display = 'none';
       }
 
-      function buildWhatsAppLink(){
-        const wp = CONFIG.store && CONFIG.store.info && CONFIG.store.info.whatsapp_number ? CONFIG.store.info.whatsapp_number : '';
+      function buildWhatsAppLink() {
+        const wp = (CONFIG && CONFIG.store && CONFIG.store.info && CONFIG.store.info.whatsapp_number) ? CONFIG.store.info.whatsapp_number : '';
         let msg = `Olá, vim pelo site da *${CONFIG.store.info.name}*!%0A%0A`;
-        if (CART.length === 0) msg += 'Ainda não selecionei produtos.%0A';
+        if (!CART.length) msg += 'Ainda não selecionei produtos.%0A';
         else {
           CART.forEach(i => msg += `• ${i.name} - ${formatMoney(i.price)}%0A`);
-          msg += `%0A*Total: ${formatMoney(CART.reduce((a,c)=>a+Number(c.price),0))}*%0A`;
+          msg += `%0A*Total: ${formatMoney(CART.reduce((a, c) => a + Number(c.price), 0))}*%0A`;
         }
         return `https://wa.me/${wp}?text=${msg}`;
       }
 
-      /* ===========================
-         CONFIG LOADING
-         - Tenta carregar config.json por fetch
-         - Se estiver em file:// ou fetch falhar, usa DEFAULT_CONFIG
-         - O painel de Config permite importar / editar / aplicar / baixar
-         =========================== */
-      async function loadConfigFromServer(){
+      /* ---------------------------
+         Config loading
+         - tenta buscar config.json via fetch quando servido por HTTP(S).
+         - se estiver em file:// ou fetch falhar, usa DEFAULT_CONFIG.
+         - NÃO há UI para editar config no cliente.
+         --------------------------- */
+      async function loadConfig() {
         try {
-          // Se rodando via file:// o fetch tende a falhar — neste caso usamos default e informamos
-          if (location.protocol === 'file:'){
-            logDebug('file:// detectado — usando DEFAULT_CONFIG (faça upload do config via painel se necessário).');
+          if (location.protocol === 'file:') {
+            console.info('file:// detectado — usando DEFAULT_CONFIG (coloque config.json no servidor para usar a configuração).');
             CONFIG = DEFAULT_CONFIG;
             return;
           }
           const res = await fetch('config.json', { cache: 'no-store' });
-          if (res.ok){
+          if (res.ok) {
             const data = await res.json();
             CONFIG = deepMerge(DEFAULT_CONFIG, data);
-            logDebug('config.json carregado do servidor e aplicado.');
+            console.info('config.json carregado e aplicado.');
           } else {
-            logDebug('config.json não encontrado no servidor — usando DEFAULT_CONFIG.');
+            console.info('config.json não encontrado no servidor — usando DEFAULT_CONFIG.');
             CONFIG = DEFAULT_CONFIG;
           }
         } catch (err) {
-          logDebug('Falha ao buscar config.json (usando DEFAULT_CONFIG). Erro: ' + (err && err.message));
+          console.warn('Falha ao buscar config.json — usando DEFAULT_CONFIG. Erro:', err && err.message);
           CONFIG = DEFAULT_CONFIG;
         }
       }
 
-      /* ===========================
-         CONFIG MANAGER UI HANDLERS
-         =========================== */
-      function openConfigPanel(){
-        configPanel.style.display = 'flex';
-        configTextarea.value = JSON.stringify(CONFIG, null, 2);
-        configStatus.textContent = 'status: carregado';
-        configTextarea.focus();
-      }
-      function closeConfigPanel(){
-        configPanel.style.display = 'none';
-      }
-      function applyConfigFromTextarea(){
+      /* ---------------------------
+         Inicialização principal
+         --------------------------- */
+      function initializeFromConfig() {
         try {
-          const parsed = JSON.parse(configTextarea.value);
-          CONFIG = deepMerge(DEFAULT_CONFIG, parsed);
-          applyTheme();
-          initializeAppState();
-          renderProducts();
-          renderCart();
-          updateCartCount();
-          configStatus.textContent = 'status: aplicado';
-        } catch (err) {
-          configStatus.textContent = 'status: JSON inválido';
-          showError('JSON inválido ao aplicar configuração: ' + (err && err.message));
-        }
-      }
-      function resetToDefaults(){
-        CONFIG = DEFAULT_CONFIG;
-        applyTheme();
-        initializeAppState();
-        renderProducts();
-        renderCart();
-        updateCartCount();
-        configTextarea.value = JSON.stringify(CONFIG, null, 2);
-        configStatus.textContent = 'status: resetado';
-      }
-      function downloadConfig(){
-        const content = JSON.stringify(CONFIG, null, 2);
-        const blob = new Blob([content], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'config.json';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        configStatus.textContent = 'status: baixado';
-      }
-      function handleFileUpload(file){
-        const reader = new FileReader();
-        reader.onload = function(e){
-          try {
-            const parsed = JSON.parse(e.target.result);
-            CONFIG = deepMerge(DEFAULT_CONFIG, parsed);
-            applyTheme();
-            initializeAppState();
-            renderProducts();
-            renderCart();
-            updateCartCount();
-            configTextarea.value = JSON.stringify(CONFIG, null, 2);
-            configStatus.textContent = 'status: arquivo carregado';
-          } catch (err){
-            showError('Arquivo JSON inválido: ' + (err && err.message));
-            configStatus.textContent = 'status: upload inválido';
-          }
-        };
-        reader.readAsText(file);
-      }
-
-      // eventos do painel
-      configToggle.addEventListener('click', () => {
-        if (configPanel.style.display === 'flex') closeConfigPanel();
-        else openConfigPanel();
-      });
-      btnCloseConfig.addEventListener('click', closeConfigPanel);
-      btnApply.addEventListener('click', applyConfigFromTextarea);
-      btnReset.addEventListener('click', resetToDefaults);
-      btnDownload.addEventListener('click', downloadConfig);
-
-      btnUpload.addEventListener('click', () => configFileInput.click());
-      configFileInput.addEventListener('change', (e) => {
-        const f = e.target.files && e.target.files[0];
-        if (f) handleFileUpload(f);
-        configFileInput.value = '';
-      });
-
-      /* ===========================
-         INICIALIZAÇÃO DA APLICAÇÃO
-         =========================== */
-      function initializeAppState(){
-        // Header / Hero / Footer fill
-        try {
-          $('#store-name').textContent = CONFIG.store.info.name || 'BellaFlor';
-          $('#store-sub').textContent = CONFIG.store.info.subtitle || '';
+          // Header / hero / footer
           heroTitle.textContent = CONFIG.texts.hero.title || '';
           heroName.textContent = CONFIG.store.info.name || '';
           heroSub.textContent = CONFIG.texts.hero.subtitle || '';
@@ -788,11 +604,12 @@
           $('#link-whats').href = `https://wa.me/${CONFIG.store.info.whatsapp_number}`;
           $('#link-email').href = CONFIG.store.links.email || '#';
           $('#hero-whatsapp').href = `https://wa.me/${CONFIG.store.info.whatsapp_number}`;
+
           $('#cart-title').textContent = CONFIG.texts.cart.title || 'Seu Jardim';
           $('#cart-total-label').textContent = CONFIG.texts.cart.total || 'Subtotal';
 
-          // Produtos: se houver "catalog.products" no JSON, usa; senão gera mock
-          if (CONFIG.catalog.products && Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length > 0){
+          // produtos: se config fornecer lista, usa; senão gera mock
+          if (CONFIG.catalog.products && Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length) {
             PRODUCTS = CONFIG.catalog.products.map((p, i) => ({ ...p, id: p.id || `prod_${i + 1}` }));
           } else {
             const cnt = (CONFIG.catalog.mock_settings && CONFIG.catalog.mock_settings.count) || 24;
@@ -803,14 +620,14 @@
           const cats = Array.from(new Set([CONFIG.catalog.categories[0] || 'Todos', ...(CONFIG.catalog.categories || [])]));
           activeCategory = cats[0];
           renderCategories(cats);
-        } catch (err){
-          showError('Erro ao aplicar configuração inicial: ' + (err && err.message));
+        } catch (err) {
+          console.error('Erro ao inicializar a partir da config:', err);
         }
       }
 
-      /* ===========================
-         EVENTOS GLOBAIS E INICIALIZAÇÃO
-         =========================== */
+      /* ---------------------------
+         Eventos globais e boot
+         --------------------------- */
       cartBtn.addEventListener('click', () => toggleCart(true));
       wishBtn.addEventListener('click', () => alert(`${WISH.length} itens salvos`));
       $('#close-cart').addEventListener('click', () => toggleCart(false));
@@ -820,49 +637,51 @@
       heroCta.addEventListener('click', () => document.getElementById('products').scrollIntoView({ behavior: 'smooth' }));
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); toggleCart(false); } });
 
-      /* ===========================
-         BOOT: carregar config, aplicar tema, inicializar app
-         =========================== */
-      async function boot(){
+      // função auxiliar para aplicar config programaticamente (apenas para admin via console)
+      window.BellaFlor = window.BellaFlor || {};
+      window.BellaFlor.applyExternalConfig = function(obj){
         try {
-          await loadConfigFromServer();
+          if (!obj || typeof obj !== 'object') throw new Error('Parâmetro inválido - forneça o objeto JSON da configuração.');
+          CONFIG = deepMerge(DEFAULT_CONFIG, obj);
           applyTheme();
-          initializeAppState();
+          initializeFromConfig();
           renderProducts();
           renderCart();
           updateCartCount();
-          setTimeout(()=>{ if(loader){ loader.remove(); document.body.classList.add('loaded'); } }, 250);
-          logDebug('Aplicação iniciada com sucesso.');
-        } catch (err){
-          showError('Falha na inicialização: ' + (err && err.message));
-          if(loader){ loader.remove(); document.body.classList.add('loaded'); }
+          console.info('External config applied via console.');
+        } catch (err) {
+          console.error('applyExternalConfig error:', err);
         }
-      }
+      };
 
-      // Captura erros globais para mostrar no UI (útil no GitHub)
+      // captura erros globais para não deixar loader travado
       window.addEventListener('error', function(evt){
-        const msg = (evt && evt.message) ? evt.message : 'Erro JS não identificado';
-        showError('Erro JS: ' + msg);
-        if(loader){ loader.remove(); document.body.classList.add('loaded'); }
+        console.error('Erro global capturado:', evt.error || evt.message || evt);
+        if (loader) { loader.remove(); document.body.classList.add('loaded'); }
       });
       window.addEventListener('unhandledrejection', function(evt){
-        showError('Promise rejeitada: ' + (evt.reason && evt.reason.message ? evt.reason.message : String(evt.reason)));
-        if(loader){ loader.remove(); document.body.classList.add('loaded'); }
+        console.error('Promise rejeitada:', evt.reason || evt);
+        if (loader) { loader.remove(); document.body.classList.add('loaded'); }
       });
 
-      // Inicializa
-      boot();
-
-      // Expor utilidades para o console (dev)
-      window.BellaFlor = {
-        getConfig: () => CONFIG,
-        setConfig: (c) => { CONFIG = deepMerge(DEFAULT_CONFIG, c); applyTheme(); initializeAppState(); renderProducts(); renderCart(); updateCartCount(); },
-        downloadConfig: () => {
-          const blob = new Blob([JSON.stringify(CONFIG, null, 2)], {type:'application/json'});
-          const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'config.json'; document.body.appendChild(a); a.click(); a.remove();
-        },
-        addToCart
-      };
+      // boot
+      (async function boot(){
+        try {
+          await loadConfig();
+          applyTheme();
+          initializeFromConfig();
+          renderProducts();
+          renderCart();
+          updateCartCount();
+          // remover loader com pequeno delay visual
+          setTimeout(()=>{ if (loader) loader.remove(); document.body.classList.add('loaded'); }, 200);
+          console.info('BellaFlor iniciado com sucesso.');
+        } catch (err) {
+          console.error('Falha no boot:', err);
+          if (loader) loader.remove();
+          document.body.classList.add('loaded');
+        }
+      })();
 
     })();
   </script>
