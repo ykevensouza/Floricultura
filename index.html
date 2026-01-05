@@ -5,25 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   
   <title>BellaFlor — Atelier Botânico | Loja Online</title>
-  <meta name="description" content="Arranjos florais autorais, buquês e presentes botânicos. BellaFlor traduz sentimentos em flores com design exclusivo e entrega especial." />
+  <meta name="description" content="Arranjos florais autorais, buquês e presentes botânicos. A BellaFlor traduz sentimentos em flores com design exclusivo e entrega especial." />
+  <link rel="canonical" href="https://seusite.com/" />
   <meta name="theme-color" content="#bf6c74" />
   
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BellaFlor Atelier" />
   <meta property="og:title" content="BellaFlor — Atelier Botânico" />
   <meta property="og:description" content="Arranjos autorais que traduzem sentimentos." />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1200&q=80" />
+  <meta property="og:url" content="https://seusite.com/" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=1200&q=80" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BellaFlor — Atelier Botânico" />
+  <meta name="twitter:description" content="Arranjos autorais que traduzem sentimentos." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=1200&q=80" />
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
   
+  <!-- Fontes e ícones -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* * BellaFlor Core Styles 
-     * Design System & Tokens
-     */
     :root {
       --brand-primary: #bf6c74;
       --brand-dark: #a6555d;
@@ -44,11 +53,9 @@
       
       --card-img-height: 280px;
     }
-
     /* Reset & Base */
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    
     body {
       margin: 0;
       font-family: var(--ff-body);
@@ -56,19 +63,21 @@
       background: var(--bg);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      padding-top: var(--header-height); /* Fix sticky header overlap */
+      padding-top: var(--header-height);
     }
-
-    /* Utilities */
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; width: 100%; }
-    
+    a { text-decoration: none; color: inherit; }
+    /* Skip-link: hidden until focus for accessibility */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .sr-only:focus, .sr-only:active {
+      position: static; width: auto; height: auto; overflow: visible; clip: auto;
+    }
+    /* Botões */
     .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: var(--radius); border: 2px solid transparent; cursor: pointer; font-weight: 700; transition: all 0.2s ease; text-decoration: none; font-size: 1rem; }
     .btn.primary { background: var(--brand-primary); color: #fff; }
     .btn.primary:hover { background: var(--brand-dark); transform: translateY(-1px); }
     .btn.ghost { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.4); backdrop-filter: blur(4px); }
     .btn.ghost:hover { background: rgba(255,255,255,0.25); border-color: #fff; }
-    
     .icon-button { background: none; border: none; cursor: pointer; padding: 8px; color: var(--text); font-size: 1.2rem; transition: color 0.2s; display: inline-flex; align-items: center; justify-content: center; }
     .icon-button:hover { color: var(--brand-primary); }
 
@@ -99,14 +108,14 @@
       min-height: 70vh; 
       display: flex; align-items: center; justify-content: center; 
       text-align: center; color: white; 
-      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1490750967868-58cb75069ed6?auto=format&fit=crop&w=1920&q=80');
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=1920&q=80');
       background-size: cover; background-position: center; background-attachment: fixed;
-      margin-top: calc(var(--header-height) * -1); /* Pull up behind transparent header if desired, but here we keep distinct */
+      margin-top: calc(var(--header-height) * -1);
       position: relative;
     }
-    .hero-content { position: relative; z-index: 1; padding: 20px; max-width: 800px; animation: fadeIn Up 1s ease-out; }
+    .hero-content { position: relative; z-index: 1; padding: 20px; max-width: 800px; }
     .hero-lead { font-family: var(--ff-heading); letter-spacing: 3px; text-transform: uppercase; font-size: 1rem; margin-bottom: 10px; opacity: 0.9; }
-    .hero h1 { font-family: var(--ff-script); font-size: clamp(3.5rem, 8vw, 6rem); margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #fff; line-height: 1.1; }
+    .hero h1 { font-family: var(--ff-script); font-size: clamp(3.5rem, 8vw, 6rem); margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.3); line-height: 1.1; }
     .hero p { font-size: 1.2rem; opacity: 0.95; margin-bottom: 30px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
     .hero-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
 
@@ -119,7 +128,7 @@
     .filter-select { flex: 1; min-width: 180px; padding: 14px; border: 1px solid #e0e0e0; border-radius: var(--radius); background: white; cursor: pointer; font-size: 1rem; color: var(--text); }
     .filter-select:focus { outline: none; border-color: var(--brand-primary); }
 
-    /* Grid */
+    /* Product Grid */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding-bottom: 40px; }
 
     /* Card */
@@ -132,30 +141,18 @@
     .card-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--brand-accent); font-weight: 700; margin-bottom: 8px; }
     .card-title { font-family: var(--ff-heading); font-size: 1.25rem; margin: 0 0 5px; font-weight: 600; line-height: 1.3; }
     .card-price { font-weight: 700; color: var(--brand-primary); margin-top: auto; font-size: 1.15rem; }
-    
-    /* Card Actions - Always visible on touch, hover on desktop */
-    .card-overlay-btn { 
-        position: absolute; bottom: 20px; right: 20px; 
-        width: 45px; height: 45px; border-radius: 50%; 
-        background: white; color: var(--brand-primary); 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
-        display: flex; align-items: center; justify-content: center;
-        opacity: 0; transform: translateY(10px); transition: all 0.3s;
-        border: none; cursor: pointer; z-index: 2; font-size: 1.2rem;
-    }
+    .card-overlay-btn { position: absolute; bottom: 20px; right: 20px; width: 45px; height: 45px; border-radius: 50%; background: white; color: var(--brand-primary); box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(10px); transition: all 0.3s; border: none; cursor: pointer; z-index: 2; font-size: 1.2rem; }
     .card-overlay-btn:hover { background: var(--brand-primary); color: white; }
     .card:hover .card-overlay-btn { opacity: 1; transform: translateY(0); }
 
     /* Cart Sidebar */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 200; backdrop-filter: blur(3px); }
     .overlay.open { opacity: 1; pointer-events: all; }
-    
     .sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 420px; background: var(--surface); z-index: 210; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
     .sidebar.open { transform: translateX(0); }
     .sidebar-header, .sidebar-footer { padding: 25px; border-bottom: 1px solid #eee; }
     .sidebar-footer { border-top: 1px solid #eee; border-bottom: none; background: #fafafa; }
     .sidebar-body { flex: 1; overflow-y: auto; padding: 20px; }
-    
     .cart-item { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-start; animation: slideIn 0.3s ease; }
     .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
     .cart-details { flex: 1; }
@@ -177,9 +174,6 @@
     .toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 400; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
     .toast { background: rgba(30, 30, 30, 0.9); color: white; padding: 12px 24px; border-radius: 50px; font-size: 0.95rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; animation: toastUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: all; }
     .toast i { color: #2ecc71; }
-
-    /* Animations */
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes toastUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -193,26 +187,19 @@
     @media (max-width: 600px) {
       .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
       .card-overlay-btn { opacity: 1; transform: translateY(0); width: 40px; height: 40px; bottom: 15px; right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); }
-      .nav-link { display: none; } /* Simplified mobile nav for this demo */
+      .nav-link { display: none; } /* Oculta links no mobile (podemos adicionar menu hamburguer) */
     }
   </style>
 </head>
 <body>
-
   <a href="#main-content" class="sr-only">Pular para o conteúdo principal</a>
   
-  <div id="page-loader" class="page-loader" aria-hidden="false">
-    <div class="spinner"><i class="fas fa-fan" aria-hidden="true"></i></div>
-    <p style="margin-top:1rem; font-family:var(--ff-heading); letter-spacing:2px; color:#888;">BELLAFLOR</p>
-  </div>
-
-  <header class="site-header">
+  <header class="site-header" role="banner">
     <div class="container nav-inner">
       <a href="#" class="brand" aria-label="BellaFlor - Página Inicial" onclick="window.scrollTo(0,0); return false;">
         <span class="brand-name">BellaFlor</span>
         <span class="brand-sub">Atelier Botânico</span>
       </a>
-
       <nav role="navigation" aria-label="Menu Principal" style="display:flex; align-items:center;">
         <a href="#catalog" class="nav-link">Coleção</a>
         <button id="cart-btn" class="icon-button cart-trigger" aria-label="Abrir Carrinho de Compras" aria-haspopup="dialog" aria-expanded="false">
@@ -223,16 +210,16 @@
     </div>
   </header>
 
-  <main id="main-content">
+  <main id="main-content" role="main">
     <section id="hero" class="hero">
       <div class="hero-content">
-        <div class="hero-lead">Arte Floral & Design</div>
+        <div class="hero-lead">Arte Floral &amp; Design</div>
         <h1>A Poesia das Flores</h1>
         <p>Arranjos autorais que traduzem sentimentos em formas e cores.</p>
         <div class="hero-actions">
           <a href="#catalog" class="btn primary">Ver Coleção</a>
           <a href="https://wa.me/551938279999" target="_blank" rel="noopener noreferrer" class="btn ghost">
-            <i class="fab fa-whatsapp" style="margin-right:8px"></i> Personalizar
+            <i class="fab fa-whatsapp" style="margin-right:8px"></i>Personalizar
           </a>
         </div>
       </div>
@@ -245,27 +232,25 @@
           <i class="fas fa-search" aria-hidden="true"></i>
           <input type="search" id="search-input" placeholder="Procure por flores, ocasiões..." autocomplete="off">
         </div>
-        
         <div style="display:flex; gap:10px; flex:1; min-width: 300px;">
-            <label for="category-select" class="sr-only">Filtrar por Categoria</label>
-            <select id="category-select" class="filter-select">
+          <label for="category-select" class="sr-only">Filtrar por Categoria</label>
+          <select id="category-select" class="filter-select">
             <option value="">Todas as Categorias</option>
-            </select>
-
-            <label for="sort-select" class="sr-only">Ordenar por</label>
-            <select id="sort-select" class="filter-select">
+          </select>
+          <label for="sort-select" class="sr-only">Ordenar por</label>
+          <select id="sort-select" class="filter-select">
             <option value="relevance">Destaques</option>
             <option value="price-asc">Preço: Menor</option>
             <option value="price-desc">Preço: Maior</option>
-            </select>
+          </select>
         </div>
       </section>
 
       <section id="catalog" aria-labelledby="catalog-title">
         <h2 id="catalog-title" class="sr-only">Catálogo de Produtos</h2>
         <div id="product-grid" class="product-grid">
-          </div>
-        
+          <!-- Produtos gerados dinamicamente -->
+        </div>
         <div style="text-align:center; padding: 40px 0;">
           <button id="load-more" class="btn primary" style="display:none;">Carregar Mais Flores</button>
         </div>
@@ -273,7 +258,7 @@
     </div>
   </main>
 
-  <footer style="background:#f8f9fa; padding: 60px 0; margin-top:60px; border-top:1px solid #eee;">
+  <footer role="contentinfo" style="background:#f8f9fa; padding: 60px 0; margin-top:60px; border-top:1px solid #eee;">
     <div class="container" style="text-align:center;">
       <div class="brand-name" style="margin-bottom:10px;">BellaFlor</div>
       <p style="color:var(--muted); margin-bottom:20px;">Cultivando beleza e momentos inesquecíveis.</p>
@@ -295,15 +280,22 @@
       <button id="close-cart" class="icon-button" aria-label="Fechar Carrinho"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
     <div id="cart-items" class="sidebar-body" aria-live="polite">
-        </div>
+      <!-- Itens do carrinho -->
+    </div>
     <div class="sidebar-footer">
       <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:700; font-size:1.1rem;">
         <span>Total Estimado:</span>
         <span id="cart-total">R$ 0,00</span>
       </div>
-      <button id="checkout-btn" class="btn primary" style="width:100%">
+      <!-- Botão WhatsApp -->
+      <button id="checkout-whatsapp" class="btn primary" style="width:100%">
         Finalizar no WhatsApp <i class="fab fa-whatsapp" style="margin-left:8px"></i>
       </button>
+      <!-- Botão Mercado Pago (placeholder) -->
+      <button id="checkout-mercado" class="btn ghost" style="width:100%; margin-top:10px;">
+        Finalizar no Mercado Pago
+      </button>
+      <!-- OBS: Implementar integração MercadoPago no futuro. Cada produto pode ter um link em STATE.products (ex.: product.mercadoLink) -->
     </div>
   </aside>
 
@@ -317,30 +309,24 @@
         <h2 id="modal-title" style="font-family:var(--ff-heading); font-size:2rem; margin:0 0 15px; color:var(--brand-primary);"></h2>
         <p id="modal-desc" style="color:var(--text); margin-bottom:30px; font-size:1.05rem; line-height:1.7;"></p>
         <div style="margin-top:auto">
-            <div id="modal-price" style="font-size:1.8rem; color:var(--text); font-weight:700; margin-bottom:20px;"></div>
-            <button id="modal-add-btn" class="btn primary" style="width:100%; padding: 15px;">
-                Adicionar ao Carrinho - <span id="modal-btn-price"></span>
-            </button>
+          <div id="modal-price" style="font-size:1.8rem; color:var(--text); font-weight:700; margin-bottom:20px;"></div>
+          <button id="modal-add-btn" class="btn primary" style="width:100%; padding: 15px;">
+            Adicionar ao Carrinho - <span id="modal-btn-price"></span>
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    /**
-     * BellaFlor Application
-     * Modular, Secure, and Accessible
-     */
     (function() {
       'use strict';
-
-      // --- Configuration & State ---
+      // Configuração e Estado
       const CONFIG = {
         currency: { style: 'currency', currency: 'BRL' },
         itemsPerPage: 8,
-        whatsappNumber: "551938279999" // Use formato internacional sem + ou -
+        whatsappNumber: "551938279999"
       };
-
       const STATE = {
         products: [],
         filteredProducts: [],
@@ -348,98 +334,45 @@
         visibleCount: 0,
         filters: { search: '', category: '', sort: 'relevance' }
       };
-
-      // --- Utilities (Security & DOM) ---
-      
-      // Construtor seguro de elementos DOM
-      const el = (tag, props = {}, ...children) => {
-        const element = document.createElement(tag);
-        for (const [key, val] of Object.entries(props)) {
-          if (key.startsWith('data-')) {
-            element.setAttribute(key, val);
-          } else if (key.startsWith('on') && typeof val === 'function') {
-            element.addEventListener(key.substring(2).toLowerCase(), val);
-          } else if (key === 'style') {
-            element.style.cssText = val;
-          } else if (val !== false && val !== null && val !== undefined) {
-            element.setAttribute(key, val);
-          }
-        }
-        children.forEach(child => {
-          if (typeof child === 'string') element.appendChild(document.createTextNode(child));
-          else if (child instanceof Node) element.appendChild(child);
-        });
-        return element;
-      };
-
-      const formatMoney = (val) => new Intl.NumberFormat('pt-BR', CONFIG.currency).format(val);
-      
-      const debounce = (fn, delay) => {
-        let timeout;
-        return (...args) => {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => fn(...args), delay);
-        };
-      };
-
-      // --- Services ---
-
-      const ToastService = {
-          container: document.getElementById('toast-container'),
-          show(message) {
-              const toast = el('div', { class: 'toast' }, 
-                  el('i', { class: 'fas fa-check-circle' }),
-                  message
-              );
-              this.container.appendChild(toast);
-              setTimeout(() => {
-                  toast.style.opacity = '0';
-                  toast.style.transform = 'translateY(20px)';
-                  setTimeout(() => toast.remove(), 300);
-              }, 3000);
-          }
-      };
-
+      // Inicializa dados (produtos e imagens)
       const DataService = {
         init() {
           const flowers = [
-            { n: 'Rosas Colombianas', c: 'Buquês', p: 189.90 },
-            { n: 'Orquídea Phalaenopsis', c: 'Orquídeas', p: 245.00 },
-            { n: 'Mix do Campo', c: 'Arranjos', p: 120.00 },
-            { n: 'Tulipas Holandesas', c: 'Buquês', p: 210.00 },
-            { n: 'Box Luxo Vermelho', c: 'Box', p: 299.90 },
-            { n: 'Girassóis Vibrantes', c: 'Arranjos', p: 98.00 },
-            { n: 'Lisianthus Branco', c: 'Buquês', p: 145.50 },
-            { n: 'Terrário Suculenta', c: 'Plantas', p: 85.00 },
-            { n: 'Cesta Café & Flores', c: 'Cestas', p: 350.00 },
-            { n: 'Lavanda Seca', c: 'Decoração', p: 65.00 },
-            { n: 'Peônias (Sazonal)', c: 'Premium', p: 450.00 },
-            { n: 'Lírios Brancos', c: 'Arranjos', p: 160.00 }
+            { n: 'Rosas Colombianas', c: 'Buquês', p: 189.90, mpLink: '#' },
+            { n: 'Orquídea Phalaenopsis', c: 'Orquídeas', p: 245.00, mpLink: '#' },
+            { n: 'Mix do Campo', c: 'Arranjos', p: 120.00, mpLink: '#' },
+            { n: 'Tulipas Holandesas', c: 'Buquês', p: 210.00, mpLink: '#' },
+            { n: 'Box Luxo Vermelho', c: 'Box', p: 299.90, mpLink: '#' },
+            { n: 'Girassóis Vibrantes', c: 'Arranjos', p: 98.00, mpLink: '#' },
+            { n: 'Lisianthus Branco', c: 'Buquês', p: 145.50, mpLink: '#' },
+            { n: 'Terrário Suculenta', c: 'Plantas', p: 85.00, mpLink: '#' },
+            { n: 'Cesta Café & Flores', c: 'Cestas', p: 350.00, mpLink: '#' },
+            { n: 'Lavanda Seca', c: 'Decoração', p: 65.00, mpLink: '#' },
+            { n: 'Peônias (Sazonal)', c: 'Premium', p: 450.00, mpLink: '#' },
+            { n: 'Lírios Brancos', c: 'Arranjos', p: 160.00, mpLink: '#' }
           ];
-          
+          const imgs = [
+            '1562690868-60bbe7293e94', '1597826368522-9f4a35226e99',
+            '1586541679237-640a233b4997', '1520763185298-1b434c919102',
+            '1518709766631-a6a8f4b08224', '1464698579707-353232147316'
+          ];
           STATE.products = Array.from({ length: 24 }, (_, i) => {
             const base = flowers[i % flowers.length];
-            // Cycle through high quality unsplash images
-            const imgs = [
-                '1562690868-60bbe7293e94', '1597826368522-9f4a35226e99', 
-                '1586541679237-640a233b4997', '1520763185298-1b434c919102',
-                '1518709766631-a6a8f4b08224', '1464698579707-353232147316'
-            ];
-            
             return {
               id: i + 1,
               name: base.n,
               category: base.c,
               price: base.p,
               image: `https://images.unsplash.com/photo-${imgs[i % imgs.length]}?auto=format&fit=crop&w=600&q=80`,
-              desc: `Um design exclusivo BellaFlor com ${base.n} frescas selecionadas manualmente. Perfeito para celebrar momentos únicos.`
+              desc: `Um design exclusivo BellaFlor com ${base.n.toLowerCase()} frescas. Perfeito para ocasiões especiais.`,
+              mpLink: base.mpLink  // Link placeholder para MercadoPago
             };
           });
           STATE.filteredProducts = [...STATE.products];
         }
       };
 
-      // --- UI Controller ---
+      // Controlador de UI
       const UI = {
         elements: {
           grid: document.getElementById('product-grid'),
@@ -451,12 +384,10 @@
           year: document.getElementById('year'),
           catSelect: document.getElementById('category-select')
         },
-
         init() {
           this.elements.year.textContent = new Date().getFullYear();
           this.setupCategories();
         },
-
         setupCategories() {
           const categories = [...new Set(STATE.products.map(p => p.category))].sort();
           const frag = document.createDocumentFragment();
@@ -468,53 +399,61 @@
           });
           this.elements.catSelect.appendChild(frag);
         },
-
         renderGrid(append = false) {
           if (!append) {
             this.elements.grid.innerHTML = '';
             STATE.visibleCount = 0;
           }
-
           const start = STATE.visibleCount;
           const end = start + CONFIG.itemsPerPage;
           const slice = STATE.filteredProducts.slice(start, end);
-          
           if (STATE.filteredProducts.length === 0) {
             this.elements.grid.innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:60px 20px;">
-                    <i class="fas fa-leaf" style="font-size:3rem; color:#e0e0e0; margin-bottom:15px;"></i>
-                    <p style="color:var(--muted); font-size:1.1rem;">Não encontramos flores com estes filtros.</p>
-                    <button onclick="document.getElementById('category-select').value=''; document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));" class="btn ghost" style="color:var(--brand-primary); border-color:var(--brand-primary)">Limpar Filtros</button>
-                </div>`;
+              <div style="grid-column:1/-1; text-align:center; padding:60px 20px;">
+                <i class="fas fa-leaf" style="font-size:3rem; color:#e0e0e0; margin-bottom:15px;"></i>
+                <p style="color:var(--muted); font-size:1.1rem;">Não encontramos flores com estes filtros.</p>
+                <button onclick="document.getElementById('category-select').value=''; document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));" class="btn ghost" style="color:var(--brand-primary); border-color:var(--brand-primary)">Limpar Filtros</button>
+              </div>`;
             this.elements.loadMore.style.display = 'none';
             return;
           }
-
           const frag = document.createDocumentFragment();
-          
           slice.forEach(p => {
-            const article = el('article', { class: 'card', tabindex: '0' },
-              el('div', { class: 'card-media' },
-                el('img', { 
-                   src: p.image, 
-                   alt: `Foto de ${p.name}`, 
-                   loading: 'lazy',
-                   width: '400', height: '280'
-                }),
-                el('button', {
-                    class: 'card-overlay-btn',
-                    'aria-label': 'Adicionar ao carrinho',
-                    onclick: (e) => { e.stopPropagation(); App.addToCart(p.id); }
-                }, el('i', { class: 'fas fa-plus' }))
-              ),
-              el('div', { class: 'card-body' },
-                el('div', { class: 'card-tag' }, p.category),
-                el('h3', { class: 'card-title' }, p.name),
-                el('div', { class: 'card-price' }, formatMoney(p.price))
-              )
-            );
+            const article = document.createElement('article');
+            article.className = 'card';
+            article.setAttribute('tabindex', '0');
+            // Conteúdo do cartão
+            const cardMedia = document.createElement('div');
+            cardMedia.className = 'card-media';
+            const img = document.createElement('img');
+            img.src = p.image;
+            img.alt = `Foto do arranjo ${p.name}`;
+            img.loading = 'lazy';
+            img.width = 400; img.height = 280;
+            cardMedia.appendChild(img);
+            const addBtn = document.createElement('button');
+            addBtn.className = 'card-overlay-btn';
+            addBtn.setAttribute('aria-label', 'Adicionar ao carrinho');
+            addBtn.onclick = (e) => { e.stopPropagation(); App.addToCart(p.id); };
+            addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+            cardMedia.appendChild(addBtn);
 
-            // Interaction handlers
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            const tag = document.createElement('div');
+            tag.className = 'card-tag';
+            tag.textContent = p.category;
+            const title = document.createElement('h3');
+            title.className = 'card-title';
+            title.textContent = p.name;
+            const price = document.createElement('div');
+            price.className = 'card-price';
+            price.textContent = new Intl.NumberFormat('pt-BR', CONFIG.currency).format(p.price);
+
+            cardBody.append(tag, title, price);
+            article.append(cardMedia, cardBody);
+
+            // Abrir modal ao clicar
             article.addEventListener('click', () => App.openProductModal(p));
             article.addEventListener('keydown', (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -522,63 +461,62 @@
                 App.openProductModal(p);
               }
             });
-
             frag.appendChild(article);
           });
-
           this.elements.grid.appendChild(frag);
-          STATE.visibleCount = end;
-
-          this.elements.loadMore.style.display = 
+          STATE.visibleCount += slice.length;
+          this.elements.loadMore.style.display =
             STATE.visibleCount >= STATE.filteredProducts.length ? 'none' : 'inline-block';
         },
-
         updateCart() {
           this.elements.cartCount.textContent = STATE.cart.length;
-          
-          // Animation effect
           this.elements.cartCount.classList.add('bump');
           setTimeout(() => this.elements.cartCount.classList.remove('bump'), 300);
 
           this.elements.cartItems.innerHTML = '';
-          
           if (STATE.cart.length === 0) {
             this.elements.cartItems.innerHTML = `
-                <div style="text-align:center; padding: 40px 20px;">
-                    <i class="fas fa-shopping-basket" style="font-size:3rem; color:#eee; margin-bottom:15px;"></i>
-                    <p class="muted">Sua cesta está vazia.</p>
-                </div>`;
-            this.elements.cartTotal.textContent = formatMoney(0);
+              <div style="text-align:center; padding: 40px 20px;">
+                <i class="fas fa-shopping-basket" style="font-size:3rem; color:#eee; margin-bottom:15px;"></i>
+                <p style="color:var(--muted); font-size:1.1rem;">Sua cesta está vazia.</p>
+              </div>`;
+            this.elements.cartTotal.textContent = new Intl.NumberFormat('pt-BR', CONFIG.currency).format(0);
             return;
           }
 
           let total = 0;
           STATE.cart.forEach((item, index) => {
             total += item.price;
-            const row = el('div', { class: 'cart-item' },
-              el('img', { src: item.image, alt: item.name }),
-              el('div', { class: 'cart-details' },
-                el('div', { style: 'font-weight:700; font-size:0.95rem; line-height:1.2; margin-bottom:4px;' }, item.name),
-                el('div', { style: 'color:var(--brand-primary); font-weight:600;' }, formatMoney(item.price)),
-                el('button', { 
-                   class: 'cart-remove', 
-                   onclick: () => App.removeFromCart(index) 
-                 }, 'Remover')
-              )
-            );
+            const row = document.createElement('div');
+            row.className = 'cart-item';
+            const img = document.createElement('img');
+            img.src = item.image;
+            img.alt = item.name;
+            const details = document.createElement('div');
+            details.className = 'cart-details';
+            const nameDiv = document.createElement('div');
+            nameDiv.style = 'font-weight:700; font-size:0.95rem; line-height:1.2; margin-bottom:4px;';
+            nameDiv.textContent = item.name;
+            const priceDiv = document.createElement('div');
+            priceDiv.style = 'color:var(--brand-primary); font-weight:600;';
+            priceDiv.textContent = new Intl.NumberFormat('pt-BR', CONFIG.currency).format(item.price);
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'cart-remove';
+            removeBtn.onclick = () => App.removeFromCart(index);
+            removeBtn.textContent = 'Remover';
+            details.append(nameDiv, priceDiv, removeBtn);
+            row.append(img, details);
             this.elements.cartItems.appendChild(row);
           });
-          
-          this.elements.cartTotal.textContent = formatMoney(total);
+          this.elements.cartTotal.textContent = new Intl.NumberFormat('pt-BR', CONFIG.currency).format(total);
         },
-
         toggleLoader(show) {
           if (show) this.elements.loader.classList.remove('hidden');
           else this.elements.loader.classList.add('hidden');
         }
       };
 
-      // --- Main Logic ---
+      // Lógica principal
       const App = {
         init() {
           DataService.init();
@@ -586,68 +524,55 @@
           UI.renderGrid();
           UI.updateCart();
           this.bindEvents();
-          
-          // Initial Load Simulation
           window.addEventListener('load', () => setTimeout(() => UI.toggleLoader(false), 500));
         },
-
         bindEvents() {
-          // Filters
           const applyFilters = debounce(() => this.filterProducts(), 300);
-          
           document.getElementById('search-input').addEventListener('input', (e) => {
             STATE.filters.search = e.target.value.toLowerCase();
             applyFilters();
           });
-          
           document.getElementById('category-select').addEventListener('change', (e) => {
             STATE.filters.category = e.target.value;
             this.filterProducts();
           });
-          
           document.getElementById('sort-select').addEventListener('change', (e) => {
             STATE.filters.sort = e.target.value;
             this.filterProducts();
           });
-
           document.getElementById('load-more').addEventListener('click', () => UI.renderGrid(true));
 
-          // Cart & Modal
           document.getElementById('cart-btn').addEventListener('click', () => this.toggleCart(true));
           document.getElementById('close-cart').addEventListener('click', () => this.toggleCart(false));
           document.getElementById('overlay').addEventListener('click', () => {
               this.toggleCart(false);
               this.closeProductModal();
           });
-          document.getElementById('checkout-btn').addEventListener('click', () => this.checkout());
+
+          document.getElementById('checkout-whatsapp').addEventListener('click', () => this.checkoutWhatsApp());
+          document.getElementById('checkout-mercado').addEventListener('click', () => this.checkoutMercado());
 
           document.getElementById('close-modal').addEventListener('click', () => this.closeProductModal());
           document.getElementById('modal-backdrop').addEventListener('click', () => this.closeProductModal());
-          
-          // Escape key closes UI
+
           document.addEventListener('keydown', (e) => {
-              if(e.key === 'Escape') {
-                  this.toggleCart(false);
-                  this.closeProductModal();
-              }
+            if (e.key === 'Escape') {
+              this.toggleCart(false);
+              this.closeProductModal();
+            }
           });
         },
-
         filterProducts() {
           let list = [...STATE.products];
           const { search, category, sort } = STATE.filters;
-
           if (search) list = list.filter(p => p.name.toLowerCase().includes(search));
           if (category) list = list.filter(p => p.category === category);
-
           if (sort === 'price-asc') list.sort((a,b) => a.price - b.price);
           else if (sort === 'price-desc') list.sort((a,b) => b.price - a.price);
-          else if (sort === 'relevance') list.sort((a,b) => a.id - b.id); // Default order
-          
+          else if (sort === 'relevance') list.sort((a,b) => a.id - b.id);
           STATE.filteredProducts = list;
           UI.renderGrid(false);
         },
-
         addToCart(id) {
           const product = STATE.products.find(p => p.id === id);
           if (product) {
@@ -657,24 +582,20 @@
             ToastService.show(`"${product.name}" adicionado à cesta.`);
           }
         },
-
         removeFromCart(index) {
           STATE.cart.splice(index, 1);
           localStorage.setItem('bella_cart', JSON.stringify(STATE.cart));
           UI.updateCart();
         },
-
         toggleCart(open) {
           const sidebar = document.getElementById('cart-sidebar');
           const overlay = document.getElementById('overlay');
           const trigger = document.getElementById('cart-btn');
-
           if (open) {
             overlay.classList.add('open');
             sidebar.classList.add('open');
             sidebar.setAttribute('aria-hidden', 'false');
             trigger.setAttribute('aria-expanded', 'true');
-            // Simple focus trap could go here
           } else {
             overlay.classList.remove('open');
             sidebar.classList.remove('open');
@@ -682,68 +603,98 @@
             trigger.setAttribute('aria-expanded', 'false');
           }
         },
-
         openProductModal(product) {
           const modal = document.getElementById('product-modal');
           const imgCont = document.getElementById('modal-img-container');
-          
           imgCont.style.backgroundImage = `url('${product.image}')`;
           document.getElementById('modal-cat').textContent = product.category;
           document.getElementById('modal-title').textContent = product.name;
           document.getElementById('modal-desc').textContent = product.desc;
-          document.getElementById('modal-price').textContent = formatMoney(product.price);
-          document.getElementById('modal-btn-price').textContent = formatMoney(product.price);
-          
-          // Setup Add Button
+          document.getElementById('modal-price').textContent = new Intl.NumberFormat('pt-BR', CONFIG.currency).format(product.price);
+          document.getElementById('modal-btn-price').textContent = new Intl.NumberFormat('pt-BR', CONFIG.currency).format(product.price);
+
           const btn = document.getElementById('modal-add-btn');
-          // Clone to remove old listeners
           const newBtn = btn.cloneNode(true);
           btn.parentNode.replaceChild(newBtn, btn);
-          
           newBtn.addEventListener('click', () => {
-              this.addToCart(product.id);
-              this.closeProductModal();
-              this.toggleCart(true); // Open cart if adding via modal (user intent is higher)
+            this.addToCart(product.id);
+            this.closeProductModal();
+            this.toggleCart(true);
           });
 
           modal.classList.add('open');
           modal.setAttribute('aria-hidden', 'false');
           document.body.style.overflow = 'hidden';
         },
-
         closeProductModal() {
           const modal = document.getElementById('product-modal');
           modal.classList.remove('open');
           modal.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
         },
-
-        checkout() {
-            if (STATE.cart.length === 0) {
-                ToastService.show("Adicione flores antes de finalizar.");
-                return;
-            }
-
-            let message = "*Olá, BellaFlor! Gostaria de fazer o seguinte pedido:*\n\n";
-            let total = 0;
-            
-            // Agrupar itens iguais (Opcional - mas deixei simples por enquanto)
-            STATE.cart.forEach((item) => {
-                message += `▫️ ${item.name} - ${formatMoney(item.price)}\n`;
-                total += item.price;
-            });
-
-            message += `\n*Total Estimado: ${formatMoney(total)}*`;
-            message += "\n\nPor favor, podem confirmar a disponibilidade e a entrega?";
-
-            const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+        checkoutWhatsApp() {
+          if (STATE.cart.length === 0) {
+            ToastService.show("Adicione flores antes de finalizar.");
+            return;
+          }
+          let message = "*Olá, BellaFlor! Gostaria de fazer o seguinte pedido:*\n\n";
+          let total = 0;
+          STATE.cart.forEach(item => {
+            message += `▫️ ${item.name} - ${new Intl.NumberFormat('pt-BR', CONFIG.currency).format(item.price)}\n`;
+            total += item.price;
+          });
+          message += `\n*Total Estimado: ${new Intl.NumberFormat('pt-BR', CONFIG.currency).format(total)}*`;
+          message += "\n\nPor favor, podem confirmar a disponibilidade e a entrega?";
+          const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
+          window.open(url, '_blank');
+        },
+        checkoutMercado() {
+          if (STATE.cart.length === 0) {
+            ToastService.show("Adicione flores antes de finalizar.");
+            return;
+          }
+          // TODO: implementar integração real com MercadoPago aqui.
+          // Por exemplo, montar URL de checkout com os produtos do carrinho.
+          alert("Checkout via MercadoPago - implementar link de pagamento.");
         }
       };
-
-      // Start App
+      // Serviço de Toast
+      const ToastService = {
+        container: document.getElementById('toast-container'),
+        show(message) {
+          const toast = document.createElement('div');
+          toast.className = 'toast';
+          toast.innerHTML = `<i class="fas fa-check-circle"></i>${message}`;
+          this.container.appendChild(toast);
+          setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            setTimeout(() => toast.remove(), 300);
+          }, 3000);
+        }
+      };
+      const el = (tag, props = {}, ...children) => {
+        const element = document.createElement(tag);
+        for (const [key, val] of Object.entries(props)) {
+          if (key.startsWith('data-')) element.setAttribute(key, val);
+          else if (key.startsWith('on') && typeof val === 'function') element.addEventListener(key.substring(2).toLowerCase(), val);
+          else if (key === 'style') element.style.cssText = val;
+          else if (val !== false && val !== null && val !== undefined) element.setAttribute(key, val);
+        }
+        children.forEach(child => {
+          if (typeof child === 'string') element.appendChild(document.createTextNode(child));
+          else if (child instanceof Node) element.appendChild(child);
+        });
+        return element;
+      };
+      const debounce = (fn, delay) => {
+        let timeout;
+        return (...args) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn(...args), delay);
+        };
+      };
       App.init();
-
     })();
   </script>
 </body>
