@@ -4,30 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BellaFlor | Floricultura Premium Artur Nogueira</title>
-    
     <meta name="description" content="BellaFlor - A floricultura mais exclusiva de Artur Nogueira.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
     <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
-    
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #fffbfb; color: #2d3436; opacity: 0; transition: opacity 0.5s; }
+        
+        /* Scrollbar Personalizada */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e85d75; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d64c63; }
+
+        body { 
+            font-family: 'Lato', sans-serif; 
+            background: #fffbfb; 
+            color: #2d3436; 
+            opacity: 0; 
+            transition: opacity 0.8s ease-in-out; 
+            overflow-x: hidden;
+        }
         body.loaded { opacity: 1; }
+        
         .loading-screen {
             position: fixed; inset: 0; background: #fff; display: flex; 
             justify-content: center; align-items: center; z-index: 9999;
             color: #e85d75; font-size: 2rem; font-family: 'Playfair Display', serif;
+            flex-direction: column; gap: 20px;
         }
     </style>
 </head>
@@ -35,7 +50,8 @@
 
     <div id="root">
         <div class="loading-screen">
-            <i class="fas fa-spinner fa-spin"></i> &nbsp; Preparando o Jardim...
+            <i class="fas fa-seedling fa-spin" style="font-size: 3rem;"></i> 
+            <span>Cultivando experiências...</span>
         </div>
     </div>
 
@@ -43,9 +59,67 @@
         const { useState, useEffect, useMemo } = React;
         const styled = window.styled;
 
-        // --- 1. DADOS (40 Produtos Mockados) ---
+        // ==================================================================================
+        // 1. ARQUIVO DE CONFIGURAÇÃO (ISTO SERÁ SEU FUTURO ARQUIVO CONFIG.JS)
+        // ==================================================================================
+        
+        const SITE_CONFIG = {
+            info: {
+                name: "BellaFlor",
+                city: "Artur Nogueira",
+                whatsapp: "551938279999", // Apenas números
+                since: "2010"
+            },
+            theme: {
+                primary: '#e85d75',       // Cor principal (Botões, destaques)
+                primaryHover: '#c93b55',  // Cor ao passar o mouse
+                secondary: '#2d3436',     // Cor de texto escuro
+                bg: '#fffbfb',            // Fundo do site
+                white: '#ffffff',
+                gold: '#d4af37',          // Detalhes de luxo
+                fontHeading: "'Playfair Display', serif",
+                fontBody: "'Lato', sans-serif"
+            },
+            hero: {
+                title: "Flores que contam a sua história",
+                subtitle: "A floricultura mais exclusiva de Artur Nogueira. Buquês autorais e presentes inesquecíveis.",
+                // Imagem de fundo de alta qualidade (Rosas em tom escuro/elegante)
+                image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1920&q=80"
+            }
+        };
+
+        // ==================================================================================
+        // 2. BANCO DE IMAGENS INTELIGENTE
+        // ==================================================================================
+        
+        // Mapeia palavras-chave para IDs reais do Unsplash para garantir que "Girassol" mostre um Girassol.
+        const getImageForFlower = (flowerName, index) => {
+            const imageMap = {
+                'Rosas': ['1548695607-9c73430ba065', '1518709268805-4e9042af9f23', '1562690868-60bbe7293e94'],
+                'Girassóis': ['1470509037663-253afd7f0f51', '1532009804797-28d8745d064c'],
+                'Lírios': ['1525253815340-d9d2e1c9e830', '1587574293340-e0011c4e8ea0'],
+                'Tulipas': ['1520763185298-1b434c919102', '1586967789182-520e791b7596'],
+                'Gérberas': ['1555546255-b778d91c2b53'],
+                'Astromélias': ['1595231916356-a86217cef424'],
+                'Orquídeas': ['1566929341488-820845a76cb5', '1561181286-d3fee7d55364'],
+                'Flores do Campo': ['1464698579707-353232147316', '1507290431195-26ab47d4940d']
+            };
+
+            // Tenta encontrar uma imagem específica, senão usa uma genérica bonita
+            const keys = Object.keys(imageMap);
+            const key = keys.find(k => flowerName.includes(k)) || 'Flores do Campo';
+            const ids = imageMap[key] || imageMap['Flores do Campo'];
+            const imgId = ids[index % ids.length]; // Rotaciona as imagens disponíveis
+            
+            return `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+        };
+
+        // ==================================================================================
+        // 3. GERAÇÃO DE DADOS (MOCK)
+        // ==================================================================================
+
         const PRODUCTS = Array.from({ length: 40 }, (_, i) => {
-            const types = ['Buquê', 'Arranjo', 'Cesta', 'Orquídea', 'Caixa'];
+            const types = ['Buquê', 'Arranjo', 'Cesta', 'Box Luxury', 'Vaso'];
             const flowers = ['Rosas Vermelhas', 'Girassóis', 'Lírios', 'Tulipas', 'Gérberas', 'Astromélias', 'Orquídeas Phalaenopsis', 'Flores do Campo'];
             const adjs = ['Imperial', 'Romântico', 'Radiante', 'Eterno', 'Apaixonante', 'Luxuoso', 'Silvestre', 'Delicado'];
             
@@ -53,133 +127,191 @@
             const flower = flowers[i % flowers.length];
             const adj = adjs[i % adjs.length];
             
+            // Lógica para categorização
+            let category = 'Outros';
+            if(type === 'Buquê') category = 'Buquês';
+            else if(type === 'Cesta') category = 'Cestas';
+            else if(flower.includes('Orquídea')) category = 'Orquídeas';
+            else category = 'Arranjos';
+
             return {
                 id: i + 1,
                 name: `${type} ${adj} de ${flower}`,
-                price: (79.90 + (i * 12.50)).toFixed(2),
-                category: type + 's',
-                // Usando imagens reais do Unsplash com parâmetros fixos para não mudar no reload
-                image: `https://images.unsplash.com/photo-${[
-                    '1562690868-60bbe7293e94', '1587574293340-e0011c4e8ea0', 
-                    '1595231916356-a86217cef424', '1507290431195-26ab47d4940d',
-                    '1561181286-d3fee7d55364', '1591886980571-70d30eb5a53e'
-                ][i % 6]}?auto=format&fit=crop&w=500&q=80`,
-                description: `Um design exclusivo BellaFlor com as mais frescas ${flower}. Perfeito para emocionar.`
+                price: (89.90 + (i * 15.50)).toFixed(2),
+                category: category,
+                image: getImageForFlower(flower, i),
+                description: `Design exclusivo ${SITE_CONFIG.info.name} com ${flower} frescas selecionadas.`
             };
         });
 
-        // --- 2. STYLED COMPONENTS (CSS-IN-JS) ---
-        
-        // Tema e Variáveis
-        const theme = {
-            primary: '#e85d75',
-            primaryHover: '#d64c63',
-            secondary: '#2d3436',
-            bg: '#fffbfb',
-            white: '#ffffff',
-            shadow: '0 10px 30px rgba(0,0,0,0.08)'
-        };
-
-        const FadeIn = styled.div`
-            animation: fadeIn 0.8s ease-out forwards;
-            @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        `;
+        // ==================================================================================
+        // 4. STYLED COMPONENTS
+        // ==================================================================================
 
         const Navbar = styled.nav`
             position: fixed; top: 0; width: 100%; height: 80px;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            padding: 0 8%; z-index: 1000; box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
         `;
 
         const Logo = styled.div`
-            font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: ${theme.primary};
-            display: flex; align-items: center; gap: 10px; cursor: pointer;
-            span { color: ${theme.secondary}; }
+            font-family: ${SITE_CONFIG.theme.fontHeading}; font-size: 1.8rem; font-weight: 700; color: ${SITE_CONFIG.theme.primary};
+            display: flex; align-items: center; gap: 8px; cursor: pointer; letter-spacing: -1px;
+            span { color: ${SITE_CONFIG.theme.secondary}; font-weight: 400; font-size: 1rem; margin-left: 5px; text-transform: uppercase; letter-spacing: 2px; }
+            @media(max-width: 768px) { span { display: none; } }
         `;
 
         const CartBadge = styled.button`
-            position: relative; background: none; border: none; font-size: 1.4rem; color: ${theme.secondary}; cursor: pointer;
+            position: relative; background: none; border: none; font-size: 1.3rem; color: ${SITE_CONFIG.theme.secondary}; cursor: pointer;
+            transition: transform 0.2s;
+            &:hover { transform: scale(1.1); color: ${SITE_CONFIG.theme.primary}; }
             .count {
-                position: absolute; top: -5px; right: -8px; background: ${theme.primary}; color: white;
-                font-size: 0.7rem; width: 20px; height: 20px; border-radius: 50%; display: flex; 
-                align-items: center; justify-content: center; font-weight: bold;
+                position: absolute; top: -8px; right: -10px; background: ${SITE_CONFIG.theme.primary}; color: white;
+                font-size: 0.7rem; width: 22px; height: 22px; border-radius: 50%; display: flex; 
+                align-items: center; justify-content: center; font-weight: bold; border: 2px solid white;
             }
         `;
 
-        const Hero = styled.header`
+        const HeroSection = styled.header`
             height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; color: white; padding: 20px; margin-top: 80px;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            text-align: center; color: white; padding: 20px; margin-top: 0;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('${SITE_CONFIG.hero.image}') center/cover fixed;
             
-            h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-            p { font-size: clamp(1rem, 2vw, 1.3rem); max-width: 600px; margin-bottom: 30px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+            h1 { 
+                font-family: ${SITE_CONFIG.theme.fontHeading}; 
+                font-size: clamp(2.5rem, 6vw, 5rem); 
+                margin-bottom: 20px; 
+                line-height: 1.1;
+                text-shadow: 0 4px 20px rgba(0,0,0,0.3); 
+                animation: slideUp 1s ease-out;
+            }
+            p { 
+                font-size: clamp(1rem, 2vw, 1.4rem); 
+                max-width: 700px; 
+                margin-bottom: 40px; 
+                font-weight: 300;
+                text-shadow: 0 2px 10px rgba(0,0,0,0.3); 
+                animation: slideUp 1.2s ease-out;
+            }
+
+            @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         `;
 
         const Button = styled.button`
-            padding: 15px 40px; background: ${props => props.secondary ? 'transparent' : theme.primary};
-            color: ${props => props.secondary ? 'white' : 'white'}; border: ${props => props.secondary ? '2px solid white' : 'none'};
-            font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: 0.3s;
-            box-shadow: ${props => props.secondary ? 'none' : '0 10px 20px rgba(232, 93, 117, 0.4)'};
+            padding: 16px 45px; 
+            background: ${props => props.secondary ? 'transparent' : SITE_CONFIG.theme.primary};
+            color: ${props => props.secondary ? 'white' : 'white'}; 
+            border: ${props => props.secondary ? '2px solid white' : 'none'};
+            font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: all 0.3s;
+            box-shadow: ${props => props.secondary ? 'none' : '0 10px 25px rgba(232, 93, 117, 0.4)'};
+            text-transform: uppercase; letter-spacing: 1px; font-family: ${SITE_CONFIG.theme.fontBody};
             
-            &:hover { transform: translateY(-3px); background: ${props => props.secondary ? 'white' : theme.primaryHover}; color: ${props => props.secondary ? theme.primary : 'white'}; }
+            &:hover { 
+                transform: translateY(-4px); 
+                background: ${props => props.secondary ? 'white' : SITE_CONFIG.theme.primaryHover}; 
+                color: ${props => props.secondary ? SITE_CONFIG.theme.secondary : 'white'}; 
+                box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            }
         `;
 
-        const FilterSection = styled.section`
-            padding: 40px 5%; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center;
-            background: #fff; position: sticky; top: 80px; z-index: 900; box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        const FilterBar = styled.section`
+            padding: 30px 8%; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center;
+            background: #fff; position: sticky; top: 80px; z-index: 900; 
+            border-bottom: 1px solid #eee;
         `;
 
-        const SearchInput = styled.input`
-            padding: 12px 20px; border-radius: 30px; border: 1px solid #ddd; width: 300px; max-width: 100%;
-            font-family: 'Inter', sans-serif; &:focus { outline: 2px solid ${theme.primary}; border-color: transparent; }
+        const SearchInput = styled.div`
+            position: relative;
+            input {
+                padding: 12px 20px 12px 45px; border-radius: 30px; border: 1px solid #ddd; width: 300px; max-width: 100%;
+                font-family: ${SITE_CONFIG.theme.fontBody}; transition: 0.3s;
+                &:focus { outline: none; border-color: ${SITE_CONFIG.theme.primary}; box-shadow: 0 0 0 4px rgba(232, 93, 117, 0.1); }
+            }
+            i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #aaa; }
         `;
 
         const CategoryBtn = styled.button`
-            padding: 8px 16px; border-radius: 20px; background: ${props => props.active ? theme.primary : '#f1f1f1'};
-            color: ${props => props.active ? 'white' : '#666'}; border: none; font-weight: 500; margin-right: 8px; margin-bottom: 8px;
-            cursor: pointer; transition: 0.2s; &:hover { background: ${props => props.active ? theme.primary : '#e0e0e0'}; }
+            padding: 10px 20px; border-radius: 25px; 
+            background: ${props => props.active ? SITE_CONFIG.theme.primary : 'transparent'};
+            color: ${props => props.active ? 'white' : '#666'}; 
+            border: 1px solid ${props => props.active ? SITE_CONFIG.theme.primary : '#ddd'}; 
+            font-weight: 600; margin-right: 10px; margin-bottom: 5px; font-size: 0.9rem;
+            cursor: pointer; transition: 0.3s; 
+            &:hover { 
+                background: ${props => props.active ? SITE_CONFIG.theme.primaryHover : '#f8f8f8'}; 
+                border-color: ${SITE_CONFIG.theme.primary};
+            }
         `;
 
         const Grid = styled.div`
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 40px 5% 80px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 50px 8% 100px;
         `;
 
         const Card = styled.div`
-            background: white; border-radius: 12px; overflow: hidden; box-shadow: ${theme.shadow}; transition: 0.3s;
-            &:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+            background: white; border-radius: 16px; overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
             
-            .img-wrap { height: 300px; overflow: hidden; position: relative; }
-            img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+            &:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+            
+            .img-wrap { height: 320px; overflow: hidden; position: relative; background: #eee; }
+            img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s; }
             &:hover img { transform: scale(1.1); }
             
-            .content { padding: 20px; }
-            .cat { font-size: 0.75rem; text-transform: uppercase; color: ${theme.primary}; font-weight: 700; letter-spacing: 1px; }
-            h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin: 5px 0; color: ${theme.secondary}; }
-            .price { font-size: 1.4rem; font-weight: 700; color: ${theme.secondary}; margin-top: 10px; display: block; }
+            .content { padding: 25px; }
+            .cat { 
+                font-size: 0.7rem; text-transform: uppercase; color: ${SITE_CONFIG.theme.gold}; 
+                font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 8px;
+            }
+            h3 { font-family: ${SITE_CONFIG.theme.fontHeading}; font-size: 1.4rem; margin: 0 0 10px; color: ${SITE_CONFIG.theme.secondary}; }
+            .desc { font-size: 0.9rem; color: #777; margin-bottom: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
             
-            .btn-add { width: 100%; padding: 12px; background: ${theme.secondary}; color: white; border: none; margin-top: 15px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-            .btn-add:hover { background: ${theme.primary}; }
+            .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+            .price { font-size: 1.3rem; font-weight: 700; color: ${SITE_CONFIG.theme.secondary}; }
+            
+            .btn-add { 
+                width: 45px; height: 45px; border-radius: 50%; 
+                background: ${SITE_CONFIG.theme.secondary}; color: white; border: none; 
+                display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+                cursor: pointer; transition: 0.3s; 
+            }
+            .btn-add:hover { background: ${SITE_CONFIG.theme.primary}; transform: rotate(90deg); }
         `;
 
         const Sidebar = styled.div`
-            position: fixed; top: 0; right: 0; width: 400px; max-width: 100%; height: 100vh; background: white;
-            z-index: 2000; padding: 30px; box-shadow: -10px 0 40px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-            transform: translateX(${props => props.open ? '0' : '100%'}); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: fixed; top: 0; right: 0; width: 450px; max-width: 90%; height: 100vh; background: white;
+            z-index: 2000; padding: 40px; box-shadow: -10px 0 50px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+            transform: translateX(${props => props.open ? '0' : '100%'}); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         `;
 
         const Backdrop = styled.div`
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1500;
-            opacity: ${props => props.open ? 1 : 0}; pointer-events: ${props => props.open ? 'all' : 'none'}; transition: 0.3s;
+            position: fixed; inset: 0; background: rgba(45, 52, 54, 0.6); z-index: 1500; backdrop-filter: blur(4px);
+            opacity: ${props => props.open ? 1 : 0}; pointer-events: ${props => props.open ? 'all' : 'none'}; transition: 0.4s;
         `;
 
-        const WhatsAppBtn = styled.a`
-            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px;
-            background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
-            margin-top: 20px; transition: 0.3s; &:hover { background: #1ebc57; }
+        const WhatsAppFloat = styled.a`
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            background: #25D366; color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 2rem;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); z-index: 990;
+            transition: 0.3s; animation: pulse 2s infinite;
+            text-decoration: none;
+
+            &:hover { transform: scale(1.1); box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6); }
+
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+                70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+            }
         `;
 
-        // --- 3. COMPONENTE APP PRINCIPAL ---
+        // ==================================================================================
+        // 5. APP PRINCIPAL
+        // ==================================================================================
+
         function App() {
             const [cart, setCart] = useState([]);
             const [isCartOpen, setIsCartOpen] = useState(false);
@@ -187,8 +319,7 @@
             const [category, setCategory] = useState('Todas');
             
             useEffect(() => {
-                // Remover loading screen
-                document.body.classList.add('loaded');
+                setTimeout(() => document.body.classList.add('loaded'), 800);
             }, []);
 
             const addToCart = (product) => {
@@ -212,129 +343,168 @@
 
             const total = cart.reduce((acc, item) => acc + parseFloat(item.price), 0);
 
-            // Gerar link do WhatsApp com o pedido
-            const whatsappLink = useMemo(() => {
-                const phone = "551938279999"; // Coloque seu número aqui
-                let msg = "*Olá BellaFlor! Gostaria de fazer o seguinte pedido:*\n\n";
-                cart.forEach(item => { msg += `- ${item.name}: R$ ${item.price.replace('.', ',')}\n`; });
-                msg += `\n*Total: R$ ${total.toFixed(2).replace('.', ',')}*`;
-                msg += "\n\nQual a previsão de entrega?";
+            // Gerador de link do WhatsApp inteligente
+            const checkoutLink = useMemo(() => {
+                const phone = SITE_CONFIG.info.whatsapp;
+                let msg = `*Olá, ${SITE_CONFIG.info.name}!* Gostaria de finalizar meu pedido:\n\n`;
+                
+                // Agrupar itens iguais? Por enquanto simples listagem
+                cart.forEach((item, i) => { 
+                    msg += `▫️ ${item.name} - R$ ${item.price.replace('.', ',')}\n`; 
+                });
+                
+                msg += `\n*💰 TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n`;
+                msg += `\n📍 Entrega para: *${SITE_CONFIG.info.city}*`;
+                msg += "\n💳 Como posso efetuar o pagamento?";
+                
                 return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
             }, [cart, total]);
+
+            const openGeneralWhatsapp = () => {
+                window.open(`https://wa.me/${SITE_CONFIG.info.whatsapp}?text=Olá, gostaria de conhecer as flores.`, '_blank');
+            };
 
             return (
                 <>
                     <Navbar>
                         <Logo onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-                            <i className="fas fa-seedling" style={{color: theme.primary}}></i>
-                            BellaFlor <span>Artur Nogueira</span>
+                            <i className="fas fa-spa" style={{color: SITE_CONFIG.theme.primary}}></i>
+                            {SITE_CONFIG.info.name} <span>{SITE_CONFIG.info.city}</span>
                         </Logo>
-                        <CartBadge onClick={() => setIsCartOpen(true)}>
+                        <CartBadge onClick={() => setIsCartOpen(true)} title="Ver carrinho">
                             <i className="fas fa-shopping-bag"></i>
                             {cart.length > 0 && <span className="count">{cart.length}</span>}
                         </CartBadge>
                     </Navbar>
 
-                    <Hero>
-                        <FadeIn>
-                            <h1>Flores que contam histórias</h1>
-                            <p>A mais alta floricultura de Artur Nogueira. Buquês exclusivos, arranjos de luxo e presentes inesquecíveis.</p>
-                            <div style={{display: 'flex', gap: '15px', justifyContent: 'center'}}>
-                                <Button onClick={() => document.getElementById('shop').scrollIntoView({behavior: 'smooth'})}>Ver Coleção</Button>
-                                <Button secondary onClick={() => window.open('https://wa.me/551938279999', '_blank')}>Falar no WhatsApp</Button>
-                            </div>
-                        </FadeIn>
-                    </Hero>
+                    <HeroSection>
+                        <h1>{SITE_CONFIG.hero.title}</h1>
+                        <p>{SITE_CONFIG.hero.subtitle}</p>
+                        <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center'}}>
+                            <Button onClick={() => document.getElementById('shop').scrollIntoView({behavior: 'smooth'})}>
+                                Ver Coleção
+                            </Button>
+                            <Button secondary onClick={openGeneralWhatsapp}>
+                                <i className="fab fa-whatsapp"></i> Atendimento
+                            </Button>
+                        </div>
+                    </HeroSection>
 
-                    <FilterSection id="shop">
-                        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                            <i className="fas fa-search" style={{color: '#aaa'}}></i>
-                            <SearchInput 
-                                placeholder="Buscar flores..." 
+                    <FilterBar id="shop">
+                        <SearchInput>
+                            <i className="fas fa-search"></i>
+                            <input 
+                                placeholder="O que você procura?" 
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
-                        </div>
-                        <div>
-                            {['Todas', 'Buquês', 'Cestas', 'Orquídeas'].map(cat => (
+                        </SearchInput>
+                        <div style={{display:'flex', flexWrap: 'wrap', justifyContent:'center'}}>
+                            {['Todas', 'Buquês', 'Arranjos', 'Cestas', 'Orquídeas'].map(cat => (
                                 <CategoryBtn key={cat} active={category === cat} onClick={() => setCategory(cat)}>
                                     {cat}
                                 </CategoryBtn>
                             ))}
                         </div>
-                    </FilterSection>
+                    </FilterBar>
 
                     <Grid>
                         {filteredProducts.map(product => (
-                            <FadeIn key={product.id}>
-                                <Card>
-                                    <div className="img-wrap">
-                                        <img src={product.image} alt={product.name} loading="lazy" />
-                                    </div>
-                                    <div className="content">
-                                        <span className="cat">{product.category}</span>
-                                        <h3>{product.name}</h3>
-                                        <p style={{fontSize: '0.9rem', color: '#888', margin: '5px 0'}}>{product.description}</p>
+                            <Card key={product.id}>
+                                <div className="img-wrap">
+                                    <img src={product.image} alt={product.name} loading="lazy" />
+                                </div>
+                                <div className="content">
+                                    <span className="cat">{product.category}</span>
+                                    <h3>{product.name}</h3>
+                                    <p className="desc">{product.description}</p>
+                                    <div className="footer">
                                         <span className="price">R$ {product.price.replace('.', ',')}</span>
-                                        <button className="btn-add" onClick={() => addToCart(product)}>
-                                            <i className="fas fa-cart-plus"></i> Adicionar
+                                        <button className="btn-add" onClick={() => addToCart(product)} title="Adicionar ao carrinho">
+                                            <i className="fas fa-plus"></i>
                                         </button>
                                     </div>
-                                </Card>
-                            </FadeIn>
+                                </div>
+                            </Card>
                         ))}
                     </Grid>
                     
                     {filteredProducts.length === 0 && (
-                        <div style={{textAlign: 'center', padding: '50px', color: '#999'}}>
-                            <i className="fas fa-flower" style={{fontSize: '3rem', marginBottom: '20px'}}></i>
-                            <p>Nenhum produto encontrado com este termo.</p>
+                        <div style={{textAlign: 'center', padding: '100px 20px', color: '#999'}}>
+                            <i className="far fa-sad-tear" style={{fontSize: '4rem', marginBottom: '20px', color: '#eee'}}></i>
+                            <p style={{fontSize: '1.2rem'}}>Nenhuma flor encontrada. Tente outra categoria.</p>
                         </div>
                     )}
 
-                    <footer style={{background: '#2d3436', color: 'white', padding: '60px 5%', textAlign: 'center'}}>
-                        <h2 style={{fontFamily: 'Playfair Display', marginBottom: '20px'}}>BellaFlor</h2>
-                        <p style={{opacity: 0.7}}>Criando memórias em Artur Nogueira desde 2010.</p>
-                        <p style={{marginTop: '40px', fontSize: '0.8rem', opacity: 0.5}}>&copy; 2024 BellaFlor. Design Ultimate.</p>
+                    <footer style={{background: SITE_CONFIG.theme.secondary, color: 'white', padding: '80px 5%', textAlign: 'center'}}>
+                        <h2 style={{fontFamily: SITE_CONFIG.theme.fontHeading, fontSize: '2.5rem', marginBottom: '20px'}}>{SITE_CONFIG.info.name}</h2>
+                        <p style={{opacity: 0.7, maxWidth: '600px', margin: '0 auto 40px'}}>
+                            Transformando sentimentos em gestos concretos. A floricultura referência em {SITE_CONFIG.info.city} desde {SITE_CONFIG.info.since}.
+                        </p>
+                        <div style={{display: 'flex', gap: '20px', justifyContent: 'center', fontSize: '1.5rem'}}>
+                            <i className="fab fa-instagram" style={{cursor:'pointer', opacity:0.8}}></i>
+                            <i className="fab fa-facebook" style={{cursor:'pointer', opacity:0.8}}></i>
+                            <i className="far fa-envelope" style={{cursor:'pointer', opacity:0.8}}></i>
+                        </div>
+                        <p style={{marginTop: '60px', fontSize: '0.8rem', opacity: 0.3}}>&copy; 2024 {SITE_CONFIG.info.name}. Todos os direitos reservados.</p>
                     </footer>
 
-                    {/* CARRINHO */}
+                    {/* BOTÃO FLUTUANTE ZAP */}
+                    <WhatsAppFloat href={`https://wa.me/${SITE_CONFIG.info.whatsapp}`} target="_blank" title="Fale conosco no WhatsApp">
+                        <i className="fab fa-whatsapp"></i>
+                    </WhatsAppFloat>
+
+                    {/* SIDEBAR DO CARRINHO */}
                     <Backdrop open={isCartOpen} onClick={() => setIsCartOpen(false)} />
                     <Sidebar open={isCartOpen}>
                         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px'}}>
-                            <h2 style={{fontFamily: 'Playfair Display'}}>Seu Carrinho</h2>
-                            <button onClick={() => setIsCartOpen(false)} style={{background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer'}}>
+                            <h2 style={{fontFamily: SITE_CONFIG.theme.fontHeading}}>Seu Jardim</h2>
+                            <button onClick={() => setIsCartOpen(false)} style={{background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer', color: '#999'}}>
                                 <i className="fas fa-times"></i>
                             </button>
                         </div>
 
-                        <div style={{flex: 1, overflowY: 'auto'}}>
+                        <div style={{flex: 1, overflowY: 'auto', paddingRight: '5px'}}>
                             {cart.length === 0 ? (
-                                <p style={{color: '#999', textAlign: 'center', marginTop: '50px'}}>Seu carrinho está vazio.</p>
+                                <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'70%', color:'#aaa'}}>
+                                    <i className="fas fa-basket-shopping" style={{fontSize:'3rem', marginBottom:'20px', opacity:0.3}}></i>
+                                    <p>Sua cesta está vazia.</p>
+                                </div>
                             ) : (
                                 cart.map((item, index) => (
-                                    <div key={index} style={{display: 'flex', gap: '15px', marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '15px'}}>
-                                        <img src={item.image} style={{width: '60px', height: '60px', objectFit: 'cover', borderRadius: '5px'}} />
+                                    <div key={index} style={{display: 'flex', gap: '15px', marginBottom: '20px', borderBottom: '1px solid #f5f5f5', paddingBottom: '15px'}}>
+                                        <img src={item.image} style={{width: '70px', height: '70px', objectFit: 'cover', borderRadius: '8px'}} />
                                         <div style={{flex: 1}}>
-                                            <h4 style={{fontSize: '0.9rem'}}>{item.name}</h4>
-                                            <span style={{fontWeight: 'bold', color: theme.primary}}>R$ {item.price.replace('.', ',')}</span>
+                                            <h4 style={{fontSize: '0.95rem', marginBottom: '5px'}}>{item.name}</h4>
+                                            <span style={{fontWeight: 'bold', color: SITE_CONFIG.theme.primary}}>R$ {item.price.replace('.', ',')}</span>
                                         </div>
-                                        <button onClick={() => removeFromCart(index)} style={{background:'none', border:'none', color: '#ff7675', cursor: 'pointer'}}>
-                                            <i className="fas fa-trash"></i>
+                                        <button onClick={() => removeFromCart(index)} style={{background:'none', border:'none', color: '#ff7675', cursor: 'pointer', alignSelf: 'center', padding:'10px'}}>
+                                            <i className="fas fa-trash-alt"></i>
                                         </button>
                                     </div>
                                 ))
                             )}
                         </div>
 
-                        <div style={{borderTop: '1px solid #eee', paddingTop: '20px'}}>
-                            <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: 'bold'}}>
-                                <span>Total:</span>
+                        <div style={{borderTop: '2px dashed #eee', paddingTop: '25px', marginTop: 'auto'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '1.4rem', fontWeight: 'bold', marginBottom: '25px', color: SITE_CONFIG.theme.secondary}}>
+                                <span>Total</span>
                                 <span>R$ {total.toFixed(2).replace('.', ',')}</span>
                             </div>
-                            <WhatsAppBtn href={whatsappLink} target="_blank">
-                                <i className="fab fa-whatsapp"></i> Finalizar Pedido
-                            </WhatsAppBtn>
+                            <a 
+                                href={checkoutLink} 
+                                target="_blank"
+                                style={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                                    width: '100%', padding: '18px', background: '#25D366', color: 'white',
+                                    textDecoration: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1.1rem',
+                                    transition: '0.3s', boxShadow: '0 10px 20px rgba(37, 211, 102, 0.2)'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                            >
+                                <i className="fab fa-whatsapp"></i> Finalizar no WhatsApp
+                            </a>
                         </div>
                     </Sidebar>
                 </>
