@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BellaFlor | Floricultura Premium Artur Nogueira</title>
-    <meta name="description" content="BellaFlor - A floricultura mais exclusiva de Artur Nogueira.">
+    <title>BellaFlor | Atelier Floral Premium</title>
+    <meta name="description" content="BellaFlor - Design floral exclusivo e presentes inesquecíveis em Artur Nogueira.">
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -20,311 +21,327 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* CSS Reset & Base Global */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         
-        /* Scrollbar Personalizada */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #e85d75; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #d64c63; }
+        :root {
+            --primary: #d64c63;
+            --gold: #c5a059;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #fff; }
+        ::-webkit-scrollbar-thumb { background: #ecccd3; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
         body { 
-            font-family: 'Lato', sans-serif; 
-            background: #fffbfb; 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #fdfbfb;
+            background-image: radial-gradient(#f3e6e8 1px, transparent 1px);
+            background-size: 30px 30px;
             color: #2d3436; 
-            opacity: 0; 
-            transition: opacity 0.8s ease-in-out; 
             overflow-x: hidden;
+            opacity: 0; transition: opacity 1s ease;
         }
         body.loaded { opacity: 1; }
         
-        .loading-screen {
-            position: fixed; inset: 0; background: #fff; display: flex; 
-            justify-content: center; align-items: center; z-index: 9999;
-            color: #e85d75; font-size: 2rem; font-family: 'Playfair Display', serif;
-            flex-direction: column; gap: 20px;
+        /* Loader Elegante */
+        .loader-wrapper {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
+        .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
+        .flower-spinner { font-size: 3rem; color: var(--primary); animation: spin-slow 3s infinite linear; }
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="root">
-        <div class="loading-screen">
-            <i class="fas fa-seedling fa-spin" style="font-size: 3rem;"></i> 
-            <span>Cultivando experiências...</span>
+        <div class="loader-wrapper">
+            <i class="fas fa-fan flower-spinner"></i>
+            <p style="margin-top: 15px; font-family: 'Cormorant Garamond'; letter-spacing: 2px; color: #555;">PREPARANDO O JARDIM...</p>
         </div>
     </div>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect, useMemo, useRef } = React;
         const styled = window.styled;
 
         // ==================================================================================
-        // 1. ARQUIVO DE CONFIGURAÇÃO (ISTO SERÁ SEU FUTURO ARQUIVO CONFIG.JS)
+        // 1. ÁREA DE CONFIGURAÇÃO (FUTURO CONFIG.JS)
+        // ----------------------------------------------------------------------------------
+        // Tudo daqui para baixo até o marcador "FIM DA CONFIGURAÇÃO" será movido futuramente.
         // ==================================================================================
         
-        const SITE_CONFIG = {
-            info: {
+        const CONFIG = {
+            store: {
                 name: "BellaFlor",
+                slogan: "Atelier Floral",
                 city: "Artur Nogueira",
-                whatsapp: "551938279999", // Apenas números
-                since: "2010"
+                whatsapp: "551938279999", 
+                since: "2010",
+                instagram: "@bellaflor_artur",
+                email: "contato@bellaflor.com"
             },
             theme: {
-                primary: '#e85d75',       // Cor principal (Botões, destaques)
-                primaryHover: '#c93b55',  // Cor ao passar o mouse
-                secondary: '#2d3436',     // Cor de texto escuro
-                bg: '#fffbfb',            // Fundo do site
-                white: '#ffffff',
-                gold: '#d4af37',          // Detalhes de luxo
-                fontHeading: "'Playfair Display', serif",
-                fontBody: "'Lato', sans-serif"
+                colors: {
+                    primary: '#d64c63',      // Rosa queimado elegante
+                    primaryLight: '#fbe6ea', // Fundo suave
+                    secondary: '#2d3436',    // Texto escuro
+                    gold: '#c5a059',         // Detalhes dourados
+                    bg: '#fdfbfb',           // Fundo Off-white
+                    success: '#27ae60'       // Verde sucesso
+                },
+                fonts: {
+                    heading: "'Cormorant Garamond', serif",
+                    body: "'Montserrat', sans-serif"
+                }
             },
             hero: {
-                title: "Flores que contam a sua história",
-                subtitle: "A floricultura mais exclusiva de Artur Nogueira. Buquês autorais e presentes inesquecíveis.",
-                // Imagem de fundo de alta qualidade (Rosas em tom escuro/elegante)
-                image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1920&q=80"
-            }
+                headline: "Flores que eternizam momentos",
+                subheadline: "Design floral autoral e exclusivo em Artur Nogueira. Transforme sentimentos em arte.",
+                bgImage: "https://images.unsplash.com/photo-1507290431195-26ab47d4940d?auto=format&fit=crop&w=1920&q=80",
+                buttonText: "Explorar Coleção"
+            },
+            categories: ['Todos', 'Buquês', 'Arranjos', 'Box Luxo', 'Orquídeas', 'Cestas']
         };
 
-        // ==================================================================================
-        // 2. BANCO DE IMAGENS INTELIGENTE
-        // ==================================================================================
+        // --- MOCK DATABASE & UTILS ---
         
-        // Mapeia palavras-chave para IDs reais do Unsplash para garantir que "Girassol" mostre um Girassol.
-        const getImageForFlower = (flowerName, index) => {
-            const imageMap = {
-                'Rosas': ['1548695607-9c73430ba065', '1518709268805-4e9042af9f23', '1562690868-60bbe7293e94'],
-                'Girassóis': ['1470509037663-253afd7f0f51', '1532009804797-28d8745d064c'],
-                'Lírios': ['1525253815340-d9d2e1c9e830', '1587574293340-e0011c4e8ea0'],
-                'Tulipas': ['1520763185298-1b434c919102', '1586967789182-520e791b7596'],
-                'Gérberas': ['1555546255-b778d91c2b53'],
-                'Astromélias': ['1595231916356-a86217cef424'],
-                'Orquídeas': ['1566929341488-820845a76cb5', '1561181286-d3fee7d55364'],
-                'Flores do Campo': ['1464698579707-353232147316', '1507290431195-26ab47d4940d']
+        // Utilitário de Imagens Inteligente
+        const getFlowerImage = (term, index) => {
+            const map = {
+                'rosa': ['1562690868-60bbe7293e94', '1518709268805-4e9042af9f23'],
+                'girassol': ['1470509037663-253afd7f0f51', '1532009804797-28d8745d064c'],
+                'lirio': ['1525253815340-d9d2e1c9e830'],
+                'orquidea': ['1566929341488-820845a76cb5', '1561181286-d3fee7d55364'],
+                'tulipa': ['1520763185298-1b434c919102'],
+                'campo': ['1464698579707-353232147316']
             };
-
-            // Tenta encontrar uma imagem específica, senão usa uma genérica bonita
-            const keys = Object.keys(imageMap);
-            const key = keys.find(k => flowerName.includes(k)) || 'Flores do Campo';
-            const ids = imageMap[key] || imageMap['Flores do Campo'];
-            const imgId = ids[index % ids.length]; // Rotaciona as imagens disponíveis
-            
-            return `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+            const key = Object.keys(map).find(k => term.toLowerCase().includes(k)) || 'campo';
+            const ids = map[key];
+            return `https://images.unsplash.com/photo-${ids[index % ids.length]}?auto=format&fit=crop&w=800&q=80`;
         };
 
-        // ==================================================================================
-        // 3. GERAÇÃO DE DADOS (MOCK)
-        // ==================================================================================
-
-        const PRODUCTS = Array.from({ length: 40 }, (_, i) => {
-            const types = ['Buquê', 'Arranjo', 'Cesta', 'Box Luxury', 'Vaso'];
-            const flowers = ['Rosas Vermelhas', 'Girassóis', 'Lírios', 'Tulipas', 'Gérberas', 'Astromélias', 'Orquídeas Phalaenopsis', 'Flores do Campo'];
-            const adjs = ['Imperial', 'Romântico', 'Radiante', 'Eterno', 'Apaixonante', 'Luxuoso', 'Silvestre', 'Delicado'];
+        // Gerador de Produtos
+        const PRODUCTS = Array.from({ length: 32 }, (_, i) => {
+            const types = ['Buquê', 'Arranjo', 'Box', 'Cesta', 'Vaso'];
+            const flowers = ['Rosas Vermelhas', 'Girassóis', 'Lírios Brancos', 'Tulipas', 'Mix do Campo', 'Orquídeas Phalaenopsis', 'Rosas Colombianas'];
+            const adjs = ['Imperial', 'Eterno', 'Radiante', 'Apaixonante', 'Minimalista', 'Clássico', 'Silvestre'];
             
             const type = types[i % types.length];
             const flower = flowers[i % flowers.length];
             const adj = adjs[i % adjs.length];
             
-            // Lógica para categorização
-            let category = 'Outros';
-            if(type === 'Buquê') category = 'Buquês';
-            else if(type === 'Cesta') category = 'Cestas';
-            else if(flower.includes('Orquídea')) category = 'Orquídeas';
-            else category = 'Arranjos';
+            // Auto Categorização
+            let cat = 'Arranjos';
+            if(type === 'Buquê') cat = 'Buquês';
+            else if(type === 'Box') cat = 'Box Luxo';
+            else if(type === 'Cesta') cat = 'Cestas';
+            else if(flower.includes('Orquídeas')) cat = 'Orquídeas';
 
             return {
                 id: i + 1,
-                name: `${type} ${adj} de ${flower}`,
-                price: (89.90 + (i * 15.50)).toFixed(2),
-                category: category,
-                image: getImageForFlower(flower, i),
-                description: `Design exclusivo ${SITE_CONFIG.info.name} com ${flower} frescas selecionadas.`
+                name: `${type} ${adj}`,
+                subtitle: `Com ${flower} selecionadas`,
+                price: (90 + (i * 20) + (Math.random() * 50)).toFixed(2),
+                category: cat,
+                image: getFlowerImage(flower, i),
+                details: "Um design exclusivo feito à mão por nossos floristas experts. Acompanha cartão de mensagem personalizado e instruções de cuidado."
             };
         });
 
         // ==================================================================================
-        // 4. STYLED COMPONENTS
+        // FIM DA CONFIGURAÇÃO - O CÓDIGO ABAIXO É A APLICAÇÃO REACT
         // ==================================================================================
 
-        const Navbar = styled.nav`
-            position: fixed; top: 0; width: 100%; height: 80px;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+        // --- Styled Components ---
+
+        const GlassNav = styled.nav`
+            position: fixed; top: 0; left: 0; right: 0; height: 85px;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 8%; z-index: 1000; box-shadow: 0 4px 30px rgba(0,0,0,0.03);
-            transition: all 0.3s ease;
+            padding: 0 5%; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            &.scrolled { height: 70px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         `;
 
-        const Logo = styled.div`
-            font-family: ${SITE_CONFIG.theme.fontHeading}; font-size: 1.8rem; font-weight: 700; color: ${SITE_CONFIG.theme.primary};
-            display: flex; align-items: center; gap: 8px; cursor: pointer; letter-spacing: -1px;
-            span { color: ${SITE_CONFIG.theme.secondary}; font-weight: 400; font-size: 1rem; margin-left: 5px; text-transform: uppercase; letter-spacing: 2px; }
+        const Logo = styled.h1`
+            font-family: ${CONFIG.theme.fonts.heading}; font-size: 2rem; color: ${CONFIG.theme.colors.primary};
+            font-weight: 700; letter-spacing: -0.5px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            span { font-family: ${CONFIG.theme.fonts.body}; font-size: 0.8rem; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 400; margin-top: 5px; }
             @media(max-width: 768px) { span { display: none; } }
         `;
 
-        const CartBadge = styled.button`
-            position: relative; background: none; border: none; font-size: 1.3rem; color: ${SITE_CONFIG.theme.secondary}; cursor: pointer;
-            transition: transform 0.2s;
-            &:hover { transform: scale(1.1); color: ${SITE_CONFIG.theme.primary}; }
-            .count {
-                position: absolute; top: -8px; right: -10px; background: ${SITE_CONFIG.theme.primary}; color: white;
-                font-size: 0.7rem; width: 22px; height: 22px; border-radius: 50%; display: flex; 
-                align-items: center; justify-content: center; font-weight: bold; border: 2px solid white;
+        const IconsGroup = styled.div`
+            display: flex; gap: 20px; align-items: center;
+            i { font-size: 1.2rem; cursor: pointer; color: ${CONFIG.theme.colors.secondary}; transition: 0.3s; position: relative; }
+            i:hover { color: ${CONFIG.theme.colors.primary}; transform: translateY(-2px); }
+            .badge {
+                position: absolute; top: -8px; right: -10px; background: ${CONFIG.theme.colors.primary};
+                color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; border: 2px solid white; font-weight: bold;
             }
         `;
 
-        const HeroSection = styled.header`
-            height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; color: white; padding: 20px; margin-top: 0;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('${SITE_CONFIG.hero.image}') center/cover fixed;
+        const Hero = styled.header`
+            height: 95vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('${CONFIG.hero.bgImage}') center/cover fixed;
+            position: relative; overflow: hidden;
             
-            h1 { 
-                font-family: ${SITE_CONFIG.theme.fontHeading}; 
-                font-size: clamp(2.5rem, 6vw, 5rem); 
-                margin-bottom: 20px; 
-                line-height: 1.1;
-                text-shadow: 0 4px 20px rgba(0,0,0,0.3); 
-                animation: slideUp 1s ease-out;
+            &::after {
+                content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 150px;
+                background: linear-gradient(to top, ${CONFIG.theme.colors.bg}, transparent);
             }
-            p { 
-                font-size: clamp(1rem, 2vw, 1.4rem); 
-                max-width: 700px; 
-                margin-bottom: 40px; 
-                font-weight: 300;
-                text-shadow: 0 2px 10px rgba(0,0,0,0.3); 
-                animation: slideUp 1.2s ease-out;
-            }
-
-            @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         `;
 
-        const Button = styled.button`
-            padding: 16px 45px; 
-            background: ${props => props.secondary ? 'transparent' : SITE_CONFIG.theme.primary};
-            color: ${props => props.secondary ? 'white' : 'white'}; 
-            border: ${props => props.secondary ? '2px solid white' : 'none'};
-            font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: all 0.3s;
-            box-shadow: ${props => props.secondary ? 'none' : '0 10px 25px rgba(232, 93, 117, 0.4)'};
-            text-transform: uppercase; letter-spacing: 1px; font-family: ${SITE_CONFIG.theme.fontBody};
+        const HeroContent = styled.div`
+            z-index: 2; max-width: 800px; padding: 20px;
+            h2 { font-family: ${CONFIG.theme.fonts.heading}; font-size: clamp(3rem, 8vw, 5.5rem); margin-bottom: 20px; line-height: 1; text-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+            p { font-size: 1.2rem; margin-bottom: 40px; font-weight: 300; letter-spacing: 1px; opacity: 0.9; }
+        `;
+
+        const MainBtn = styled.button`
+            padding: 18px 45px; background: ${props => props.outline ? 'transparent' : CONFIG.theme.colors.primary};
+            color: ${props => props.outline ? 'white' : 'white'}; border: ${props => props.outline ? '1px solid rgba(255,255,255,0.6)' : 'none'};
+            font-family: ${CONFIG.theme.fonts.body}; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden;
             
             &:hover { 
-                transform: translateY(-4px); 
-                background: ${props => props.secondary ? 'white' : SITE_CONFIG.theme.primaryHover}; 
-                color: ${props => props.secondary ? SITE_CONFIG.theme.secondary : 'white'}; 
-                box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+                background: ${props => props.outline ? 'white' : '#b63b50'}; 
+                color: ${props => props.outline ? CONFIG.theme.colors.secondary : 'white'};
+                transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
             }
         `;
 
-        const FilterBar = styled.section`
-            padding: 30px 8%; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center;
-            background: #fff; position: sticky; top: 80px; z-index: 900; 
-            border-bottom: 1px solid #eee;
+        const FilterContainer = styled.div`
+            position: sticky; top: 85px; background: rgba(253, 251, 251, 0.95); padding: 20px 0; z-index: 900;
+            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+            transition: top 0.3s;
         `;
 
-        const SearchInput = styled.div`
-            position: relative;
-            input {
-                padding: 12px 20px 12px 45px; border-radius: 30px; border: 1px solid #ddd; width: 300px; max-width: 100%;
-                font-family: ${SITE_CONFIG.theme.fontBody}; transition: 0.3s;
-                &:focus { outline: none; border-color: ${SITE_CONFIG.theme.primary}; box-shadow: 0 0 0 4px rgba(232, 93, 117, 0.1); }
-            }
-            i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #aaa; }
+        const FilterBtn = styled.button`
+            background: ${props => props.active ? CONFIG.theme.colors.secondary : 'transparent'};
+            color: ${props => props.active ? '#fff' : '#888'};
+            border: 1px solid ${props => props.active ? CONFIG.theme.colors.secondary : '#ddd'};
+            padding: 8px 24px; border-radius: 30px; cursor: pointer; transition: 0.3s;
+            font-family: ${CONFIG.theme.fonts.body}; font-size: 0.85rem; font-weight: 500;
+            
+            &:hover { border-color: ${CONFIG.theme.colors.secondary}; color: ${CONFIG.theme.colors.secondary}; }
         `;
 
-        const CategoryBtn = styled.button`
-            padding: 10px 20px; border-radius: 25px; 
-            background: ${props => props.active ? SITE_CONFIG.theme.primary : 'transparent'};
-            color: ${props => props.active ? 'white' : '#666'}; 
-            border: 1px solid ${props => props.active ? SITE_CONFIG.theme.primary : '#ddd'}; 
-            font-weight: 600; margin-right: 10px; margin-bottom: 5px; font-size: 0.9rem;
-            cursor: pointer; transition: 0.3s; 
+        const Grid = styled.section`
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px;
+            padding: 60px 8%; margin-bottom: 50px;
+        `;
+
+        const ProductCard = styled.div`
+            background: white; border-radius: 4px; overflow: hidden; position: relative;
+            transition: all 0.4s ease; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+
             &:hover { 
-                background: ${props => props.active ? SITE_CONFIG.theme.primaryHover : '#f8f8f8'}; 
-                border-color: ${SITE_CONFIG.theme.primary};
+                transform: translateY(-10px); 
+                box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+                .quick-actions { opacity: 1; transform: translateY(0); }
+                img { transform: scale(1.05); }
             }
-        `;
 
-        const Grid = styled.div`
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 50px 8% 100px;
-        `;
+            .img-container { height: 350px; overflow: hidden; position: relative; background: #f0f0f0; }
+            img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s ease; }
 
-        const Card = styled.div`
-            background: white; border-radius: 16px; overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            
-            &:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-            
-            .img-wrap { height: 320px; overflow: hidden; position: relative; background: #eee; }
-            img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s; }
-            &:hover img { transform: scale(1.1); }
-            
-            .content { padding: 25px; }
-            .cat { 
-                font-size: 0.7rem; text-transform: uppercase; color: ${SITE_CONFIG.theme.gold}; 
-                font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 8px;
+            .quick-actions {
+                position: absolute; bottom: 15px; left: 0; right: 0; display: flex; justify-content: center; gap: 10px;
+                opacity: 0; transform: translateY(20px); transition: 0.4s ease;
             }
-            h3 { font-family: ${SITE_CONFIG.theme.fontHeading}; font-size: 1.4rem; margin: 0 0 10px; color: ${SITE_CONFIG.theme.secondary}; }
-            .desc { font-size: 0.9rem; color: #777; margin-bottom: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-            
-            .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-            .price { font-size: 1.3rem; font-weight: 700; color: ${SITE_CONFIG.theme.secondary}; }
-            
-            .btn-add { 
-                width: 45px; height: 45px; border-radius: 50%; 
-                background: ${SITE_CONFIG.theme.secondary}; color: white; border: none; 
-                display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-                cursor: pointer; transition: 0.3s; 
+            .action-btn {
+                width: 40px; height: 40px; border-radius: 50%; background: white; border: none;
+                display: flex; align-items: center; justify-content: center; color: ${CONFIG.theme.colors.secondary};
+                cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.2s;
+                &:hover { background: ${CONFIG.theme.colors.primary}; color: white; }
             }
-            .btn-add:hover { background: ${SITE_CONFIG.theme.primary}; transform: rotate(90deg); }
+
+            .info { padding: 20px; text-align: center; }
+            .cat { font-size: 0.7rem; text-transform: uppercase; color: ${CONFIG.theme.colors.gold}; letter-spacing: 2px; font-weight: 600; display: block; margin-bottom: 5px; }
+            h3 { font-family: ${CONFIG.theme.fonts.heading}; font-size: 1.4rem; color: ${CONFIG.theme.colors.secondary}; margin-bottom: 5px; }
+            .price { font-weight: 600; color: ${CONFIG.theme.colors.primary}; font-size: 1.1rem; margin-top: 10px; display: block; }
         `;
 
         const Sidebar = styled.div`
-            position: fixed; top: 0; right: 0; width: 450px; max-width: 90%; height: 100vh; background: white;
-            z-index: 2000; padding: 40px; box-shadow: -10px 0 50px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-            transform: translateX(${props => props.open ? '0' : '100%'}); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: fixed; top: 0; right: 0; width: 420px; max-width: 90%; height: 100vh;
+            background: white; z-index: 2000; box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+            transform: translateX(${props => props.open ? '0' : '100%'}); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex; flex-direction: column; padding: 30px;
         `;
 
-        const Backdrop = styled.div`
-            position: fixed; inset: 0; background: rgba(45, 52, 54, 0.6); z-index: 1500; backdrop-filter: blur(4px);
-            opacity: ${props => props.open ? 1 : 0}; pointer-events: ${props => props.open ? 'all' : 'none'}; transition: 0.4s;
+        const ModalOverlay = styled.div`
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 2500; display: flex; justify-content: center; align-items: center; padding: 20px;
+            opacity: ${props => props.open ? 1 : 0}; pointer-events: ${props => props.open ? 'all' : 'none'}; transition: 0.3s;
         `;
 
-        const WhatsAppFloat = styled.a`
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-            background: #25D366; color: white; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 2rem;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); z-index: 990;
-            transition: 0.3s; animation: pulse 2s infinite;
-            text-decoration: none;
-
-            &:hover { transform: scale(1.1); box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6); }
-
-            @keyframes pulse {
-                0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-                70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-            }
-        `;
-
-        // ==================================================================================
-        // 5. APP PRINCIPAL
-        // ==================================================================================
-
-        function App() {
-            const [cart, setCart] = useState([]);
-            const [isCartOpen, setIsCartOpen] = useState(false);
-            const [searchTerm, setSearchTerm] = useState('');
-            const [category, setCategory] = useState('Todas');
+        const ModalBox = styled.div`
+            background: white; width: 900px; max-width: 100%; height: 500px; display: flex;
+            border-radius: 8px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            transform: scale(${props => props.open ? 1 : 0.9}); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             
+            @media(max-width: 768px) { flex-direction: column; height: auto; max-height: 90vh; overflow-y: auto; }
+        `;
+
+        const Toast = styled.div`
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: ${CONFIG.theme.colors.secondary}; color: white; padding: 12px 25px;
+            border-radius: 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 3000;
+            display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+            animation: fadeInUp 0.5s, fadeOutDown 0.5s 2.5s forwards;
+
+            @keyframes fadeInUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+            @keyframes fadeOutDown { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, 20px); } }
+        `;
+
+        // --- Components ---
+
+        const App = () => {
+            const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('bellaCart')) || []);
+            const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('bellaWish')) || []);
+            const [isCartOpen, setIsCartOpen] = useState(false);
+            const [activeCategory, setActiveCategory] = useState('Todos');
+            const [modalProduct, setModalProduct] = useState(null);
+            const [toast, setToast] = useState(null);
+            const [scrolled, setScrolled] = useState(false);
+
             useEffect(() => {
-                setTimeout(() => document.body.classList.add('loaded'), 800);
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                document.body.classList.add('loaded');
+                return () => window.removeEventListener('scroll', handleScroll);
             }, []);
+
+            useEffect(() => { localStorage.setItem('bellaCart', JSON.stringify(cart)); }, [cart]);
+            useEffect(() => { localStorage.setItem('bellaWish', JSON.stringify(wishlist)); }, [wishlist]);
+
+            const showToast = (msg, icon = 'check-circle') => {
+                setToast({ msg, icon });
+                setTimeout(() => setToast(null), 3000);
+            };
+
+            const toggleWishlist = (e, product) => {
+                e.stopPropagation();
+                const exists = wishlist.find(w => w.id === product.id);
+                if (exists) {
+                    setWishlist(wishlist.filter(w => w.id !== product.id));
+                    showToast('Removido dos favoritos', 'heart-broken');
+                } else {
+                    setWishlist([...wishlist, product]);
+                    showToast('Adicionado aos favoritos', 'heart');
+                }
+            };
 
             const addToCart = (product) => {
                 setCart([...cart, product]);
                 setIsCartOpen(true);
+                showToast(`${product.name} adicionado!`);
             };
 
             const removeFromCart = (index) => {
@@ -333,183 +350,168 @@
                 setCart(newCart);
             };
 
-            const filteredProducts = useMemo(() => {
-                return PRODUCTS.filter(p => {
-                    const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-                    const matchCat = category === 'Todas' || p.category.includes(category);
-                    return matchSearch && matchCat;
-                });
-            }, [searchTerm, category]);
+            const cartTotal = cart.reduce((acc, item) => acc + parseFloat(item.price), 0);
 
-            const total = cart.reduce((acc, item) => acc + parseFloat(item.price), 0);
+            const whatsappLink = useMemo(() => {
+                let msg = `*Olá, ${CONFIG.store.name}!* \n\nGostaria de finalizar meu pedido:\n`;
+                cart.forEach(item => msg += `▫️ ${item.name} - R$ ${item.price}\n`);
+                msg += `\n*Total: R$ ${cartTotal.toFixed(2)}*`;
+                return `https://wa.me/${CONFIG.store.whatsapp}?text=${encodeURIComponent(msg)}`;
+            }, [cart]);
 
-            // Gerador de link do WhatsApp inteligente
-            const checkoutLink = useMemo(() => {
-                const phone = SITE_CONFIG.info.whatsapp;
-                let msg = `*Olá, ${SITE_CONFIG.info.name}!* Gostaria de finalizar meu pedido:\n\n`;
-                
-                // Agrupar itens iguais? Por enquanto simples listagem
-                cart.forEach((item, i) => { 
-                    msg += `▫️ ${item.name} - R$ ${item.price.replace('.', ',')}\n`; 
-                });
-                
-                msg += `\n*💰 TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n`;
-                msg += `\n📍 Entrega para: *${SITE_CONFIG.info.city}*`;
-                msg += "\n💳 Como posso efetuar o pagamento?";
-                
-                return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-            }, [cart, total]);
-
-            const openGeneralWhatsapp = () => {
-                window.open(`https://wa.me/${SITE_CONFIG.info.whatsapp}?text=Olá, gostaria de conhecer as flores.`, '_blank');
-            };
+            const filteredProducts = activeCategory === 'Todos' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.category === activeCategory);
 
             return (
                 <>
-                    <Navbar>
-                        <Logo onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-                            <i className="fas fa-spa" style={{color: SITE_CONFIG.theme.primary}}></i>
-                            {SITE_CONFIG.info.name} <span>{SITE_CONFIG.info.city}</span>
+                    {/* Navigation */}
+                    <GlassNav className={scrolled ? 'scrolled' : ''}>
+                        <Logo onClick={() => window.scrollTo(0,0)}>
+                            {CONFIG.store.name} <span>{CONFIG.store.city}</span>
                         </Logo>
-                        <CartBadge onClick={() => setIsCartOpen(true)} title="Ver carrinho">
-                            <i className="fas fa-shopping-bag"></i>
-                            {cart.length > 0 && <span className="count">{cart.length}</span>}
-                        </CartBadge>
-                    </Navbar>
+                        <IconsGroup>
+                            <i className="fas fa-heart" onClick={() => showToast(`Você tem ${wishlist.length} favoritos`)}>
+                                {wishlist.length > 0 && <span className="badge">{wishlist.length}</span>}
+                            </i>
+                            <i className="fas fa-shopping-bag" onClick={() => setIsCartOpen(true)}>
+                                {cart.length > 0 && <span className="badge">{cart.length}</span>}
+                            </i>
+                        </IconsGroup>
+                    </GlassNav>
 
-                    <HeroSection>
-                        <h1>{SITE_CONFIG.hero.title}</h1>
-                        <p>{SITE_CONFIG.hero.subtitle}</p>
-                        <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center'}}>
-                            <Button onClick={() => document.getElementById('shop').scrollIntoView({behavior: 'smooth'})}>
-                                Ver Coleção
-                            </Button>
-                            <Button secondary onClick={openGeneralWhatsapp}>
-                                <i className="fab fa-whatsapp"></i> Atendimento
-                            </Button>
-                        </div>
-                    </HeroSection>
+                    {/* Hero Section */}
+                    <Hero>
+                        <HeroContent className="animate__animated animate__fadeInUp">
+                            <h2>{CONFIG.hero.headline}</h2>
+                            <p>{CONFIG.hero.subheadline}</p>
+                            <MainBtn onClick={() => document.getElementById('shop').scrollIntoView({behavior: 'smooth'})}>
+                                {CONFIG.hero.buttonText}
+                            </MainBtn>
+                        </HeroContent>
+                    </Hero>
 
-                    <FilterBar id="shop">
-                        <SearchInput>
-                            <i className="fas fa-search"></i>
-                            <input 
-                                placeholder="O que você procura?" 
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                            />
-                        </SearchInput>
-                        <div style={{display:'flex', flexWrap: 'wrap', justifyContent:'center'}}>
-                            {['Todas', 'Buquês', 'Arranjos', 'Cestas', 'Orquídeas'].map(cat => (
-                                <CategoryBtn key={cat} active={category === cat} onClick={() => setCategory(cat)}>
-                                    {cat}
-                                </CategoryBtn>
-                            ))}
-                        </div>
-                    </FilterBar>
+                    {/* Filters */}
+                    <FilterContainer id="shop">
+                        {CONFIG.categories.map(cat => (
+                            <FilterBtn key={cat} active={activeCategory === cat} onClick={() => setActiveCategory(cat)}>
+                                {cat}
+                            </FilterBtn>
+                        ))}
+                    </FilterContainer>
 
+                    {/* Product Grid */}
                     <Grid>
-                        {filteredProducts.map(product => (
-                            <Card key={product.id}>
-                                <div className="img-wrap">
+                        {filteredProducts.map((product, idx) => (
+                            <ProductCard key={product.id} onClick={() => setModalProduct(product)} style={{animationDelay: `${idx * 50}ms`}} className="animate__animated animate__fadeIn">
+                                <div className="img-container">
                                     <img src={product.image} alt={product.name} loading="lazy" />
-                                </div>
-                                <div className="content">
-                                    <span className="cat">{product.category}</span>
-                                    <h3>{product.name}</h3>
-                                    <p className="desc">{product.description}</p>
-                                    <div className="footer">
-                                        <span className="price">R$ {product.price.replace('.', ',')}</span>
-                                        <button className="btn-add" onClick={() => addToCart(product)} title="Adicionar ao carrinho">
+                                    <div className="quick-actions">
+                                        <button className="action-btn" onClick={(e) => toggleWishlist(e, product)}>
+                                            <i className={wishlist.find(w => w.id === product.id) ? "fas fa-heart" : "far fa-heart"} style={{color: wishlist.find(w => w.id === product.id) ? CONFIG.theme.colors.primary : ''}}></i>
+                                        </button>
+                                        <button className="action-btn" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
                                             <i className="fas fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
-                            </Card>
+                                <div className="info">
+                                    <span className="cat">{product.category}</span>
+                                    <h3>{product.name}</h3>
+                                    <p style={{fontSize: '0.85rem', color: '#888', marginBottom: '8px'}}>{product.subtitle}</p>
+                                    <span className="price">R$ {product.price.replace('.', ',')}</span>
+                                </div>
+                            </ProductCard>
                         ))}
                     </Grid>
-                    
-                    {filteredProducts.length === 0 && (
-                        <div style={{textAlign: 'center', padding: '100px 20px', color: '#999'}}>
-                            <i className="far fa-sad-tear" style={{fontSize: '4rem', marginBottom: '20px', color: '#eee'}}></i>
-                            <p style={{fontSize: '1.2rem'}}>Nenhuma flor encontrada. Tente outra categoria.</p>
-                        </div>
-                    )}
 
-                    <footer style={{background: SITE_CONFIG.theme.secondary, color: 'white', padding: '80px 5%', textAlign: 'center'}}>
-                        <h2 style={{fontFamily: SITE_CONFIG.theme.fontHeading, fontSize: '2.5rem', marginBottom: '20px'}}>{SITE_CONFIG.info.name}</h2>
-                        <p style={{opacity: 0.7, maxWidth: '600px', margin: '0 auto 40px'}}>
-                            Transformando sentimentos em gestos concretos. A floricultura referência em {SITE_CONFIG.info.city} desde {SITE_CONFIG.info.since}.
-                        </p>
-                        <div style={{display: 'flex', gap: '20px', justifyContent: 'center', fontSize: '1.5rem'}}>
-                            <i className="fab fa-instagram" style={{cursor:'pointer', opacity:0.8}}></i>
-                            <i className="fab fa-facebook" style={{cursor:'pointer', opacity:0.8}}></i>
-                            <i className="far fa-envelope" style={{cursor:'pointer', opacity:0.8}}></i>
+                    {/* Footer */}
+                    <footer style={{background: '#f8f8f8', padding: '80px 10%', textAlign: 'center', borderTop: '1px solid #eee'}}>
+                        <h2 style={{fontFamily: CONFIG.theme.fonts.heading, fontSize: '2.5rem', color: CONFIG.theme.colors.primary}}>{CONFIG.store.name}</h2>
+                        <div style={{margin: '30px 0', fontSize: '1.5rem', color: CONFIG.theme.colors.secondary}}>
+                            <i className="fab fa-instagram" style={{margin: '0 15px', cursor: 'pointer'}}></i>
+                            <i className="fab fa-whatsapp" style={{margin: '0 15px', cursor: 'pointer'}}></i>
+                            <i className="far fa-envelope" style={{margin: '0 15px', cursor: 'pointer'}}></i>
                         </div>
-                        <p style={{marginTop: '60px', fontSize: '0.8rem', opacity: 0.3}}>&copy; 2024 {SITE_CONFIG.info.name}. Todos os direitos reservados.</p>
+                        <p style={{color: '#999', fontSize: '0.9rem'}}>&copy; 2024 {CONFIG.store.name} • Feito com amor.</p>
                     </footer>
 
-                    {/* BOTÃO FLUTUANTE ZAP */}
-                    <WhatsAppFloat href={`https://wa.me/${SITE_CONFIG.info.whatsapp}`} target="_blank" title="Fale conosco no WhatsApp">
-                        <i className="fab fa-whatsapp"></i>
-                    </WhatsAppFloat>
-
-                    {/* SIDEBAR DO CARRINHO */}
-                    <Backdrop open={isCartOpen} onClick={() => setIsCartOpen(false)} />
+                    {/* Cart Sidebar */}
+                    <div style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1900, opacity: isCartOpen ? 1 : 0, pointerEvents: isCartOpen ? 'all' : 'none', transition: '0.3s'}} onClick={() => setIsCartOpen(false)}></div>
                     <Sidebar open={isCartOpen}>
-                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px'}}>
-                            <h2 style={{fontFamily: SITE_CONFIG.theme.fontHeading}}>Seu Jardim</h2>
-                            <button onClick={() => setIsCartOpen(false)} style={{background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer', color: '#999'}}>
-                                <i className="fas fa-times"></i>
-                            </button>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #eee', paddingBottom: '20px'}}>
+                            <h2 style={{fontFamily: CONFIG.theme.fonts.heading}}>Sua Seleção</h2>
+                            <i className="fas fa-times" onClick={() => setIsCartOpen(false)} style={{cursor: 'pointer', fontSize: '1.5rem'}}></i>
                         </div>
-
-                        <div style={{flex: 1, overflowY: 'auto', paddingRight: '5px'}}>
+                        
+                        <div style={{flex: 1, overflowY: 'auto'}}>
                             {cart.length === 0 ? (
-                                <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'70%', color:'#aaa'}}>
-                                    <i className="fas fa-basket-shopping" style={{fontSize:'3rem', marginBottom:'20px', opacity:0.3}}></i>
-                                    <p>Sua cesta está vazia.</p>
-                                </div>
+                                <p style={{textAlign: 'center', color: '#999', marginTop: '50px'}}>Seu carrinho está vazio.</p>
                             ) : (
                                 cart.map((item, index) => (
-                                    <div key={index} style={{display: 'flex', gap: '15px', marginBottom: '20px', borderBottom: '1px solid #f5f5f5', paddingBottom: '15px'}}>
-                                        <img src={item.image} style={{width: '70px', height: '70px', objectFit: 'cover', borderRadius: '8px'}} />
+                                    <div key={index} style={{display: 'flex', gap: '15px', marginBottom: '20px'}}>
+                                        <img src={item.image} style={{width: '70px', height: '70px', objectFit: 'cover', borderRadius: '4px'}} />
                                         <div style={{flex: 1}}>
-                                            <h4 style={{fontSize: '0.95rem', marginBottom: '5px'}}>{item.name}</h4>
-                                            <span style={{fontWeight: 'bold', color: SITE_CONFIG.theme.primary}}>R$ {item.price.replace('.', ',')}</span>
+                                            <h4 style={{fontSize: '0.9rem'}}>{item.name}</h4>
+                                            <span style={{color: CONFIG.theme.colors.primary, fontWeight: 'bold'}}>R$ {item.price.replace('.', ',')}</span>
                                         </div>
-                                        <button onClick={() => removeFromCart(index)} style={{background:'none', border:'none', color: '#ff7675', cursor: 'pointer', alignSelf: 'center', padding:'10px'}}>
-                                            <i className="fas fa-trash-alt"></i>
-                                        </button>
+                                        <i className="far fa-trash-alt" onClick={() => removeFromCart(index)} style={{color: '#aaa', cursor: 'pointer'}}></i>
                                     </div>
                                 ))
                             )}
                         </div>
 
-                        <div style={{borderTop: '2px dashed #eee', paddingTop: '25px', marginTop: 'auto'}}>
-                            <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '1.4rem', fontWeight: 'bold', marginBottom: '25px', color: SITE_CONFIG.theme.secondary}}>
+                        <div style={{borderTop: '1px solid #eee', paddingTop: '20px'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '20px'}}>
                                 <span>Total</span>
-                                <span>R$ {total.toFixed(2).replace('.', ',')}</span>
+                                <span>R$ {cartTotal.toFixed(2).replace('.', ',')}</span>
                             </div>
-                            <a 
-                                href={checkoutLink} 
-                                target="_blank"
-                                style={{
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-                                    width: '100%', padding: '18px', background: '#25D366', color: 'white',
-                                    textDecoration: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1.1rem',
-                                    transition: '0.3s', boxShadow: '0 10px 20px rgba(37, 211, 102, 0.2)'
-                                }}
-                                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                            >
-                                <i className="fab fa-whatsapp"></i> Finalizar no WhatsApp
+                            <a href={whatsappLink} target="_blank" style={{display: 'block', padding: '15px', background: '#25D366', color: 'white', textAlign: 'center', textDecoration: 'none', borderRadius: '4px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px'}}>
+                                Finalizar Pedido
                             </a>
                         </div>
                     </Sidebar>
+
+                    {/* Product Quick View Modal */}
+                    <ModalOverlay open={!!modalProduct} onClick={() => setModalProduct(null)}>
+                        {modalProduct && (
+                            <ModalBox open={!!modalProduct} onClick={e => e.stopPropagation()}>
+                                <div style={{flex: 1, background: `url(${modalProduct.image}) center/cover`}}></div>
+                                <div style={{flex: 1, padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+                                    <span style={{color: CONFIG.theme.colors.gold, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', fontWeight: 'bold'}}>{modalProduct.category}</span>
+                                    <h2 style={{fontFamily: CONFIG.theme.fonts.heading, fontSize: '2.5rem', margin: '10px 0', lineHeight: 1}}>{modalProduct.name}</h2>
+                                    <p style={{fontSize: '1.5rem', color: CONFIG.theme.colors.primary, fontWeight: 'bold', marginBottom: '20px'}}>R$ {modalProduct.price.replace('.', ',')}</p>
+                                    <p style={{color: '#666', lineHeight: '1.6', marginBottom: '30px'}}>{modalProduct.details}</p>
+                                    
+                                    <div style={{display: 'flex', gap: '10px'}}>
+                                        <MainBtn onClick={() => { addToCart(modalProduct); setModalProduct(null); }}>Adicionar ao Carrinho</MainBtn>
+                                        <MainBtn outline onClick={() => { toggleWishlist({}, modalProduct); setModalProduct(null); }} style={{borderColor: '#ddd', color: '#666'}}>
+                                            <i className="far fa-heart"></i>
+                                        </MainBtn>
+                                    </div>
+                                </div>
+                                <button onClick={() => setModalProduct(null)} style={{position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', zIndex: 10}}>&times;</button>
+                            </ModalBox>
+                        )}
+                    </ModalOverlay>
+
+                    {/* Toast Notification */}
+                    {toast && (
+                        <Toast>
+                            <i className={`fas fa-${toast.icon}`}></i> {toast.msg}
+                        </Toast>
+                    )}
+
+                    {/* WhatsApp Float */}
+                    <a href={`https://wa.me/${CONFIG.store.whatsapp}`} target="_blank" style={{
+                        position: 'fixed', bottom: '30px', right: '30px', width: '60px', height: '60px', background: '#25D366', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', boxShadow: '0 10px 25px rgba(37,211,102,0.3)', zIndex: 990, textDecoration: 'none'
+                    }}>
+                        <i className="fab fa-whatsapp"></i>
+                    </a>
+
                 </>
             );
-        }
+        };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
