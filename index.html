@@ -1,196 +1,163 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BellaFlor — Loja configurável por JSON</title>
-  <meta name="description" content="Loja inteiramente controlada por config.json — altere textos, cores, imagens, layout e conteúdo via JSON sem tocar no HTML." />
-  <meta name="theme-color" content="#bf6c74" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BellaFlor — Loja configurável</title>
+<meta name="description" content="Loja controlada por config.json — fallback seguro caso o JSON não carregue." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
 
-  <!-- Fonts and icons (safe CDNs) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Fonts & icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <style>
-    /* ===================================================================
-       GLOBAL THEME VARIABLES (defaults)
-       These will be overridden at runtime by values from config.json.
-       Keep values sensible so the page looks correct even if config fails.
-       =================================================================== */
-    :root{
-      --brand-primary: #bf6c74;      /* main color */
-      --brand-accent:  #d4a373;
-      --text:          #2c3e50;
-      --muted:         #7f8c8d;
-      --bg:            #fcfcfb;
-      --surface:       #ffffff;
-      --radius:        8px;
-      --shadow:        0 12px 36px rgba(0,0,0,0.08);
-      --max-width:     1200px;
+<style>
+  /* ---------- Variáveis padrão (serão sobrescritas pelo config.json se existir) ---------- */
+  :root{
+    --brand-primary: #bf6c74;
+    --brand-accent:  #d4a373;
+    --text: #2c3e50;
+    --muted: #7f8c8d;
+    --bg: #fcfcfb;
+    --surface: #ffffff;
+    --radius: 10px;
+    --shadow: 0 12px 36px rgba(0,0,0,0.08);
+    --max-width: 1200px;
 
-      --font-heading: "Cinzel", serif;
-      --font-script:  "Pinyon Script", cursive;
-      --font-body:    "Lato", sans-serif;
-    }
+    --ff-heading: "Cinzel", serif;
+    --ff-script: "Pinyon Script", cursive;
+    --ff-body: "Lato", sans-serif;
+  }
 
-    /* Minimal reset */
-    *,*::before,*::after{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--font-body);
-      color:var(--text);
-      background:var(--bg);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-      opacity:0;
-      transition:opacity .4s ease;
-    }
-    body.ready{opacity:1}
+  /* ---------- Reset e base ---------- */
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:var(--ff-body);
+    color:var(--text);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.45;
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  body.ready{opacity:1}
 
-    /* Layout utility */
-    .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
+  .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
 
-    /* Header / Nav */
-    header.site-header{
-      position:sticky;top:0;z-index:1000;background:rgba(255,255,255,0.90);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,0.03);
-      padding:12px 0;
-    }
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:18px}
-    .brand{cursor:pointer;display:flex;flex-direction:column}
-    .brand .name{font-family:var(--font-heading);color:var(--brand-primary);letter-spacing:1px;font-size:1.1rem;margin:0}
-    .brand .sub{font-family:var(--font-script);color:var(--brand-accent);font-size:.95rem;margin-top:-6px}
-    nav.main-nav{display:flex;gap:12px;align-items:center}
-    .nav-link{background:none;border:0;padding:8px 10px;cursor:pointer;color:var(--muted);font-weight:600}
-    .nav-link.active{color:var(--brand-primary);border-bottom:2px solid var(--brand-primary)}
+  /* Loader */
+  .page-loader{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
+    gap:12px;background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));z-index:9999;
+  }
+  .petal{font-size:2.4rem;color:var(--brand-accent);animation:breathe 1.8s infinite}
+  @keyframes breathe{0%,100%{transform:scale(.96)}50%{transform:scale(1.05)}}
 
-    /* Hero */
-    .hero{
-      min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 18px;border-bottom:1px solid rgba(0,0,0,0.03);
-      color:white;background-size:cover;background-position:center;
-    }
-    .hero .lead{font-family:var(--font-heading);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;color:rgba(255,255,255,0.95)}
-    .hero h1{font-family:var(--font-script);font-size:clamp(2rem,5vw,4rem);margin:.15rem 0 0.6rem;text-shadow:0 10px 30px rgba(0,0,0,0.35)}
-    .hero p.subtitle{max-width:860px;margin:12px auto 24px;color:rgba(255,255,255,0.92);font-family:var(--font-heading)}
-    .hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .btn{padding:12px 20px;border-radius:10px;border:0;cursor:pointer;font-weight:700;transition:transform .18s ease}
-    .btn.primary{background:var(--brand-primary);color:#fff}
-    .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.18)}
+  /* Header */
+  header.site-header{position:sticky;top:0;background:rgba(255,255,255,0.94);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,0.03);z-index:900}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+  .brand{cursor:pointer;display:flex;flex-direction:column}
+  .brand .name{font-family:var(--ff-heading);color:var(--brand-primary);margin:0}
+  .brand .sub{font-family:var(--ff-script);color:var(--brand-accent);margin-top:-6px;font-size:.95rem}
+  nav.main-nav{display:flex;gap:12px;align-items:center}
+  .nav-link{background:none;border:0;padding:8px 10px;cursor:pointer;color:var(--muted);font-weight:700;text-decoration:none}
+  .nav-link.active{color:var(--brand-primary);border-bottom:2px solid var(--brand-primary)}
 
-    /* Sections & grid */
-    section.site-section{padding:48px 0}
-    .section-header{display:flex;align-items:baseline;gap:12px;justify-content:space-between}
-    .section-title{font-family:var(--font-heading);font-size:1.25rem;color:var(--text);margin:0}
-    .section-sub{color:var(--muted);font-size:.95rem}
+  /* Hero */
+  .hero{min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 18px;border-bottom:1px solid rgba(0,0,0,0.03);color:white;background-size:cover;background-position:center}
+  .hero .lead{font-family:var(--ff-heading);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;color:rgba(255,255,255,0.95)}
+  .hero h1{font-family:var(--ff-script);font-size:clamp(2rem,5vw,3.6rem);margin:0.2rem 0;text-shadow:0 10px 30px rgba(0,0,0,0.28)}
+  .hero p.subtitle{max-width:840px;margin:12px auto 20px;color:rgba(255,255,255,0.92);font-family:var(--ff-heading)}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{padding:12px 20px;border-radius:10px;border:0;cursor:pointer;font-weight:700;transition:transform .18s ease}
+  .btn.primary{background:var(--brand-primary);color:#fff}
+  .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.18)}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:20px}
+  /* Sections */
+  .site-section{padding:48px 0}
+  .section-header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .section-title{font-family:var(--ff-heading);font-size:1.1rem;margin:0}
+  .section-sub{color:var(--muted);font-size:.95rem}
 
-    /* Card */
-    .card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .18s ease}
-    .card:hover{transform:translateY(-6px)}
-    .card .media{height:220px;background:#f2f2f2;display:block;overflow:hidden}
-    .card img{width:100%;height:100%;object-fit:cover;display:block}
-    .card .card-body{padding:14px}
-    .tag{font-size:.72rem;color:var(--brand-accent);text-transform:uppercase;letter-spacing:1.6px}
-    .card h3{font-family:var(--font-heading);margin:6px 0 8px}
-    .price{color:var(--muted);font-weight:700}
+  /* Grid & cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:20px}
+  .card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .18s}
+  .card:hover{transform:translateY(-6px)}
+  .card .media{height:220px;background:#f4f4f4;overflow:hidden}
+  .card img{width:100%;height:100%;object-fit:cover;display:block}
+  .card .card-body{padding:14px}
+  .tag{font-size:.72rem;color:var(--brand-accent);text-transform:uppercase;letter-spacing:1.6px}
+  .card h3{font-family:var(--ff-heading);margin:6px 0 8px}
+  .price{color:var(--muted);font-weight:700}
 
-    /* Footer */
-    footer.site-footer{background:#fafafa;padding:40px 0;border-top:1px solid rgba(0,0,0,0.03)}
-    .footer-inner{display:flex;flex-direction:column;align-items:center;gap:12px}
+  /* Cart */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.48);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:120}
+  .overlay.show{opacity:1;pointer-events:all}
+  .cart{position:fixed;right:0;top:0;height:100vh;width:420px;max-width:96%;background:var(--surface);transform:translateX(110%);transition:transform .24s ease;z-index:130;display:flex;flex-direction:column}
+  .cart.open{transform:translateX(0)}
+  .cart .head{padding:18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+  .cart .body{padding:18px;overflow:auto;flex:1}
+  .cart .foot{padding:18px;border-top:1px solid #eee}
 
-    /* Cart sidebar & overlay */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.48);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:1200}
-    .overlay.show{opacity:1;pointer-events:all}
-    .cart{position:fixed;right:0;top:0;height:100vh;width:420px;max-width:96%;background:var(--surface);transform:translateX(110%);transition:transform .24s ease;z-index:1300;display:flex;flex-direction:column;box-shadow:-20px 0 50px rgba(0,0,0,0.12)}
-    .cart.open{transform:translateX(0)}
-    .cart .head{padding:18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
-    .cart .body{padding:18px;overflow:auto;flex:1}
-    .cart .foot{padding:18px;border-top:1px solid #eee}
+  /* Modal */
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:140}
+  .modal.show{opacity:1;pointer-events:all}
+  .modal-card{background:var(--surface);border-radius:12px;overflow:hidden;max-width:980px;width:100%;display:grid;grid-template-columns:1fr 1fr;box-shadow:var(--shadow)}
+  @media (max-width:820px){ .modal-card{grid-template-columns:1fr} }
 
-    /* Modal */
-    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:1400}
-    .modal.show{opacity:1;pointer-events:all}
-    .modal-card{background:var(--surface);border-radius:12px;overflow:hidden;max-width:980px;width:100%;display:grid;grid-template-columns:1fr 1fr;box-shadow:var(--shadow)}
-    @media (max-width:820px){.modal-card{grid-template-columns:1fr}}
+  /* Footer */
+  footer.site-footer{background:#fafafa;padding:40px 0;border-top:1px solid rgba(0,0,0,0.03)}
+  .footer-inner{display:flex;flex-direction:column;align-items:center;gap:12px}
 
-    /* Accessibility helpers */
-    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+  /* Accessibility helper */
+  .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
-    /* Responsive tweaks */
-    @media (max-width:900px){
-      .hero{padding:36px 18px}
-      .card .media{height:180px}
-    }
-  </style>
+  @media (max-width:900px){
+    .card .media{height:180px}
+    .hero{padding:36px 12px}
+  }
+</style>
 </head>
 <body>
-  <!-- ===================================================================
-       NOTE:
-       This index.html is a production-ready page that will attempt to load
-       `config.json` from the same directory at runtime. The site is fully
-       driven by that JSON. If loading fails (file absent, CORS, network),
-       a robust DEFAULT_CONFIG is used as a safe fallback.
-       The page intentionally does NOT expose any configuration editor in the
-       public UI. Administrative configuration may be loaded by uploading
-       config.json to the server or via a developer console helper.
-       =================================================================== -->
-
-  <!-- Page loader (removed automatically after config is applied) -->
+  <!-- Loader -->
   <div id="page-loader" class="page-loader" aria-hidden="false">
     <div class="petal" aria-hidden="true"><i class="fas fa-seedling" aria-hidden="true"></i></div>
-    <div class="loader-text" aria-hidden="true">CULTIVANDO BELEZA...</div>
+    <div class="muted" style="font-family:var(--ff-heading);letter-spacing:2px">CULTIVANDO BELEZA...</div>
   </div>
 
-  <!-- Header / Navigation -->
-  <header class="site-header" role="banner" aria-label="Cabeçalho do site">
+  <!-- Header -->
+  <header class="site-header" role="banner" aria-label="Cabeçalho">
     <div class="container nav-inner">
-      <div class="brand" id="brand" role="button" tabindex="0">
+      <div id="brand" class="brand" role="button" tabindex="0">
         <div class="name" id="brandName">BellaFlor</div>
         <div class="sub" id="brandSub">Atelier Botânico</div>
       </div>
-
-      <nav class="main-nav" id="mainNav" role="navigation" aria-label="Menu principal">
-        <!-- Nav items will be injected here from config -->
+      <nav id="mainNav" class="main-nav" role="navigation" aria-label="Menu principal">
+        <!-- preenchido por config -->
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Main / Hero -->
   <main id="main" role="main">
-    <section id="hero" class="hero" role="region" aria-label="Hero">
+    <section id="hero" class="hero" role="region" aria-label="Destaque">
       <div class="container">
         <div class="lead" id="heroLead">A Poesia das Flores</div>
         <h1 id="heroTitle">BellaFlor</h1>
         <p class="subtitle" id="heroSubtitle">Arranjos autorais que traduzem sentimentos.</p>
-        <div class="cta" id="heroCta">
-          <!-- CTA buttons injected from config -->
-        </div>
+        <div class="cta" id="heroCta"></div>
       </div>
     </section>
 
-    <!-- Dynamic sections container
-         The `sections` array in config.json defines an ordered list of
-         content blocks. Each block should specify `type` and a `data`
-         object appropriate for that type. Supported types below:
-         - products: grid of products
-         - grid: generic card grid (title + cards)
-         - text: rich text content
-         - cta: full-width CTA
-         - gallery: image gallery
-         - testimonials: testimonial slider/list
-         You can add more types in the JS if desired.
-    -->
-    <div id="sectionsRoot" class="container">
-      <!-- sections injected here -->
-    </div>
+    <!-- Dynamic sections -->
+    <div id="sectionsRoot" class="container"></div>
   </main>
 
-  <!-- Overlay + Cart -->
+  <!-- Overlay & Cart -->
   <div id="overlay" class="overlay" aria-hidden="true"></div>
 
   <aside id="cartPanel" class="cart" aria-hidden="true" role="dialog" aria-label="Carrinho">
@@ -206,18 +173,18 @@
         <div class="muted" id="subtotalLabel">Subtotal</div>
         <div id="subtotalValue">R$ 0,00</div>
       </div>
-      <a id="checkoutLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Finalizar no WhatsApp <i class="fab fa-whatsapp" aria-hidden="true" style="margin-left:8px"></i></a>
+      <a id="checkoutLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Finalizar no WhatsApp <i class="fab fa-whatsapp" style="margin-left:8px" aria-hidden="true"></i></a>
     </div>
   </aside>
 
   <!-- Product Modal -->
   <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-label="Detalhes do produto">
     <div class="modal-card" role="document">
-      <div id="modalImage" class="left" style="background-size:cover;background-position:center"></div>
-      <div class="right">
+      <div id="modalImage" style="background-size:cover;background-position:center;min-height:300px"></div>
+      <div style="padding:20px">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div id="modalCategory" class="muted">Categoria</div>
-          <button id="modalCloseBtn" class="icon-button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i></button>
+          <button id="modalClose" class="icon-button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i></button>
         </div>
         <h3 id="modalTitle"></h3>
         <div id="modalPrice" style="color:var(--brand-primary);font-size:1.2rem"></div>
@@ -231,560 +198,351 @@
   </div>
 
   <!-- Footer -->
-  <footer class="site-footer" role="contentinfo" aria-label="Rodapé">
+  <footer class="site-footer" role="contentinfo">
     <div class="footer-inner container">
       <div style="text-align:center">
-        <div id="footerBrand" style="font-family:var(--font-heading);font-weight:700;color:var(--brand-primary)">BellaFlor</div>
+        <div id="footerBrand" style="font-family:var(--ff-heading);font-weight:700;color:var(--brand-primary)">BellaFlor</div>
         <div id="footerMade" class="muted">Design Exclusivo</div>
       </div>
       <div id="footerSocial" style="display:flex;gap:12px;align-items:center"></div>
-      <div class="muted" id="footerCopy">© <span id="footerYear"></span></div>
+      <div class="muted">© <span id="footerYear"></span></div>
     </div>
   </footer>
 
-  <!-- ===========================
-       SCRIPT: configuration-driven engine
-       - Reads config.json (same folder) via fetch
-       - Merges with DEFAULT_CONFIG
-       - Applies theme & renders sections
-       - Handles cart, modal, products, accessibility
-       - Provides safe fallbacks & robust error handling
-       - No public config editor exposed in UI
-       =========================== -->
-  <script>
-  (function(){
-    'use strict';
+<script>
+/*
+  Versão robusta e tolerante: carrega config.json se disponível, mas sempre
+  renderiza UI com DEFAULT_CONFIG como fallback.
+  -> Corrige o problema de "página em branco": em quaisquer erros o conteúdo
+     padrão aparece e o loader é removido.
+*/
 
-    /* ====================
-       DEFAULT CONFIG (fallback)
-       Edit this object only if you want to change safe fallback defaults.
-       The real configuration should live in config.json supplied by the admin.
-       ==================== */
-    const DEFAULT_CONFIG = {
-      meta: { version: "1.0", name: "BellaFlor Demo" },
-      store: {
-        info: {
-          name: "BellaFlor",
-          subtitle: "Atelier Botânico",
-          whatsapp_number: "551938279999"  // international format without plus
-        },
-        links: {
-          instagram: "https://instagram.com",
-          facebook: "https://facebook.com",
-          email: "mailto:contato@bellaflor.com.br"
-        }
-      },
-      theme: {
-        colors: {
-          primary: "#bf6c74",
-          accent: "#d4a373",
-          text: "#2c3e50",
-          muted: "#7f8c8d",
-          bg: "#fcfcfb",
-          surface: "#ffffff"
-        },
-        fonts: {
-          heading: "'Cinzel', serif",
-          script: "'Pinyon Script', cursive",
-          body: "'Lato', sans-serif"
-        }
-      },
-      texts: {
-        hero: {
-          lead: "A Poesia das Flores",
-          title: "BellaFlor",
-          subtitle: "Arranjos autorais que traduzem sentimentos em seu presente.",
-          ctas: [
-            { type: "scroll", label: "Ver Coleção", target: "#products" },
-            { type: "link", label: "WhatsApp", href: "https://wa.me/551938279999" }
-          ],
-          background: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1600&q=80"
-        }
-      },
-      catalog: {
-        categories: ["Todos", "Buquês", "Arranjos", "Box Luxo", "Orquídeas", "Secas & Preservadas"],
-        mock: { count: 18, basePrice: 120 }
-        /* optionally: products: [ { id, name, category, price, image, description, ... } ] */
-      },
-      sections: [
-        /* Example section - product grid; real config.json likely overrides this */
-        {
-          id: "products",
-          type: "products",
-          title: "Coleção",
-          subtitle: "Nossos arranjos e buquês selecionados",
-          data: { limit: 24 }
-        }
-      ],
-      footer: {
-        made_by: "Design Exclusivo",
-        social: [
-          { icon: "instagram", href: "https://instagram.com" },
-          { icon: "whatsapp", href: "https://wa.me/551938279999" },
-          { icon: "email", href: "mailto:contato@bellaflor.com.br" }
-        ],
-        copyright: "©"
-      }
-    };
+(function(){
+  'use strict';
 
-    /* ================
-       Utility functions
-       ================ */
-    const $ = (sel, ctx=document) => ctx.querySelector(sel);
-    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
-    const escapeHTML = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-    const toMoney = v => Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  /* ---------- Helpers ---------- */
+  const $ = (s, ctx = document) => ctx.querySelector(s);
+  const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
+  const escapeHTML = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  const formatMoney = v => Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 
-    function mergeDeep(a,b){
-      const out = JSON.parse(JSON.stringify(a));
-      for(const k in b){
-        if(b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])){
-          out[k] = mergeDeep(out[k]||{}, b[k]);
-        } else out[k] = b[k];
-      }
-      return out;
+  function mergeDeep(a,b){
+    const out = JSON.parse(JSON.stringify(a));
+    for(const k in b){
+      if(b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])){
+        out[k] = mergeDeep(out[k]||{}, b[k]);
+      } else out[k] = b[k];
     }
+    return out;
+  }
 
-    /* ====================
-       Application state
-       ==================== */
-    let CONFIG = DEFAULT_CONFIG;
-    let PRODUCTS = [];
-    let ACTIVE_CATEGORY = null;
-    let CART = JSON.parse(localStorage.getItem('bf_cart')||'[]');
-    let WISHLIST = JSON.parse(localStorage.getItem('bf_wish')||'[]');
-    let CURRENT_PRODUCT = null;
-
-    /* ====================
-       Theme / UI helpers
-       ==================== */
-    function applyThemeFromConfig(){
-      try {
-        const t = CONFIG.theme;
-        if(t && t.colors){
-          for(const k in t.colors){
-            document.documentElement.style.setProperty('--' + (k==='primary'?'brand-primary':k), t.colors[k]);
-          }
-          // also set some core fallbacks for older variable names
-          if(t.colors.primary) document.documentElement.style.setProperty('--brand-primary', t.colors.primary);
-          if(t.colors.surface) document.documentElement.style.setProperty('--surface', t.colors.surface);
-          if(t.colors.text) document.documentElement.style.setProperty('--text', t.colors.text);
-        }
-        if(t && t.fonts){
-          if(t.fonts.heading) document.documentElement.style.setProperty('--font-heading', t.fonts.heading);
-          if(t.fonts.script) document.documentElement.style.setProperty('--font-script', t.fonts.script);
-          if(t.fonts.body) document.documentElement.style.setProperty('--font-body', t.fonts.body);
-          // apply fonts to body as safety fallback
-          document.body.style.fontFamily = t.fonts.body || "var(--font-body)";
-        }
-      } catch(e){
-        console.warn('applyThemeFromConfig failed', e);
+  /* ---------- DEFAULT CONFIG seguro ---------- */
+  const DEFAULT = {
+    meta: { version: "1.0" },
+    store: {
+      info: { name: "BellaFlor", subtitle: "Atelier Botânico", whatsapp_number: "551938279999" },
+      links: { instagram: "#", email: "mailto:contato@bellaflor.com.br" }
+    },
+    theme: {
+      colors: { primary:"#bf6c74", accent:"#d4a373", text:"#2c3e50", muted:"#7f8c8d", bg:"#fcfcfb", surface:"#ffffff" },
+      fonts: { heading:"'Cinzel', serif", script:"'Pinyon Script', cursive", body:"'Lato', sans-serif" }
+    },
+    texts: {
+      hero: {
+        lead: "A Poesia das Flores",
+        title: "BellaFlor",
+        subtitle: "Arranjos autorais que traduzem sentimentos.",
+        ctas: [{ type:"scroll", label:"Ver Coleção", target:"#products" }, { type:"link", label:"WhatsApp", href:"https://wa.me/551938279999" }],
+        background: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1600&q=80"
       }
-    }
+    },
+    catalog: {
+      categories: ["Todos","Buquês","Arranjos","Box Luxo","Orquídeas","Secas & Preservadas"],
+      mock: { count: 12, basePrice: 120 }
+    },
+    sections: [
+      { id:"products", type:"products", title:"Coleção", subtitle:"Nossos arranjos", data:{limit:12} }
+    ],
+    footer: { made_by: "Design Exclusivo", social: [{icon:"instagram",href:"#"},{icon:"whatsapp",href:"https://wa.me/551938279999"}] }
+  };
 
-    /* ====================
-       Config loader
-       - tries to fetch config.json from same directory when on HTTP(S)
-       - falls back silently to DEFAULT_CONFIG when fetch fails (CORS / file:// / network)
-       - errors are console-logged but not shown to public UI
-       ==================== */
-    async function loadConfig(){
-      // do not show any config UI to public
-      try {
-        if(location.protocol === 'file:'){
-          // local file open => cannot reliably fetch config; use default
-          CONFIG = DEFAULT_CONFIG;
-          return;
+  /* ---------- Estado ---------- */
+  let CONFIG = DEFAULT;
+  let PRODUCTS = [];
+  let ACTIVE_CATEGORY = null;
+  let CART = JSON.parse(localStorage.getItem('bf_cart')||'[]');
+  let WISHLIST = JSON.parse(localStorage.getItem('bf_wish')||'[]');
+  let CURRENT_PRODUCT = null;
+
+  /* ---------- Theme application ---------- */
+  function applyTheme(){
+    try{
+      const t = CONFIG.theme || {};
+      if(t.colors) {
+        for(const key in t.colors) {
+          const varName = '--' + (key==='primary' ? 'brand-primary' : key);
+          document.documentElement.style.setProperty(varName, t.colors[key]);
         }
-        const res = await fetch('config.json', {cache: 'no-store'});
-        if(!res.ok){
-          CONFIG = DEFAULT_CONFIG;
-          return;
-        }
-        const data = await res.json();
-        CONFIG = mergeDeep(DEFAULT_CONFIG, data);
-      } catch(err){
-        // fallback safe
-        console.warn('Could not load config.json, using DEFAULT_CONFIG. Error:', err && err.message);
-        CONFIG = DEFAULT_CONFIG;
       }
-    }
+      if(t.fonts) {
+        if(t.fonts.body) document.body.style.fontFamily = t.fonts.body;
+      }
+    }catch(e){ console.warn('applyTheme error', e); }
+  }
 
-    /* ====================
-       Data: products generator if no real products provided
-       ==================== */
-    function generateMockProducts(count = 18, base = 120){
-      const flowers = [
-        {name:'Rosas Colombianas',key:'rosa',mod:1.5},
-        {name:'Hortênsias Azuis',key:'hydrangea',mod:1.2},
-        {name:'Orquídea Phalaenopsis',key:'orchid',mod:2.0},
-        {name:'Girassóis Vibrantes',key:'sunflower',mod:0.9},
-        {name:'Mix do Campo',key:'wildflower',mod:0.8},
-        {name:'Tulipas Holandesas',key:'tulip',mod:1.8},
-        {name:'Lisianthus Premium',key:'lisianthus',mod:1.1}
-      ];
-      const adjectives = ['Imperial','Aurora','Romance','Serenidade','Majestade','Poesia','Vintage','Minimal'];
-      const containers = ['em Vaso de Cristal','no Kraft','na Box Aveludada','Rústico','Hand-tied'];
-      const unsplash = {
-        rosa:['1562690868-60bbe7293e94','1518709268805-4e9042af9f23'],
-        hydrangea:['1508610048181-48f6704e3f36'],
-        orchid:['1566929341488-820845a76cb5'],
-        sunflower:['1470509037663-253afd7f0f51'],
-        tulip:['1520763185298-1b434c919102'],
-        wildflower:['1464698579707-353232147316']
+  /* ---------- Load config.json (non-blocking) ---------- */
+  async function loadConfig(){
+    try {
+      if(location.protocol === 'file:') { CONFIG = DEFAULT; return; }
+      const resp = await fetch('config.json', {cache:'no-store'});
+      if(!resp.ok){ CONFIG = DEFAULT; return; }
+      const json = await resp.json();
+      CONFIG = mergeDeep(DEFAULT, json || {});
+    } catch(e) {
+      console.warn('Não foi possível carregar config.json — fallback para DEFAULT.', e && e.message);
+      CONFIG = DEFAULT;
+    }
+  }
+
+  /* ---------- Mock products generator ---------- */
+  function generateMocks(count=12, base=120){
+    const flowers = [
+      {name:'Rosas Colombianas',key:'rosa',mod:1.5},
+      {name:'Hortênsias Azuis',key:'hydrangea',mod:1.2},
+      {name:'Orquídea Phalaenopsis',key:'orchid',mod:2.0},
+      {name:'Girassóis Vibrantes',key:'sunflower',mod:0.9},
+      {name:'Tulipas Holandesas',key:'tulip',mod:1.8},
+      {name:'Mix do Campo',key:'wildflower',mod:0.8}
+    ];
+    const adjectives = ['Imperial','Aurora','Romance','Serenidade','Majestade','Poesia','Vintage'];
+    const containers = ['em Vaso','no Kraft','na Box Aveludada','Rústico','Hand-tied'];
+    const images = [
+      'https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1470509037663-253afd7f0f51?auto=format&fit=crop&w=900&q=80'
+    ];
+    return Array.from({length:count}, (_,i) => {
+      const f = flowers[i % flowers.length];
+      const adj = adjectives[i % adjectives.length];
+      const cont = containers[i % containers.length];
+      const price = (base * f.mod + Math.random()*30).toFixed(2);
+      return {
+        id: `prod_${i+1}`,
+        name: `${f.name} ${adj}`,
+        subtitle: `${cont} • Design Exclusivo`,
+        category: (cont.includes('Kraft')||cont.includes('Hand-tied')) ? 'Buquês' : 'Arranjos',
+        price: price,
+        image: images[i % images.length],
+        description: `Composição com ${f.name}. Cartão e cuidados inclusos.`
       };
-      return Array.from({length:count}, (_,i) => {
-        const f = flowers[i % flowers.length];
-        const adj = adjectives[i % adjectives.length];
-        const cont = containers[i % containers.length];
-        let cat = 'Arranjos';
-        if(cont.includes('Kraft')||cont.includes('Hand-tied')) cat = 'Buquês';
-        if(cont.includes('Box')) cat = 'Box Luxo';
-        if(f.name.includes('Orquídea')) cat = 'Orquídeas';
-        const price = (base * f.mod + Math.random()*40).toFixed(2);
-        const coll = unsplash[f.key] || unsplash['wildflower'];
-        const image = `https://images.unsplash.com/photo-${coll[i % coll.length]}?auto=format&fit=crop&w=900&q=80`;
-        return {
-          id: `prod_${i+1}`,
-          name: `${f.name} ${adj}`,
-          subtitle: `${cont} • Design Exclusivo`,
-          category: cat,
-          price: price,
-          image: image,
-          description: `Uma composição artística elaborada com ${f.name} frescas e selecionadas.`
-        };
-      });
-    }
+    });
+  }
 
-    /* ====================
-       Rendering functions
-       - Nav, hero, sections (dynamic), products, footer
-       ==================== */
-    function renderNav(){
-      const navRoot = $('#mainNav');
-      navRoot.innerHTML = '';
-      const items = (CONFIG.nav && Array.isArray(CONFIG.nav)) ? CONFIG.nav : [
-        {label:'Home', href:'#hero'},
-        {label:'Coleção', href:'#products'},
-        {label:'Contato', href:'#footer'}
-      ];
-      items.forEach(it => {
-        const btn = document.createElement('a');
-        btn.className = 'nav-link';
-        btn.href = it.href || '#';
-        btn.textContent = it.label || 'Item';
-        if(it.target) btn.target = it.target;
-        navRoot.appendChild(btn);
-      });
-    }
+  /* ---------- Renderers ---------- */
+  function renderNav(){
+    const nav = $('#mainNav');
+    nav.innerHTML = '';
+    const items = CONFIG.nav || [{label:'Home', href:'#hero'}];
+    items.forEach(it => {
+      const a = document.createElement('a');
+      a.className = 'nav-link';
+      a.href = it.href || '#';
+      a.textContent = it.label || 'Item';
+      if(it.target) a.target = it.target;
+      nav.appendChild(a);
+    });
+  }
 
-    function renderHero(){
-      const h = CONFIG.texts && CONFIG.texts.hero ? CONFIG.texts.hero : DEFAULT_CONFIG.texts.hero;
-      $('#hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,.22), rgba(0,0,0,.08)), url('${h.background || DEFAULT_CONFIG.texts.hero.background}')`;
-      $('#heroLead').textContent = h.lead || '';
-      $('#heroTitle').textContent = h.title || '';
-      $('#heroSubtitle').textContent = h.subtitle || '';
+  function renderHero(){
+    const h = CONFIG.texts && CONFIG.texts.hero ? CONFIG.texts.hero : DEFAULT.texts.hero;
+    const hero = $('#hero');
+    hero.style.backgroundImage = `linear-gradient(rgba(0,0,0,.22), rgba(0,0,0,.08)), url('${h.background || DEFAULT.texts.hero.background}')`;
+    $('#heroLead').textContent = h.lead || '';
+    $('#heroTitle').textContent = h.title || '';
+    $('#heroSubtitle').textContent = h.subtitle || '';
 
-      // CTAs
-      const ctaRoot = $('#heroCta');
-      ctaRoot.innerHTML = '';
-      (h.ctas || []).forEach(cta => {
-        const b = document.createElement(cta.type === 'link' ? 'a' : 'button');
-        b.className = 'btn ' + (cta.style === 'ghost' ? 'ghost' : 'primary');
-        b.textContent = cta.label || 'Ação';
-        if(cta.type === 'link'){
-          b.href = cta.href || '#';
-          b.target = '_blank';
-          b.rel = 'noopener noreferrer';
-        } else if(cta.type === 'scroll'){
-          b.addEventListener('click', () => {
-            const el = document.querySelector(cta.target || '#productGrid');
-            if(el) el.scrollIntoView({behavior:'smooth'});
-          });
-        } else if(cta.type === 'action' && cta.action === 'openCart'){
-          b.addEventListener('click', () => openCart());
-        }
-        ctaRoot.appendChild(b);
-      });
-    }
+    const ctaRoot = $('#heroCta');
+    ctaRoot.innerHTML = '';
+    (h.ctas || []).forEach(cta => {
+      const el = document.createElement(cta.type === 'link' ? 'a' : 'button');
+      el.className = 'btn ' + (cta.style === 'ghost' ? 'ghost' : 'primary');
+      el.textContent = cta.label || 'Ação';
+      if(cta.type === 'link'){ el.href = cta.href || '#'; el.target = '_blank'; el.rel = 'noopener noreferrer'; }
+      else if(cta.type === 'scroll'){ el.addEventListener('click', ()=>{ const target = document.querySelector(cta.target || '#sectionsRoot'); if(target) target.scrollIntoView({behavior:'smooth'}); }); }
+      else if(cta.type === 'action' && cta.action === 'openCart'){ el.addEventListener('click', openCart); }
+      ctaRoot.appendChild(el);
+    });
+  }
 
-    // Render dynamic sections based on CONFIG.sections array
-    function renderSections(){
-      const root = document.getElementById('sectionsRoot');
-      root.innerHTML = ''; // clear
-      const sections = CONFIG.sections || [];
-      sections.forEach(sec => {
-        const sectionEl = document.createElement('section');
-        sectionEl.className = 'site-section';
-        // Header
-        const header = document.createElement('div');
-        header.className = 'section-header';
-        const left = document.createElement('div');
-        left.innerHTML = `<h3 class="section-title">${escapeHTML(sec.title || '')}</h3><div class="section-sub">${escapeHTML(sec.subtitle || '')}</div>`;
-        header.appendChild(left);
-        sectionEl.appendChild(header);
+  function createProductCard(p){
+    const c = document.createElement('article');
+    c.className = 'card';
+    c.innerHTML = `
+      <div class="media"><img src="${escapeHTML(p.image||'')}" alt="${escapeHTML(p.name||'')}" loading="lazy" onerror="this.src='https://via.placeholder.com/900x600?text=Imagem'"></div>
+      <div class="card-body">
+        <div class="tag">${escapeHTML(p.category||'')}</div>
+        <h3>${escapeHTML(p.name||'Produto')}</h3>
+        <div class="price">${formatMoney(p.price)}</div>
+      </div>
+    `;
+    const media = c.querySelector('.media');
+    media.style.cursor = 'pointer';
+    media.addEventListener('click', ()=> openProductModal(p));
+    return c;
+  }
 
-        // Content by type
-        const type = sec.type || 'text';
-        if(type === 'products'){
-          // create a container with id for product grid (so hero CTA can target it)
-          const grid = document.createElement('div');
-          grid.id = sec.id || 'products';
-          grid.className = 'grid';
-          // choose products subset or all
-          const data = sec.data || {};
-          let items = PRODUCTS.slice();
-          if(data.category && data.category !== 'Todos') items = items.filter(p => p.category === data.category);
-          if(data.limit) items = items.slice(0, data.limit);
-          items.forEach(p => grid.appendChild(createProductCard(p)));
-          sectionEl.appendChild(grid);
-        } else if(type === 'grid'){
-          const grid = document.createElement('div');
-          grid.className = 'grid';
-          (sec.items || []).forEach(item => {
-            const c = document.createElement('article');
-            c.className = 'card';
-            c.innerHTML = `<div class="media" style="background-image:url('${(item.image||'')}');background-size:cover;"></div><div class="card-body"><div class="tag">${escapeHTML(item.tag||'')}</div><h3>${escapeHTML(item.title||'')}</h3><div class="price">${escapeHTML(item.desc||'')}</div></div>`;
-            grid.appendChild(c);
-          });
-          sectionEl.appendChild(grid);
-        } else if(type === 'text'){
-          const p = document.createElement('div');
-          p.innerHTML = sec.html || `<p>${escapeHTML(sec.text || '')}</p>`;
-          sectionEl.appendChild(p);
-        } else if(type === 'gallery'){
-          const grid = document.createElement('div');
-          grid.className = 'grid';
-          (sec.images || []).forEach(src => {
-            const c = document.createElement('div');
-            c.className = 'card';
-            c.innerHTML = `<div class="media"><img src="${src}" alt=""></div>`;
-            grid.appendChild(c);
-          });
-          sectionEl.appendChild(grid);
-        } else {
-          // unknown: fall back to text
-          const p = document.createElement('div');
-          p.innerHTML = `<p>${escapeHTML(sec.text || '')}</p>`;
-          sectionEl.appendChild(p);
-        }
+  function renderSections(){
+    const root = $('#sectionsRoot');
+    root.innerHTML = '';
+    const sections = CONFIG.sections || [];
+    sections.forEach(sec => {
+      const secEl = document.createElement('section');
+      secEl.className = 'site-section';
+      const header = document.createElement('div');
+      header.className = 'section-header';
+      const left = document.createElement('div');
+      left.innerHTML = `<h3 class="section-title">${escapeHTML(sec.title||'')}</h3><div class="section-sub">${escapeHTML(sec.subtitle||'')}</div>`;
+      header.appendChild(left);
+      secEl.appendChild(header);
 
-        root.appendChild(sectionEl);
-      });
-    }
-
-    /* Product card builder */
-    function createProductCard(p){
-      const c = document.createElement('article');
-      c.className = 'card';
-      c.innerHTML = `
-        <div class="media"><img src="${escapeHTML(p.image||'')}" alt="${escapeHTML(p.name||'')}" loading="lazy" onerror="this.src='https://via.placeholder.com/900x600?text=Imagem'"></div>
-        <div class="card-body">
-          <div class="tag">${escapeHTML(p.category||'')}</div>
-          <h3>${escapeHTML(p.name||'Produto')}</h3>
-          <div class="price">${toMoney(p.price)}</div>
-        </div>
-      `;
-      c.querySelector('.media').addEventListener('click', () => openProductModal(p));
-      return c;
-    }
-
-    /* ====================
-       Product modal & cart logic
-       ==================== */
-    function openProductModal(product){
-      CURRENT_PRODUCT = product;
-      $('#modalImage').style.backgroundImage = `url('${product.image}')`;
-      $('#modalCategory').textContent = product.category || '';
-      $('#modalTitle').textContent = product.name || '';
-      $('#modalPrice').textContent = toMoney(product.price);
-      $('#modalDesc').textContent = product.description || '';
-      $('#modal').classList.add('show');
-      $('#modal').setAttribute('aria-hidden','false');
-    }
-
-    function closeModal(){
-      CURRENT_PRODUCT = null;
-      $('#modal').classList.remove('show');
-      $('#modal').setAttribute('aria-hidden','true');
-    }
-
-    function addCurrentToCart(){
-      if(!CURRENT_PRODUCT) return;
-      CART.push(CURRENT_PRODUCT);
-      persistCart();
-      renderCart();
-      openCart();
-    }
-
-    function persistCart(){
-      try{ localStorage.setItem('bf_cart', JSON.stringify(CART)); }catch(e){ console.warn('Could not persist cart', e); }
-    }
-
-    function renderCart(){
-      const body = $('#cartBody');
-      body.innerHTML = '';
-      if(!CART.length){
-        $('#cartEmpty').classList.remove('sr-only');
-      } else {
-        $('#cartEmpty').classList.add('sr-only');
-        CART.forEach((it, idx) => {
-          const row = document.createElement('div');
-          row.className = 'cart-item';
-          row.style.display = 'flex'; row.style.gap = '12px'; row.style.marginBottom = '12px'; row.style.alignItems = 'center';
-          row.innerHTML = `<img src="${escapeHTML(it.image||'')}" alt="${escapeHTML(it.name||'')}" style="width:64px;height:64px;object-fit:cover;border-radius:6px" onerror="this.src='https://via.placeholder.com/80x80?text=Img'">
-          <div style="flex:1">
-            <div style="font-weight:700">${escapeHTML(it.name)}</div>
-            <div style="color:var(--brand-primary);font-weight:700">${toMoney(it.price)}</div>
-          </div>
-          <button class="icon-button" aria-label="Remover item"><i class="far fa-trash-alt"></i></button>`;
-          row.querySelector('button').addEventListener('click', () => {
-            CART.splice(idx,1); persistCart(); renderCart();
-          });
-          body.appendChild(row);
+      // supported types: products, grid, text, gallery
+      if(sec.type === 'products'){
+        const grid = document.createElement('div');
+        grid.id = sec.id || 'products';
+        grid.className = 'grid';
+        let items = PRODUCTS.slice();
+        if(sec.data && sec.data.category && sec.data.category !== 'Todos') items = items.filter(p => p.category === sec.data.category);
+        if(sec.data && sec.data.limit) items = items.slice(0, sec.data.limit);
+        items.forEach(p => grid.appendChild(createProductCard(p)));
+        secEl.appendChild(grid);
+      } else if(sec.type === 'grid'){
+        const grid = document.createElement('div'); grid.className = 'grid';
+        (sec.items||[]).forEach(item => {
+          const card = document.createElement('article'); card.className='card';
+          card.innerHTML = `<div class="media" style="background-image:url('${(item.image||'')}');background-size:cover;height:160px"></div><div class="card-body"><h3>${escapeHTML(item.title||'')}</h3><div class="price">${escapeHTML(item.subtitle||'')}</div></div>`;
+          grid.appendChild(card);
         });
+        secEl.appendChild(grid);
+      } else if(sec.type === 'text'){
+        const p = document.createElement('div'); p.innerHTML = sec.html || `<p>${escapeHTML(sec.text||'')}</p>`;
+        secEl.appendChild(p);
+      } else if(sec.type === 'gallery'){
+        const grid = document.createElement('div'); grid.className='grid';
+        (sec.images||[]).forEach(src => {
+          const c = document.createElement('div'); c.className='card'; c.innerHTML=`<div class="media"><img src="${src}" alt=""></div>`;
+          grid.appendChild(c);
+        });
+        secEl.appendChild(grid);
+      } else {
+        // fallback text
+        const p = document.createElement('div'); p.innerHTML = `<p>${escapeHTML(sec.text||'')}</p>`; secEl.appendChild(p);
       }
-      $('#subtotalValue').textContent = toMoney(CART.reduce((s,i)=>s+Number(i.price||0),0));
-      $('#checkoutLink').href = buildWhatsAppCheckout();
-      updateCartCount();
-    }
 
-    function updateCartCount(){
-      const el = document.getElementById('cartCount');
-      if(!el) return;
-      el.textContent = CART.length;
-      el.classList.toggle('sr-only', CART.length === 0);
-    }
+      root.appendChild(secEl);
+    });
+  }
 
-    function openCart(){
-      $('#cartPanel').classList.add('open');
-      $('#overlay').classList.add('show');
-      $('#cartPanel').setAttribute('aria-hidden','false');
-      $('#overlay').setAttribute('aria-hidden','false');
-    }
+  /* ---------- Modal + Cart ---------- */
+  function openProductModal(product){
+    CURRENT_PRODUCT = product;
+    const img = $('#modalImage'); if(img) img.style.backgroundImage = `url('${product.image}')`;
+    $('#modalCategory').textContent = product.category || '';
+    $('#modalTitle').textContent = product.name || '';
+    $('#modalPrice').textContent = formatMoney(product.price || 0);
+    $('#modalDesc').textContent = product.description || '';
+    $('#modal').classList.add('show'); $('#modal').setAttribute('aria-hidden','false');
+  }
+  function closeProductModal(){ CURRENT_PRODUCT = null; $('#modal').classList.remove('show'); $('#modal').setAttribute('aria-hidden','true'); }
 
-    function closeCart(){
-      $('#cartPanel').classList.remove('open');
-      $('#overlay').classList.remove('show');
-      $('#cartPanel').setAttribute('aria-hidden','true');
-      $('#overlay').setAttribute('aria-hidden','true');
-    }
+  function persistCart(){ try{ localStorage.setItem('bf_cart', JSON.stringify(CART)); }catch(e){} }
+  function persistWish(){ try{ localStorage.setItem('bf_wish', JSON.stringify(WISHLIST)); }catch(e){} }
 
-    function buildWhatsAppCheckout(){
-      const number = (CONFIG.store && CONFIG.store.info && CONFIG.store.info.whatsapp_number) ? CONFIG.store.info.whatsapp_number : '';
-      let msg = `Olá, vim pelo site da *${CONFIG.store.info.name || 'BellaFlor'}*.%0A%0A`;
-      if(!CART.length) msg += 'Ainda não selecionei produtos.%0A';
-      else {
-        CART.forEach(i => msg += `• ${i.name} - ${toMoney(i.price)}%0A`);
-        msg += `%0A*Total: ${toMoney(CART.reduce((s,i)=>s+Number(i.price||0),0))}*%0A`;
-      }
-      return `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
-    }
+  function addToCart(product){
+    CART.push(product);
+    persistCart();
+    renderCart();
+    openCart();
+  }
 
-    /* ====================
-       Footer & social
-       ==================== */
-    function renderFooter(){
-      $('#footerYear').textContent = (new Date()).getFullYear();
-      $('#footerBrand').textContent = CONFIG.store.info.name || DEFAULT_CONFIG.store.info.name;
-      $('#footerMade').textContent = CONFIG.footer && CONFIG.footer.made_by ? CONFIG.footer.made_by : DEFAULT_CONFIG.footer.made_by;
-      const socialRoot = $('#footerSocial');
-      socialRoot.innerHTML = '';
-      (CONFIG.footer && Array.isArray(CONFIG.footer.social) ? CONFIG.footer.social : DEFAULT_CONFIG.footer.social).forEach(s => {
-        const a = document.createElement('a');
-        a.href = s.href || '#';
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.style.color = 'var(--muted)';
-        a.style.fontSize = '1.1rem';
-        a.style.marginRight = '8px';
-        // choose icon
-        const icon = s.icon || 'link';
-        const iconClass = icon === 'instagram' ? 'fab fa-instagram' : (icon === 'whatsapp' ? 'fab fa-whatsapp' : (icon === 'email' ? 'far fa-envelope' : 'fas fa-link'));
-        a.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`;
-        socialRoot.appendChild(a);
-      });
-    }
+  function renderCart(){
+    const body = $('#cartBody'); body.innerHTML = '';
+    if(!CART.length){ $('#cartEmpty').classList.remove('sr-only'); } else { $('#cartEmpty').classList.add('sr-only'); }
+    CART.forEach((it, idx) => {
+      const row = document.createElement('div'); row.style.display='flex'; row.style.gap='12px'; row.style.marginBottom='12px'; row.style.alignItems='center';
+      row.innerHTML = `<img src="${escapeHTML(it.image||'')}" style="width:64px;height:64px;object-fit:cover;border-radius:6px" onerror="this.src='https://via.placeholder.com/80x80?text=Img'"><div style="flex:1"><div style="font-weight:700">${escapeHTML(it.name)}</div><div style="color:var(--brand-primary);font-weight:700">${formatMoney(it.price)}</div></div><button class="icon-button" aria-label="Remover"><i class="far fa-trash-alt"></i></button>`;
+      row.querySelector('button').addEventListener('click', ()=>{ CART.splice(idx,1); persistCart(); renderCart(); });
+      body.appendChild(row);
+    });
+    const total = CART.reduce((s,i)=>s+Number(i.price||0),0); $('#subtotalValue').textContent = formatMoney(total);
+    $('#checkoutLink').href = buildWhatsAppCheckout();
+    updateCartCount();
+  }
 
-    /* ====================
-       Event wiring & boot
-       ==================== */
-    function wireEvents(){
-      // modal controls
-      $('#modalCloseBtn').addEventListener('click', closeModal);
-      $('#modalAdd').addEventListener('click', addCurrentToCart);
-      $('#modalWish').addEventListener('click', () => { if(CURRENT_PRODUCT) toggleWish(CURRENT_PRODUCT); });
+  function updateCartCount(){
+    const el = document.getElementById('cartCount');
+    if(!el) return;
+    el.textContent = CART.length;
+    el.classList.toggle('sr-only', CART.length===0);
+  }
 
-      // cart open/close
-      $('#btnCloseCart').addEventListener('click', closeCart);
-      $('#overlay').addEventListener('click', () => { closeCart(); closeModal(); });
+  function openCart(){ $('#cartPanel').classList.add('open'); $('#overlay').classList.add('show'); $('#cartPanel').setAttribute('aria-hidden','false'); }
+  function closeCart(){ $('#cartPanel').classList.remove('open'); $('#overlay').classList.remove('show'); $('#cartPanel').setAttribute('aria-hidden','true'); }
 
-      // keyboard accessibility
-      document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape'){ closeModal(); closeCart(); }
-      });
+  function toggleWish(product){
+    const idx = WISHLIST.findIndex(w=>w.id===product.id);
+    if(idx === -1) WISHLIST.push(product); else WISHLIST.splice(idx,1);
+    persistWish();
+  }
 
-      // brand click -> go to top
-      $('#brand').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
-      $('#brand').addEventListener('keydown', (e) => { if(e.key === 'Enter') window.scrollTo({top:0,behavior:'smooth'}); });
-    }
+  function buildWhatsAppCheckout(){
+    const num = (CONFIG.store && CONFIG.store.info && CONFIG.store.info.whatsapp_number) ? CONFIG.store.info.whatsapp_number : '';
+    let msg = `Olá, vim pelo site da *${CONFIG.store.info.name || 'BellaFlor'}*.%0A%0A`;
+    if(!CART.length) msg += 'Ainda não selecionei produtos.%0A'; else { CART.forEach(i=> msg += `• ${i.name} - ${formatMoney(i.price)}%0A`); msg += `%0A*Total: ${formatMoney(CART.reduce((s,i)=>s+Number(i.price||0),0))}*%0A`; }
+    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+  }
 
-    /* ====================
-       Minimal wishlist toggle for modal (persisted)
-       ==================== */
-    function toggleWish(product){
-      const idx = WISHLIST.findIndex(w => w.id === product.id);
-      if(idx === -1) WISHLIST.push(product);
-      else WISHLIST.splice(idx,1);
-      try{ localStorage.setItem('bf_wish', JSON.stringify(WISHLIST)); }catch(e){ console.warn(e) }
-    }
+  /* ---------- Footer ---------- */
+  function renderFooter(){
+    $('#footerYear').textContent = (new Date()).getFullYear();
+    $('#footerBrand').textContent = CONFIG.store.info.name || DEFAULT.store.info.name;
+    $('#footerMade').textContent = CONFIG.footer && CONFIG.footer.made_by ? CONFIG.footer.made_by : DEFAULT.footer.made_by;
+    const root = $('#footerSocial'); root.innerHTML = '';
+    (CONFIG.footer && Array.isArray(CONFIG.footer.social) ? CONFIG.footer.social : DEFAULT.footer.social).forEach(s=>{
+      const a = document.createElement('a'); a.href = s.href || '#'; a.target = '_blank'; a.rel='noopener noreferrer'; a.style.color='var(--muted)';
+      const icon = s.icon || 'link'; const map = {instagram:'fab fa-instagram', whatsapp:'fab fa-whatsapp', email:'far fa-envelope'};
+      const cls = map[icon] || 'fas fa-link'; a.innerHTML = `<i class="${cls}"></i>`;
+      root.appendChild(a);
+    });
+  }
 
-    /* ====================
-       Error handling: non-intrusive
-       - Errors logged to console
-       - Public UI is not polluted
-       ==================== */
-    function safeRun(fn){
-      try { fn(); } catch(e){ console.error('SafeRun error:', e); }
-    }
+  /* ---------- Events & boot ---------- */
+  function wireEvents(){
+    // modal buttons
+    $('#modalClose').addEventListener('click', closeProductModal);
+    $('#modalAdd').addEventListener('click', ()=>{ if(CURRENT_PRODUCT) addToCart(CURRENT_PRODUCT); closeProductModal(); });
+    $('#modalWish').addEventListener('click', ()=>{ if(CURRENT_PRODUCT) toggleWish(CURRENT_PRODUCT); });
 
-    /* ====================
-       Public admin console API (developer-only)
-       - This function is available on window but does NOT render any UI.
-       - Use only in secure environment to apply a config object dynamically:
-           window.BellaFlor.applyConfig(myConfigObject)
-       - This is intentionally light and requires the admin to supply a valid
-         configuration object (it will be merged with defaults).
-       ==================== */
-    window.BellaFlor = window.BellaFlor || {};
-    window.BellaFlor.applyConfig = function(obj){
-      try {
-        if(!obj || typeof obj !== 'object') throw new Error('applyConfig expects an object');
-        CONFIG = mergeDeep(DEFAULT_CONFIG, obj);
-        applyThemeFromConfig();
-        // reinitialize
-        PRODUCTS = Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length ? CONFIG.catalog.products : generateMockProducts(CONFIG.catalog.mock.count||18, CONFIG.catalog.mock.basePrice||120);
-        renderNav();
-        renderHero();
-        renderSections();
-        renderCart();
-        renderFooter();
-        safeRun(() => document.body.classList.add('ready'));
-        console.info('BellaFlor: new config applied (via console).');
-      } catch(e){
-        console.error('applyConfig failed', e);
-      }
-    };
+    // cart buttons
+    $('#btnCloseCart').addEventListener('click', closeCart);
+    $('#overlay').addEventListener('click', ()=>{ closeCart(); closeProductModal(); });
 
-    /* ====================
-       Main bootstrap
-       ==================== */
-    async function boot(){
+    // brand click -> top
+    $('#brand').addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+    $('#brand').addEventListener('keydown', e=>{ if(e.key==='Enter') window.scrollTo({top:0,behavior:'smooth'}); });
+
+    // keyboard
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeProductModal(); closeCart(); }});
+  }
+
+  async function boot(){
+    try {
       await loadConfig();
-      applyThemeFromConfig();
+      applyTheme();
 
-      // load products (from config or mock)
-      PRODUCTS = Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length ? CONFIG.catalog.products : generateMockProducts((CONFIG.catalog.mock && CONFIG.catalog.mock.count) || 18, (CONFIG.catalog.mock && CONFIG.catalog.mock.basePrice) || 120);
+      // build PRODUCTS
+      if(Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length) PRODUCTS = CONFIG.catalog.products.map((p,i)=>({...p, id: p.id||`prod_${i+1}`}));
+      else PRODUCTS = generateMocks((CONFIG.catalog.mock && CONFIG.catalog.mock.count) || 12, (CONFIG.catalog.mock && CONFIG.catalog.mock.basePrice) || 120);
 
       // render UI
       renderNav();
@@ -794,29 +552,45 @@
       renderFooter();
       wireEvents();
 
-      // remove loader & show body
-      const loader = document.getElementById('page-loader');
-      if(loader) loader.remove();
+    } catch(e){
+      console.error('Erro na inicialização:', e);
+    } finally {
+      // remove loader e exibir conteúdo sempre (corrige "tela em branco")
+      const loader = document.getElementById('page-loader'); if(loader) loader.remove();
       document.body.classList.add('ready');
     }
+  }
 
-    // run boot and protect errors
-    safeRun(() => boot());
+  // protege erros globais e garante que a UI seja mostrada
+  window.addEventListener('error', function(evt){
+    console.error('Erro global:', evt && evt.message || evt);
+    const loader = document.getElementById('page-loader'); if(loader) loader.remove();
+    document.body.classList.add('ready');
+  });
+  window.addEventListener('unhandledrejection', function(evt){
+    console.error('Promise rejeitada:', evt && evt.reason || evt);
+    const loader = document.getElementById('page-loader'); if(loader) loader.remove();
+    document.body.classList.add('ready');
+  });
 
-    /* ====================
-       Expose some state for debugging (developer use)
-       - window.BellaFlorConfig (read-only): current merged config
-       - window.BellaFlor.state() returns snapshot
-       ==================== */
-    Object.defineProperty(window.BellaFlor, 'config', {
-      get: function(){ return CONFIG; }
-    });
-    window.BellaFlor.state = function(){ return {CONFIG, PRODUCTS, CART, WISHLIST}; };
+  // exposições úteis (somente para administrador / console)
+  window.BellaFlor = window.BellaFlor || {};
+  Object.defineProperty(window.BellaFlor, 'config', { get: ()=> CONFIG });
+  window.BellaFlor.applyConfig = function(obj){ // aplicar config através do console (dev)
+    try {
+      if(!obj || typeof obj !== 'object') throw new Error('applyConfig precisa de um objeto');
+      CONFIG = mergeDeep(DEFAULT, obj);
+      applyTheme();
+      PRODUCTS = Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length ? CONFIG.catalog.products : generateMocks(CONFIG.catalog.mock.count||12, CONFIG.catalog.mock.basePrice||120);
+      renderNav(); renderHero(); renderSections(); renderCart(); renderFooter();
+      console.info('Config aplicada via console.');
+    } catch(e){ console.error('applyConfig falhou', e); }
+  };
 
-    /* ====================
-       End of script
-       ==================== */
-  })();
-  </script>
+  // start
+  boot();
+
+})();
+</script>
 </body>
 </html>
