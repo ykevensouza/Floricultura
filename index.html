@@ -3,214 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BellaFlor Artur Nogueira - Floricultura</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>BellaFlor | Floricultura Premium Artur Nogueira</title>
+    
+    <meta name="description" content="BellaFlor - A floricultura mais exclusiva de Artur Nogueira.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #fffbfb; color: #2d3436; opacity: 0; transition: opacity 0.5s; }
+        body.loaded { opacity: 1; }
+        .loading-screen {
+            position: fixed; inset: 0; background: #fff; display: flex; 
+            justify-content: center; align-items: center; z-index: 9999;
+            color: #e85d75; font-size: 2rem; font-family: 'Playfair Display', serif;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-flower"></i>
-                    <span>BellaFlor</span>
-                </div>
-                <nav class="nav">
-                    <a href="#home">Início</a>
-                    <a href="#produtos">Produtos</a>
-                    <a href="#sobre">Sobre</a>
-                    <a href="#contato">Contato</a>
-                    <a href="admin.html" class="admin-link"><i class="fas fa-cog"></i> Admin</a>
-                </nav>
-                <div class="cart-icon" onclick="toggleCart()">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
-                </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </header>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#home" onclick="toggleMobileMenu()">Início</a>
-        <a href="#produtos" onclick="toggleMobileMenu()">Produtos</a>
-        <a href="#sobre" onclick="toggleMobileMenu()">Sobre</a>
-        <a href="#contato" onclick="toggleMobileMenu()">Contato</a>
-        <a href="admin.html" onclick="toggleMobileMenu()"><i class="fas fa-cog"></i> Admin</a>
-    </div>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">BellaFlor Artur Nogueira</h1>
-            <p class="hero-subtitle">Flores que expressam sentimentos, momentos que ficam na memória</p>
-            <a href="#produtos" class="btn btn-primary">Ver Produtos</a>
-        </div>
-    </section>
-
-    <!-- Filtros -->
-    <section class="filters">
-        <div class="container">
-            <div class="filter-group">
-                <input type="text" id="searchInput" placeholder="Buscar produtos..." class="search-input">
-                <select id="categoryFilter" class="filter-select">
-                    <option value="">Todas as Categorias</option>
-                    <option value="Buquês">Buquês</option>
-                    <option value="Arranjos">Arranjos</option>
-                    <option value="Cestas">Cestas</option>
-                    <option value="Plantas">Plantas</option>
-                    <option value="Ocasiões Especiais">Ocasiões Especiais</option>
-                </select>
-                <select id="sortFilter" class="filter-select">
-                    <option value="name">Nome</option>
-                    <option value="price-asc">Preço: Menor para Maior</option>
-                    <option value="price-desc">Preço: Maior para Menor</option>
-                </select>
-            </div>
-        </div>
-    </section>
-
-    <!-- Produtos Section -->
-    <section id="produtos" class="produtos">
-        <div class="container">
-            <h2 class="section-title">Nossos Produtos</h2>
-            <div id="productsGrid" class="products-grid">
-                <!-- Produtos serão carregados aqui -->
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Carregando produtos...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sobre Section -->
-    <section id="sobre" class="sobre">
-        <div class="container">
-            <h2 class="section-title">Sobre Nós</h2>
-            <div class="sobre-content">
-                <div class="sobre-text">
-                    <p>A <strong>BellaFlor</strong> é uma floricultura localizada em Artur Nogueira, dedicada a transformar momentos especiais em memórias inesquecíveis através da beleza e fragrância das flores.</p>
-                    <p>Com anos de experiência no mercado, oferecemos uma ampla variedade de flores frescas, arranjos personalizados e presentes especiais para todas as ocasiões.</p>
-                    <div class="features">
-                        <div class="feature-item">
-                            <i class="fas fa-truck"></i>
-                            <h3>Entrega Rápida</h3>
-                            <p>Entregamos em toda Artur Nogueira</p>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-leaf"></i>
-                            <h3>Flores Frescas</h3>
-                            <p>Produtos de alta qualidade</p>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-heart"></i>
-                            <h3>Atendimento Especial</h3>
-                            <p>Cuidado em cada detalhe</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contato Section -->
-    <section id="contato" class="contato">
-        <div class="container">
-            <h2 class="section-title">Entre em Contato</h2>
-            <div class="contato-content">
-                <div class="contato-info">
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h3>Endereço</h3>
-                            <p>Artur Nogueira - SP</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-phone"></i>
-                        <div>
-                            <h3>Telefone</h3>
-                            <p>(19) 3827-XXXX</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h3>E-mail</h3>
-                            <p>contato@bellaflor.com.br</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-clock"></i>
-                        <div>
-                            <h3>Horário de Funcionamento</h3>
-                            <p>Seg - Sex: 8h às 18h</p>
-                            <p>Sábado: 8h às 14h</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-flower"></i>
-                    <span>BellaFlor</span>
-                </div>
-                <p>&copy; 2024 BellaFlor Artur Nogueira. Todos os direitos reservados.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Carrinho Modal -->
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Carrinho de Compras</h2>
-                <button class="close-btn" onclick="toggleCart()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Itens do carrinho serão adicionados aqui -->
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cartTotal">R$ 0,00</span>
-                </div>
-                <button class="btn btn-primary btn-block" onclick="finalizarPedido()">Finalizar Pedido</button>
-            </div>
+    <div id="root">
+        <div class="loading-screen">
+            <i class="fas fa-spinner fa-spin"></i> &nbsp; Preparando o Jardim...
         </div>
     </div>
 
-    <!-- Modal de Detalhes do Produto -->
-    <div class="product-modal" id="productModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeProductModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div id="productModalContent">
-                <!-- Conteúdo será adicionado dinamicamente -->
-            </div>
-        </div>
-    </div>
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        const styled = window.styled;
 
-    <script src="js/main.js"></script>
+        // --- 1. DADOS (40 Produtos Mockados) ---
+        const PRODUCTS = Array.from({ length: 40 }, (_, i) => {
+            const types = ['Buquê', 'Arranjo', 'Cesta', 'Orquídea', 'Caixa'];
+            const flowers = ['Rosas Vermelhas', 'Girassóis', 'Lírios', 'Tulipas', 'Gérberas', 'Astromélias', 'Orquídeas Phalaenopsis', 'Flores do Campo'];
+            const adjs = ['Imperial', 'Romântico', 'Radiante', 'Eterno', 'Apaixonante', 'Luxuoso', 'Silvestre', 'Delicado'];
+            
+            const type = types[i % types.length];
+            const flower = flowers[i % flowers.length];
+            const adj = adjs[i % adjs.length];
+            
+            return {
+                id: i + 1,
+                name: `${type} ${adj} de ${flower}`,
+                price: (79.90 + (i * 12.50)).toFixed(2),
+                category: type + 's',
+                // Usando imagens reais do Unsplash com parâmetros fixos para não mudar no reload
+                image: `https://images.unsplash.com/photo-${[
+                    '1562690868-60bbe7293e94', '1587574293340-e0011c4e8ea0', 
+                    '1595231916356-a86217cef424', '1507290431195-26ab47d4940d',
+                    '1561181286-d3fee7d55364', '1591886980571-70d30eb5a53e'
+                ][i % 6]}?auto=format&fit=crop&w=500&q=80`,
+                description: `Um design exclusivo BellaFlor com as mais frescas ${flower}. Perfeito para emocionar.`
+            };
+        });
+
+        // --- 2. STYLED COMPONENTS (CSS-IN-JS) ---
+        
+        // Tema e Variáveis
+        const theme = {
+            primary: '#e85d75',
+            primaryHover: '#d64c63',
+            secondary: '#2d3436',
+            bg: '#fffbfb',
+            white: '#ffffff',
+            shadow: '0 10px 30px rgba(0,0,0,0.08)'
+        };
+
+        const FadeIn = styled.div`
+            animation: fadeIn 0.8s ease-out forwards;
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        `;
+
+        const Navbar = styled.nav`
+            position: fixed; top: 0; width: 100%; height: 80px;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        `;
+
+        const Logo = styled.div`
+            font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: ${theme.primary};
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            span { color: ${theme.secondary}; }
+        `;
+
+        const CartBadge = styled.button`
+            position: relative; background: none; border: none; font-size: 1.4rem; color: ${theme.secondary}; cursor: pointer;
+            .count {
+                position: absolute; top: -5px; right: -8px; background: ${theme.primary}; color: white;
+                font-size: 0.7rem; width: 20px; height: 20px; border-radius: 50%; display: flex; 
+                align-items: center; justify-content: center; font-weight: bold;
+            }
+        `;
+
+        const Hero = styled.header`
+            height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: white; padding: 20px; margin-top: 80px;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            
+            h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+            p { font-size: clamp(1rem, 2vw, 1.3rem); max-width: 600px; margin-bottom: 30px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        `;
+
+        const Button = styled.button`
+            padding: 15px 40px; background: ${props => props.secondary ? 'transparent' : theme.primary};
+            color: ${props => props.secondary ? 'white' : 'white'}; border: ${props => props.secondary ? '2px solid white' : 'none'};
+            font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: 0.3s;
+            box-shadow: ${props => props.secondary ? 'none' : '0 10px 20px rgba(232, 93, 117, 0.4)'};
+            
+            &:hover { transform: translateY(-3px); background: ${props => props.secondary ? 'white' : theme.primaryHover}; color: ${props => props.secondary ? theme.primary : 'white'}; }
+        `;
+
+        const FilterSection = styled.section`
+            padding: 40px 5%; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center;
+            background: #fff; position: sticky; top: 80px; z-index: 900; box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        `;
+
+        const SearchInput = styled.input`
+            padding: 12px 20px; border-radius: 30px; border: 1px solid #ddd; width: 300px; max-width: 100%;
+            font-family: 'Inter', sans-serif; &:focus { outline: 2px solid ${theme.primary}; border-color: transparent; }
+        `;
+
+        const CategoryBtn = styled.button`
+            padding: 8px 16px; border-radius: 20px; background: ${props => props.active ? theme.primary : '#f1f1f1'};
+            color: ${props => props.active ? 'white' : '#666'}; border: none; font-weight: 500; margin-right: 8px; margin-bottom: 8px;
+            cursor: pointer; transition: 0.2s; &:hover { background: ${props => props.active ? theme.primary : '#e0e0e0'}; }
+        `;
+
+        const Grid = styled.div`
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 40px 5% 80px;
+        `;
+
+        const Card = styled.div`
+            background: white; border-radius: 12px; overflow: hidden; box-shadow: ${theme.shadow}; transition: 0.3s;
+            &:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+            
+            .img-wrap { height: 300px; overflow: hidden; position: relative; }
+            img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+            &:hover img { transform: scale(1.1); }
+            
+            .content { padding: 20px; }
+            .cat { font-size: 0.75rem; text-transform: uppercase; color: ${theme.primary}; font-weight: 700; letter-spacing: 1px; }
+            h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin: 5px 0; color: ${theme.secondary}; }
+            .price { font-size: 1.4rem; font-weight: 700; color: ${theme.secondary}; margin-top: 10px; display: block; }
+            
+            .btn-add { width: 100%; padding: 12px; background: ${theme.secondary}; color: white; border: none; margin-top: 15px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+            .btn-add:hover { background: ${theme.primary}; }
+        `;
+
+        const Sidebar = styled.div`
+            position: fixed; top: 0; right: 0; width: 400px; max-width: 100%; height: 100vh; background: white;
+            z-index: 2000; padding: 30px; box-shadow: -10px 0 40px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+            transform: translateX(${props => props.open ? '0' : '100%'}); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        `;
+
+        const Backdrop = styled.div`
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1500;
+            opacity: ${props => props.open ? 1 : 0}; pointer-events: ${props => props.open ? 'all' : 'none'}; transition: 0.3s;
+        `;
+
+        const WhatsAppBtn = styled.a`
+            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px;
+            background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            margin-top: 20px; transition: 0.3s; &:hover { background: #1ebc57; }
+        `;
+
+        // --- 3. COMPONENTE APP PRINCIPAL ---
+        function App() {
+            const [cart, setCart] = useState([]);
+            const [isCartOpen, setIsCartOpen] = useState(false);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [category, setCategory] = useState('Todas');
+            
+            useEffect(() => {
+                // Remover loading screen
+                document.body.classList.add('loaded');
+            }, []);
+
+            const addToCart = (product) => {
+                setCart([...cart, product]);
+                setIsCartOpen(true);
+            };
+
+            const removeFromCart = (index) => {
+                const newCart = [...cart];
+                newCart.splice(index, 1);
+                setCart(newCart);
+            };
+
+            const filteredProducts = useMemo(() => {
+                return PRODUCTS.filter(p => {
+                    const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+                    const matchCat = category === 'Todas' || p.category.includes(category);
+                    return matchSearch && matchCat;
+                });
+            }, [searchTerm, category]);
+
+            const total = cart.reduce((acc, item) => acc + parseFloat(item.price), 0);
+
+            // Gerar link do WhatsApp com o pedido
+            const whatsappLink = useMemo(() => {
+                const phone = "551938279999"; // Coloque seu número aqui
+                let msg = "*Olá BellaFlor! Gostaria de fazer o seguinte pedido:*\n\n";
+                cart.forEach(item => { msg += `- ${item.name}: R$ ${item.price.replace('.', ',')}\n`; });
+                msg += `\n*Total: R$ ${total.toFixed(2).replace('.', ',')}*`;
+                msg += "\n\nQual a previsão de entrega?";
+                return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            }, [cart, total]);
+
+            return (
+                <>
+                    <Navbar>
+                        <Logo onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+                            <i className="fas fa-seedling" style={{color: theme.primary}}></i>
+                            BellaFlor <span>Artur Nogueira</span>
+                        </Logo>
+                        <CartBadge onClick={() => setIsCartOpen(true)}>
+                            <i className="fas fa-shopping-bag"></i>
+                            {cart.length > 0 && <span className="count">{cart.length}</span>}
+                        </CartBadge>
+                    </Navbar>
+
+                    <Hero>
+                        <FadeIn>
+                            <h1>Flores que contam histórias</h1>
+                            <p>A mais alta floricultura de Artur Nogueira. Buquês exclusivos, arranjos de luxo e presentes inesquecíveis.</p>
+                            <div style={{display: 'flex', gap: '15px', justifyContent: 'center'}}>
+                                <Button onClick={() => document.getElementById('shop').scrollIntoView({behavior: 'smooth'})}>Ver Coleção</Button>
+                                <Button secondary onClick={() => window.open('https://wa.me/551938279999', '_blank')}>Falar no WhatsApp</Button>
+                            </div>
+                        </FadeIn>
+                    </Hero>
+
+                    <FilterSection id="shop">
+                        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                            <i className="fas fa-search" style={{color: '#aaa'}}></i>
+                            <SearchInput 
+                                placeholder="Buscar flores..." 
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            {['Todas', 'Buquês', 'Cestas', 'Orquídeas'].map(cat => (
+                                <CategoryBtn key={cat} active={category === cat} onClick={() => setCategory(cat)}>
+                                    {cat}
+                                </CategoryBtn>
+                            ))}
+                        </div>
+                    </FilterSection>
+
+                    <Grid>
+                        {filteredProducts.map(product => (
+                            <FadeIn key={product.id}>
+                                <Card>
+                                    <div className="img-wrap">
+                                        <img src={product.image} alt={product.name} loading="lazy" />
+                                    </div>
+                                    <div className="content">
+                                        <span className="cat">{product.category}</span>
+                                        <h3>{product.name}</h3>
+                                        <p style={{fontSize: '0.9rem', color: '#888', margin: '5px 0'}}>{product.description}</p>
+                                        <span className="price">R$ {product.price.replace('.', ',')}</span>
+                                        <button className="btn-add" onClick={() => addToCart(product)}>
+                                            <i className="fas fa-cart-plus"></i> Adicionar
+                                        </button>
+                                    </div>
+                                </Card>
+                            </FadeIn>
+                        ))}
+                    </Grid>
+                    
+                    {filteredProducts.length === 0 && (
+                        <div style={{textAlign: 'center', padding: '50px', color: '#999'}}>
+                            <i className="fas fa-flower" style={{fontSize: '3rem', marginBottom: '20px'}}></i>
+                            <p>Nenhum produto encontrado com este termo.</p>
+                        </div>
+                    )}
+
+                    <footer style={{background: '#2d3436', color: 'white', padding: '60px 5%', textAlign: 'center'}}>
+                        <h2 style={{fontFamily: 'Playfair Display', marginBottom: '20px'}}>BellaFlor</h2>
+                        <p style={{opacity: 0.7}}>Criando memórias em Artur Nogueira desde 2010.</p>
+                        <p style={{marginTop: '40px', fontSize: '0.8rem', opacity: 0.5}}>&copy; 2024 BellaFlor. Design Ultimate.</p>
+                    </footer>
+
+                    {/* CARRINHO */}
+                    <Backdrop open={isCartOpen} onClick={() => setIsCartOpen(false)} />
+                    <Sidebar open={isCartOpen}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px'}}>
+                            <h2 style={{fontFamily: 'Playfair Display'}}>Seu Carrinho</h2>
+                            <button onClick={() => setIsCartOpen(false)} style={{background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer'}}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div style={{flex: 1, overflowY: 'auto'}}>
+                            {cart.length === 0 ? (
+                                <p style={{color: '#999', textAlign: 'center', marginTop: '50px'}}>Seu carrinho está vazio.</p>
+                            ) : (
+                                cart.map((item, index) => (
+                                    <div key={index} style={{display: 'flex', gap: '15px', marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '15px'}}>
+                                        <img src={item.image} style={{width: '60px', height: '60px', objectFit: 'cover', borderRadius: '5px'}} />
+                                        <div style={{flex: 1}}>
+                                            <h4 style={{fontSize: '0.9rem'}}>{item.name}</h4>
+                                            <span style={{fontWeight: 'bold', color: theme.primary}}>R$ {item.price.replace('.', ',')}</span>
+                                        </div>
+                                        <button onClick={() => removeFromCart(index)} style={{background:'none', border:'none', color: '#ff7675', cursor: 'pointer'}}>
+                                            <i className="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        <div style={{borderTop: '1px solid #eee', paddingTop: '20px'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: 'bold'}}>
+                                <span>Total:</span>
+                                <span>R$ {total.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <WhatsAppBtn href={whatsappLink} target="_blank">
+                                <i className="fab fa-whatsapp"></i> Finalizar Pedido
+                            </WhatsAppBtn>
+                        </div>
+                    </Sidebar>
+                </>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
