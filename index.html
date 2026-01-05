@@ -7,40 +7,27 @@
   <title>BellaFlor — Atelier Botânico | Loja Online</title>
   <meta name="description" content="Arranjos florais autorais, buquês e presentes botânicos. BellaFlor traduz sentimentos em flores com design exclusivo e entrega especial." />
   <meta name="theme-color" content="#bf6c74" />
-  <link rel="canonical" href="https://bellaflor.exemplo.com/" />
   
   <meta property="og:type" content="website" />
   <meta property="og:title" content="BellaFlor — Atelier Botânico" />
   <meta property="og:description" content="Arranjos autorais que traduzem sentimentos." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1200&q=80" />
   
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://images.unsplash.com https://via.placeholder.com;">
-
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
-
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Florist",
-    "name": "BellaFlor",
-    "image": "https://images.unsplash.com/photo-1563241527-300027f88ea2",
-    "description": "Atelier Botânico especializado em arranjos autorais.",
-    "priceRange": "$$"
-  }
-  </script>
-
   <style>
-    /* * BellaFlor Core Styles
-     * Optimized for Critical Rendering Path
+    /* * BellaFlor Core Styles 
+     * Design System & Tokens
      */
     :root {
       --brand-primary: #bf6c74;
-      --brand-accent:  #d4a373;
+      --brand-dark: #a6555d;
+      --brand-accent: #d4a373;
       --text: #2c3e50;
       --muted: #6c757d;
       --bg: #fcfcfb;
@@ -69,21 +56,20 @@
       background: var(--bg);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      padding-top: var(--header-height); /* Fix sticky header overlap */
     }
-
-    /* Typography */
-    h1, h2, h3 { line-height: 1.2; color: var(--text); }
-    button, input, select { font-family: inherit; }
 
     /* Utilities */
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; width: 100%; }
+    
     .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: var(--radius); border: 2px solid transparent; cursor: pointer; font-weight: 700; transition: all 0.2s ease; text-decoration: none; font-size: 1rem; }
     .btn.primary { background: var(--brand-primary); color: #fff; }
-    .btn.primary:hover { background: #a6555d; }
-    .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,0.3); }
-    .btn.ghost:hover { background: rgba(255,255,255,0.1); }
-    .icon-button { background: none; border: none; cursor: pointer; padding: 8px; color: var(--text); font-size: 1.2rem; transition: color 0.2s; }
+    .btn.primary:hover { background: var(--brand-dark); transform: translateY(-1px); }
+    .btn.ghost { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.4); backdrop-filter: blur(4px); }
+    .btn.ghost:hover { background: rgba(255,255,255,0.25); border-color: #fff; }
+    
+    .icon-button { background: none; border: none; cursor: pointer; padding: 8px; color: var(--text); font-size: 1.2rem; transition: color 0.2s; display: inline-flex; align-items: center; justify-content: center; }
     .icon-button:hover { color: var(--brand-primary); }
 
     /* Loader */
@@ -93,103 +79,128 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     /* Header */
-    .site-header { position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 100; height: var(--header-height); }
+    .site-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 100; height: var(--header-height); transition: transform 0.3s; }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
     .brand { display: flex; flex-direction: column; line-height: 1; text-decoration: none; color: inherit; }
-    .brand-name { font-family: var(--ff-heading); font-size: 1.25rem; font-weight: 700; color: var(--brand-primary); }
-    .brand-sub { font-family: var(--ff-script); color: var(--brand-accent); font-size: 1.1rem; margin-top: -5px; }
+    .brand-name { font-family: var(--ff-heading); font-size: 1.35rem; font-weight: 700; color: var(--brand-primary); letter-spacing: -0.5px; }
+    .brand-sub { font-family: var(--ff-script); color: var(--brand-accent); font-size: 1.2rem; margin-top: -8px; }
     
-    .nav-link { margin-left: 20px; text-decoration: none; color: var(--muted); font-weight: 600; font-size: 0.95rem; transition: color 0.2s; }
-    .nav-link:hover, .nav-link.active { color: var(--brand-primary); }
+    .nav-link { margin-left: 20px; text-decoration: none; color: var(--muted); font-weight: 600; font-size: 0.95rem; transition: color 0.2s; position: relative; }
+    .nav-link:hover { color: var(--brand-primary); }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--brand-primary); transition: width 0.3s; }
+    .nav-link:hover::after { width: 100%; }
     
     .cart-trigger { position: relative; margin-left: 20px; }
-    .cart-count { position: absolute; top: -5px; right: -5px; background: var(--brand-primary); color: white; font-size: 0.7rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .cart-count { position: absolute; top: -5px; right: -5px; background: var(--brand-primary); color: white; font-size: 0.7rem; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .cart-count.bump { transform: scale(1.5); }
 
     /* Hero */
     .hero { 
-      min-height: 60vh; 
+      min-height: 70vh; 
       display: flex; align-items: center; justify-content: center; 
       text-align: center; color: white; 
-      background-size: cover; background-position: center; 
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1490750967868-58cb75069ed6?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover; background-position: center; background-attachment: fixed;
+      margin-top: calc(var(--header-height) * -1); /* Pull up behind transparent header if desired, but here we keep distinct */
       position: relative;
     }
-    .hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
-    .hero-content { position: relative; z-index: 1; padding: 20px; max-width: 800px; }
+    .hero-content { position: relative; z-index: 1; padding: 20px; max-width: 800px; animation: fadeIn Up 1s ease-out; }
     .hero-lead { font-family: var(--ff-heading); letter-spacing: 3px; text-transform: uppercase; font-size: 1rem; margin-bottom: 10px; opacity: 0.9; }
-    .hero h1 { font-family: var(--ff-script); font-size: clamp(3rem, 6vw, 5rem); margin: 0; text-shadow: 0 4px 10px rgba(0,0,0,0.3); color: #fff; }
-    .hero p { font-size: 1.2rem; opacity: 0.95; margin-bottom: 30px; }
+    .hero h1 { font-family: var(--ff-script); font-size: clamp(3.5rem, 8vw, 6rem); margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #fff; line-height: 1.1; }
+    .hero p { font-size: 1.2rem; opacity: 0.95; margin-bottom: 30px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
     .hero-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
 
     /* Filter Toolbar */
-    .toolbar { display: flex; gap: 15px; padding: 30px 0; flex-wrap: wrap; }
+    .toolbar { display: flex; gap: 15px; padding: 40px 0; flex-wrap: wrap; align-items: center; }
     .search-box { flex: 2; min-width: 280px; position: relative; }
-    .search-box input { width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #ddd; border-radius: var(--radius); font-size: 1rem; }
-    .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
-    .filter-select { flex: 1; min-width: 180px; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius); background: white; cursor: pointer; }
+    .search-box input { width: 100%; padding: 14px 14px 14px 45px; border: 1px solid #e0e0e0; border-radius: var(--radius); font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
+    .search-box input:focus { outline: none; border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(191, 108, 116, 0.1); }
+    .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .filter-select { flex: 1; min-width: 180px; padding: 14px; border: 1px solid #e0e0e0; border-radius: var(--radius); background: white; cursor: pointer; font-size: 1rem; color: var(--text); }
+    .filter-select:focus { outline: none; border-color: var(--brand-primary); }
 
     /* Grid */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding-bottom: 40px; }
 
     /* Card */
-    .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
-    .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+    .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s; overflow: hidden; display: flex; flex-direction: column; height: 100%; position: relative; border: 1px solid rgba(0,0,0,0.02); }
+    .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
     .card-media { position: relative; height: var(--card-img-height); overflow: hidden; background: #f0f0f0; }
-    .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; will-change: transform; }
-    .card:hover .card-media img { transform: scale(1.05); }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; will-change: transform; }
+    .card:hover .card-media img { transform: scale(1.08); }
     .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-    .card-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-accent); font-weight: 700; margin-bottom: 8px; }
-    .card-title { font-family: var(--ff-heading); font-size: 1.2rem; margin: 0 0 5px; font-weight: 600; }
-    .card-price { font-weight: 700; color: var(--muted); margin-top: auto; font-size: 1.1rem; }
-    .card-actions { margin-top: 15px; opacity: 0; transform: translateY(10px); transition: all 0.2s; }
-    .card:focus-within .card-actions, .card:hover .card-actions { opacity: 1; transform: translateY(0); }
-    .btn-card { width: 100%; padding: 10px; font-size: 0.9rem; }
+    .card-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--brand-accent); font-weight: 700; margin-bottom: 8px; }
+    .card-title { font-family: var(--ff-heading); font-size: 1.25rem; margin: 0 0 5px; font-weight: 600; line-height: 1.3; }
+    .card-price { font-weight: 700; color: var(--brand-primary); margin-top: auto; font-size: 1.15rem; }
+    
+    /* Card Actions - Always visible on touch, hover on desktop */
+    .card-overlay-btn { 
+        position: absolute; bottom: 20px; right: 20px; 
+        width: 45px; height: 45px; border-radius: 50%; 
+        background: white; color: var(--brand-primary); 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; transform: translateY(10px); transition: all 0.3s;
+        border: none; cursor: pointer; z-index: 2; font-size: 1.2rem;
+    }
+    .card-overlay-btn:hover { background: var(--brand-primary); color: white; }
+    .card:hover .card-overlay-btn { opacity: 1; transform: translateY(0); }
 
     /* Cart Sidebar */
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 200; backdrop-filter: blur(2px); }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 200; backdrop-filter: blur(3px); }
     .overlay.open { opacity: 1; pointer-events: all; }
     
-    .sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 450px; background: var(--surface); z-index: 210; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+    .sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 420px; background: var(--surface); z-index: 210; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
     .sidebar.open { transform: translateX(0); }
-    .sidebar-header, .sidebar-footer { padding: 20px; border-bottom: 1px solid #eee; }
+    .sidebar-header, .sidebar-footer { padding: 25px; border-bottom: 1px solid #eee; }
     .sidebar-footer { border-top: 1px solid #eee; border-bottom: none; background: #fafafa; }
     .sidebar-body { flex: 1; overflow-y: auto; padding: 20px; }
     
-    .cart-item { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
-    .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; }
+    .cart-item { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-start; animation: slideIn 0.3s ease; }
+    .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
     .cart-details { flex: 1; }
-    .cart-remove { color: #e74c3c; font-size: 0.9rem; margin-top: 5px; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; }
+    .cart-remove { color: #e74c3c; font-size: 0.85rem; margin-top: 5px; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; opacity: 0.8; }
+    .cart-remove:hover { opacity: 1; }
 
     /* Modal */
     .modal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
     .modal.open { opacity: 1; pointer-events: all; }
-    .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.7); }
-    .modal-content { position: relative; background: var(--surface); width: 90%; max-width: 900px; border-radius: var(--radius); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); transform: scale(0.95); transition: transform 0.2s; }
+    .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); }
+    .modal-content { position: relative; background: var(--surface); width: 90%; max-width: 900px; border-radius: var(--radius); overflow: hidden; display: grid; grid-template-columns: 1.2fr 1fr; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); max-height: 85vh; }
     .modal.open .modal-content { transform: scale(1); }
-    .modal-img { background: #eee; min-height: 400px; background-size: cover; background-position: center; }
-    .modal-body { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
-    .modal-close { position: absolute; top: 15px; right: 15px; z-index: 10; background: rgba(255,255,255,0.8); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+    .modal-img { background: #eee; min-height: 300px; background-size: cover; background-position: center; }
+    .modal-body { padding: 40px; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+    .modal-close { position: absolute; top: 15px; right: 15px; z-index: 10; background: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s; }
+    .modal-close:hover { transform: rotate(90deg); color: var(--brand-primary); }
 
-    /* Accessibility Reduced Motion */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-    }
+    /* Toast Notification */
+    .toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 400; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { background: rgba(30, 30, 30, 0.9); color: white; padding: 12px 24px; border-radius: 50px; font-size: 0.95rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; animation: toastUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: all; }
+    .toast i { color: #2ecc71; }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toastUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     /* Responsive */
-    @media (max-width: 768px) {
-      .modal-content { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; }
-      .modal-img { height: 250px; min-height: auto; }
-      .modal-body { padding: 20px; }
-      .toolbar { flex-direction: column; gap: 10px; }
-      .search-box, .filter-select { width: 100%; }
-      .hero { min-height: 50vh; }
-      .card-actions { opacity: 1; transform: none; margin-top: 10px; }
+    @media (max-width: 850px) {
+      .modal-content { grid-template-columns: 1fr; grid-template-rows: 250px 1fr; }
+      .modal-img { height: 100%; }
+      .modal-body { padding: 25px; }
+      .hero h1 { font-size: 3.5rem; }
+    }
+    @media (max-width: 600px) {
+      .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+      .card-overlay-btn { opacity: 1; transform: translateY(0); width: 40px; height: 40px; bottom: 15px; right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); }
+      .nav-link { display: none; } /* Simplified mobile nav for this demo */
     }
   </style>
 </head>
 <body>
 
-  <a href="#main-content" class="sr-only" style="top: 10px; left: 10px; z-index: 9999; background: #fff; padding: 10px; width: auto; height: auto; clip: auto;">Pular para o conteúdo principal</a>
-
+  <a href="#main-content" class="sr-only">Pular para o conteúdo principal</a>
+  
   <div id="page-loader" class="page-loader" aria-hidden="false">
     <div class="spinner"><i class="fas fa-fan" aria-hidden="true"></i></div>
     <p style="margin-top:1rem; font-family:var(--ff-heading); letter-spacing:2px; color:#888;">BELLAFLOR</p>
@@ -197,13 +208,12 @@
 
   <header class="site-header">
     <div class="container nav-inner">
-      <a href="#" class="brand" aria-label="BellaFlor - Página Inicial">
+      <a href="#" class="brand" aria-label="BellaFlor - Página Inicial" onclick="window.scrollTo(0,0); return false;">
         <span class="brand-name">BellaFlor</span>
         <span class="brand-sub">Atelier Botânico</span>
       </a>
 
       <nav role="navigation" aria-label="Menu Principal" style="display:flex; align-items:center;">
-        <a href="#hero" class="nav-link">Início</a>
         <a href="#catalog" class="nav-link">Coleção</a>
         <button id="cart-btn" class="icon-button cart-trigger" aria-label="Abrir Carrinho de Compras" aria-haspopup="dialog" aria-expanded="false">
           <i class="fas fa-shopping-bag" aria-hidden="true"></i>
@@ -222,7 +232,7 @@
         <div class="hero-actions">
           <a href="#catalog" class="btn primary">Ver Coleção</a>
           <a href="https://wa.me/551938279999" target="_blank" rel="noopener noreferrer" class="btn ghost">
-            <i class="fab fa-whatsapp" style="margin-right:8px"></i> Fale Conosco
+            <i class="fab fa-whatsapp" style="margin-right:8px"></i> Personalizar
           </a>
         </div>
       </div>
@@ -233,21 +243,22 @@
         <div class="search-box">
           <label for="search-input" class="sr-only">Pesquisar produtos</label>
           <i class="fas fa-search" aria-hidden="true"></i>
-          <input type="search" id="search-input" placeholder="O que você procura hoje? (ex: Rosas, Orquídeas...)" autocomplete="off">
+          <input type="search" id="search-input" placeholder="Procure por flores, ocasiões..." autocomplete="off">
         </div>
         
-        <label for="category-select" class="sr-only">Filtrar por Categoria</label>
-        <select id="category-select" class="filter-select">
-          <option value="">Todas as Categorias</option>
-          </select>
+        <div style="display:flex; gap:10px; flex:1; min-width: 300px;">
+            <label for="category-select" class="sr-only">Filtrar por Categoria</label>
+            <select id="category-select" class="filter-select">
+            <option value="">Todas as Categorias</option>
+            </select>
 
-        <label for="sort-select" class="sr-only">Ordenar por</label>
-        <select id="sort-select" class="filter-select">
-          <option value="relevance">Mais Relevantes</option>
-          <option value="price-asc">Preço: Menor para Maior</option>
-          <option value="price-desc">Preço: Maior para Menor</option>
-          <option value="az">Nome: A - Z</option>
-        </select>
+            <label for="sort-select" class="sr-only">Ordenar por</label>
+            <select id="sort-select" class="filter-select">
+            <option value="relevance">Destaques</option>
+            <option value="price-asc">Preço: Menor</option>
+            <option value="price-desc">Preço: Maior</option>
+            </select>
+        </div>
       </section>
 
       <section id="catalog" aria-labelledby="catalog-title">
@@ -276,16 +287,18 @@
   </footer>
 
   <div id="overlay" class="overlay"></div>
+  <div id="toast-container" class="toast-container"></div>
+
   <aside id="cart-sidebar" class="sidebar" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
     <div class="sidebar-header" style="display:flex; justify-content:space-between; align-items:center;">
-      <h2 id="cart-title" style="font-size:1.2rem; margin:0;">Seu Jardim (Carrinho)</h2>
+      <h2 id="cart-title" style="font-size:1.4rem; font-family:var(--ff-heading); margin:0; color:var(--brand-primary);">Seu Jardim</h2>
       <button id="close-cart" class="icon-button" aria-label="Fechar Carrinho"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
     <div id="cart-items" class="sidebar-body" aria-live="polite">
-      </div>
+        </div>
     <div class="sidebar-footer">
-      <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:700;">
-        <span>Subtotal:</span>
+      <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:700; font-size:1.1rem;">
+        <span>Total Estimado:</span>
         <span id="cart-total">R$ 0,00</span>
       </div>
       <button id="checkout-btn" class="btn primary" style="width:100%">
@@ -301,10 +314,14 @@
       <div id="modal-img-container" class="modal-img"></div>
       <div class="modal-body">
         <span id="modal-cat" style="color:var(--brand-accent); font-weight:700; text-transform:uppercase; font-size:0.8rem; margin-bottom:10px; display:block;"></span>
-        <h2 id="modal-title" style="font-family:var(--ff-heading); margin:0 0 10px;"></h2>
-        <p id="modal-desc" style="color:var(--muted); margin-bottom:20px;"></p>
-        <div id="modal-price" style="font-size:1.5rem; color:var(--brand-primary); font-weight:700; margin-bottom:25px;"></div>
-        <button id="modal-add-btn" class="btn primary">Adicionar à Cesta</button>
+        <h2 id="modal-title" style="font-family:var(--ff-heading); font-size:2rem; margin:0 0 15px; color:var(--brand-primary);"></h2>
+        <p id="modal-desc" style="color:var(--text); margin-bottom:30px; font-size:1.05rem; line-height:1.7;"></p>
+        <div style="margin-top:auto">
+            <div id="modal-price" style="font-size:1.8rem; color:var(--text); font-weight:700; margin-bottom:20px;"></div>
+            <button id="modal-add-btn" class="btn primary" style="width:100%; padding: 15px;">
+                Adicionar ao Carrinho - <span id="modal-btn-price"></span>
+            </button>
+        </div>
       </div>
     </div>
   </div>
@@ -320,9 +337,8 @@
       // --- Configuration & State ---
       const CONFIG = {
         currency: { style: 'currency', currency: 'BRL' },
-        apiMockDelay: 600,
         itemsPerPage: 8,
-        whatsapp: "551938279999"
+        whatsappNumber: "551938279999" // Use formato internacional sem + ou -
       };
 
       const STATE = {
@@ -335,16 +351,17 @@
 
       // --- Utilities (Security & DOM) ---
       
-      // XSS Protection: Never use innerHTML with untrusted data.
-      // Use this builder or standard textContent.
+      // Construtor seguro de elementos DOM
       const el = (tag, props = {}, ...children) => {
         const element = document.createElement(tag);
         for (const [key, val] of Object.entries(props)) {
-          if (key === 'dataset') {
-            for (const [dKey, dVal] of Object.entries(val)) element.dataset[dKey] = dVal;
+          if (key.startsWith('data-')) {
+            element.setAttribute(key, val);
           } else if (key.startsWith('on') && typeof val === 'function') {
             element.addEventListener(key.substring(2).toLowerCase(), val);
-          } else if (val !== false && val !== null) {
+          } else if (key === 'style') {
+            element.style.cssText = val;
+          } else if (val !== false && val !== null && val !== undefined) {
             element.setAttribute(key, val);
           }
         }
@@ -365,44 +382,24 @@
         };
       };
 
-      // --- Focus Management (A11y) ---
-      const FocusTrap = {
-        activeElement: null,
-        focusable: 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        
-        trap(element) {
-          this.activeElement = document.activeElement;
-          const focusableEls = element.querySelectorAll(this.focusable);
-          const first = focusableEls[0];
-          const last = focusableEls[focusableEls.length - 1];
-          
-          element.addEventListener('keydown', function(e) {
-            if (e.key === 'Tab') {
-              if (e.shiftKey) {
-                if (document.activeElement === first) {
-                  e.preventDefault();
-                  last.focus();
-                }
-              } else {
-                if (document.activeElement === last) {
-                  e.preventDefault();
-                  first.focus();
-                }
-              }
-            } else if (e.key === 'Escape') {
-              App.closeAllModals();
-            }
-          });
-          
-          setTimeout(() => first?.focus(), 50);
-        },
-        
-        release() {
-          if (this.activeElement) this.activeElement.focus();
-        }
+      // --- Services ---
+
+      const ToastService = {
+          container: document.getElementById('toast-container'),
+          show(message) {
+              const toast = el('div', { class: 'toast' }, 
+                  el('i', { class: 'fas fa-check-circle' }),
+                  message
+              );
+              this.container.appendChild(toast);
+              setTimeout(() => {
+                  toast.style.opacity = '0';
+                  toast.style.transform = 'translateY(20px)';
+                  setTimeout(() => toast.remove(), 300);
+              }, 3000);
+          }
       };
 
-      // --- Data Mocking ---
       const DataService = {
         init() {
           const flowers = [
@@ -420,26 +417,29 @@
             { n: 'Lírios Brancos', c: 'Arranjos', p: 160.00 }
           ];
           
-          // Generate 24 items
           STATE.products = Array.from({ length: 24 }, (_, i) => {
             const base = flowers[i % flowers.length];
+            // Cycle through high quality unsplash images
+            const imgs = [
+                '1562690868-60bbe7293e94', '1597826368522-9f4a35226e99', 
+                '1586541679237-640a233b4997', '1520763185298-1b434c919102',
+                '1518709766631-a6a8f4b08224', '1464698579707-353232147316'
+            ];
+            
             return {
               id: i + 1,
               name: base.n,
               category: base.c,
               price: base.p,
-              image: `https://images.unsplash.com/photo-${[
-                '1562690868-60bbe7293e94', '1566929341488-820845a76cb5', 
-                '1464698579707-353232147316', '1520763185298-1b434c919102'
-              ][i % 4]}?auto=format&fit=crop&w=600&q=80`,
-              desc: `Um arranjo exclusivo de ${base.n} selecionadas manualmente. Perfeito para presentear ou decorar ambientes com sofisticação.`
+              image: `https://images.unsplash.com/photo-${imgs[i % imgs.length]}?auto=format&fit=crop&w=600&q=80`,
+              desc: `Um design exclusivo BellaFlor com ${base.n} frescas selecionadas manualmente. Perfeito para celebrar momentos únicos.`
             };
           });
           STATE.filteredProducts = [...STATE.products];
         }
       };
 
-      // --- UI Components ---
+      // --- UI Controller ---
       const UI = {
         elements: {
           grid: document.getElementById('product-grid'),
@@ -479,36 +479,43 @@
           const end = start + CONFIG.itemsPerPage;
           const slice = STATE.filteredProducts.slice(start, end);
           
+          if (STATE.filteredProducts.length === 0) {
+            this.elements.grid.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:60px 20px;">
+                    <i class="fas fa-leaf" style="font-size:3rem; color:#e0e0e0; margin-bottom:15px;"></i>
+                    <p style="color:var(--muted); font-size:1.1rem;">Não encontramos flores com estes filtros.</p>
+                    <button onclick="document.getElementById('category-select').value=''; document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));" class="btn ghost" style="color:var(--brand-primary); border-color:var(--brand-primary)">Limpar Filtros</button>
+                </div>`;
+            this.elements.loadMore.style.display = 'none';
+            return;
+          }
+
           const frag = document.createDocumentFragment();
           
           slice.forEach(p => {
-            // Safe DOM Construction
             const article = el('article', { class: 'card', tabindex: '0' },
               el('div', { class: 'card-media' },
                 el('img', { 
-                  src: p.image, 
-                  alt: `Foto de ${p.name}`, 
-                  loading: 'lazy',
-                  width: '400', height: '280'
-                })
+                   src: p.image, 
+                   alt: `Foto de ${p.name}`, 
+                   loading: 'lazy',
+                   width: '400', height: '280'
+                }),
+                el('button', {
+                    class: 'card-overlay-btn',
+                    'aria-label': 'Adicionar ao carrinho',
+                    onclick: (e) => { e.stopPropagation(); App.addToCart(p.id); }
+                }, el('i', { class: 'fas fa-plus' }))
               ),
               el('div', { class: 'card-body' },
                 el('div', { class: 'card-tag' }, p.category),
                 el('h3', { class: 'card-title' }, p.name),
-                el('div', { class: 'card-price' }, formatMoney(p.price)),
-                el('div', { class: 'card-actions' },
-                  el('button', { 
-                    class: 'btn primary btn-card',
-                    'data-id': p.id,
-                    onclick: (e) => { e.stopPropagation(); App.addToCart(p.id); } 
-                  }, 'Adicionar')
-                )
+                el('div', { class: 'card-price' }, formatMoney(p.price))
               )
             );
 
-            // Click event for modal
+            // Interaction handlers
             article.addEventListener('click', () => App.openProductModal(p));
-            // Keyboard support (Enter/Space)
             article.addEventListener('keydown', (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -522,22 +529,25 @@
           this.elements.grid.appendChild(frag);
           STATE.visibleCount = end;
 
-          // Manage Load More visibility
           this.elements.loadMore.style.display = 
             STATE.visibleCount >= STATE.filteredProducts.length ? 'none' : 'inline-block';
-            
-          // If empty
-          if (STATE.filteredProducts.length === 0) {
-            this.elements.grid.innerHTML = '<p class="muted" style="grid-column:1/-1;text-align:center;padding:40px;">Nenhum produto encontrado com esses filtros.</p>';
-          }
         },
 
         updateCart() {
           this.elements.cartCount.textContent = STATE.cart.length;
+          
+          // Animation effect
+          this.elements.cartCount.classList.add('bump');
+          setTimeout(() => this.elements.cartCount.classList.remove('bump'), 300);
+
           this.elements.cartItems.innerHTML = '';
           
           if (STATE.cart.length === 0) {
-            this.elements.cartItems.innerHTML = '<p class="muted" style="text-align:center;margin-top:20px;">Sua cesta está vazia.</p>';
+            this.elements.cartItems.innerHTML = `
+                <div style="text-align:center; padding: 40px 20px;">
+                    <i class="fas fa-shopping-basket" style="font-size:3rem; color:#eee; margin-bottom:15px;"></i>
+                    <p class="muted">Sua cesta está vazia.</p>
+                </div>`;
             this.elements.cartTotal.textContent = formatMoney(0);
             return;
           }
@@ -548,12 +558,12 @@
             const row = el('div', { class: 'cart-item' },
               el('img', { src: item.image, alt: item.name }),
               el('div', { class: 'cart-details' },
-                el('div', { style: 'font-weight:700; font-size:0.9rem' }, item.name),
-                el('div', { style: 'color:var(--brand-primary)' }, formatMoney(item.price)),
+                el('div', { style: 'font-weight:700; font-size:0.95rem; line-height:1.2; margin-bottom:4px;' }, item.name),
+                el('div', { style: 'color:var(--brand-primary); font-weight:600;' }, formatMoney(item.price)),
                 el('button', { 
-                  class: 'cart-remove', 
-                  onclick: () => App.removeFromCart(index) 
-                }, 'Remover')
+                   class: 'cart-remove', 
+                   onclick: () => App.removeFromCart(index) 
+                 }, 'Remover')
               )
             );
             this.elements.cartItems.appendChild(row);
@@ -577,7 +587,7 @@
           UI.updateCart();
           this.bindEvents();
           
-          // Remove loader after "load"
+          // Initial Load Simulation
           window.addEventListener('load', () => setTimeout(() => UI.toggleLoader(false), 500));
         },
 
@@ -600,18 +610,27 @@
             this.filterProducts();
           });
 
-          // Load More
           document.getElementById('load-more').addEventListener('click', () => UI.renderGrid(true));
 
-          // Cart Sidebar
+          // Cart & Modal
           document.getElementById('cart-btn').addEventListener('click', () => this.toggleCart(true));
           document.getElementById('close-cart').addEventListener('click', () => this.toggleCart(false));
-          document.getElementById('overlay').addEventListener('click', () => this.closeAllModals());
+          document.getElementById('overlay').addEventListener('click', () => {
+              this.toggleCart(false);
+              this.closeProductModal();
+          });
           document.getElementById('checkout-btn').addEventListener('click', () => this.checkout());
 
-          // Modal
           document.getElementById('close-modal').addEventListener('click', () => this.closeProductModal());
           document.getElementById('modal-backdrop').addEventListener('click', () => this.closeProductModal());
+          
+          // Escape key closes UI
+          document.addEventListener('keydown', (e) => {
+              if(e.key === 'Escape') {
+                  this.toggleCart(false);
+                  this.closeProductModal();
+              }
+          });
         },
 
         filterProducts() {
@@ -623,7 +642,7 @@
 
           if (sort === 'price-asc') list.sort((a,b) => a.price - b.price);
           else if (sort === 'price-desc') list.sort((a,b) => b.price - a.price);
-          else if (sort === 'az') list.sort((a,b) => a.name.localeCompare(b.name));
+          else if (sort === 'relevance') list.sort((a,b) => a.id - b.id); // Default order
           
           STATE.filteredProducts = list;
           UI.renderGrid(false);
@@ -635,7 +654,7 @@
             STATE.cart.push(product);
             localStorage.setItem('bella_cart', JSON.stringify(STATE.cart));
             UI.updateCart();
-            this.toggleCart(true);
+            ToastService.show(`"${product.name}" adicionado à cesta.`);
           }
         },
 
@@ -655,13 +674,12 @@
             sidebar.classList.add('open');
             sidebar.setAttribute('aria-hidden', 'false');
             trigger.setAttribute('aria-expanded', 'true');
-            FocusTrap.trap(sidebar);
+            // Simple focus trap could go here
           } else {
             overlay.classList.remove('open');
             sidebar.classList.remove('open');
             sidebar.setAttribute('aria-hidden', 'true');
             trigger.setAttribute('aria-expanded', 'false');
-            FocusTrap.release();
           }
         },
 
@@ -674,47 +692,58 @@
           document.getElementById('modal-title').textContent = product.name;
           document.getElementById('modal-desc').textContent = product.desc;
           document.getElementById('modal-price').textContent = formatMoney(product.price);
+          document.getElementById('modal-btn-price').textContent = formatMoney(product.price);
           
-          // Reset button to ensure fresh event listener if needed, 
-          // but simpler is just wrapping onclick:
+          // Setup Add Button
           const btn = document.getElementById('modal-add-btn');
-          btn.onclick = () => { 
-            this.addToCart(product.id); 
-            this.closeProductModal(); 
-          };
+          // Clone to remove old listeners
+          const newBtn = btn.cloneNode(true);
+          btn.parentNode.replaceChild(newBtn, btn);
+          
+          newBtn.addEventListener('click', () => {
+              this.addToCart(product.id);
+              this.closeProductModal();
+              this.toggleCart(true); // Open cart if adding via modal (user intent is higher)
+          });
 
           modal.classList.add('open');
           modal.setAttribute('aria-hidden', 'false');
-          FocusTrap.trap(modal);
+          document.body.style.overflow = 'hidden';
         },
 
         closeProductModal() {
           const modal = document.getElementById('product-modal');
           modal.classList.remove('open');
           modal.setAttribute('aria-hidden', 'true');
-          FocusTrap.release();
-        },
-
-        closeAllModals() {
-          this.toggleCart(false);
-          this.closeProductModal();
+          document.body.style.overflow = '';
         },
 
         checkout() {
-          if(STATE.cart.length === 0) return;
-          
-          let text = "Olá, gostaria de finalizar meu pedido na BellaFlor:\n\n";
-          STATE.cart.forEach(p => text += `- ${p.name}: ${formatMoney(p.price)}\n`);
-          const total = STATE.cart.reduce((acc, curr) => acc + curr.price, 0);
-          text += `\n*Total: ${formatMoney(total)}*`;
-          
-          const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
-          window.open(url, '_blank');
+            if (STATE.cart.length === 0) {
+                ToastService.show("Adicione flores antes de finalizar.");
+                return;
+            }
+
+            let message = "*Olá, BellaFlor! Gostaria de fazer o seguinte pedido:*\n\n";
+            let total = 0;
+            
+            // Agrupar itens iguais (Opcional - mas deixei simples por enquanto)
+            STATE.cart.forEach((item) => {
+                message += `▫️ ${item.name} - ${formatMoney(item.price)}\n`;
+                total += item.price;
+            });
+
+            message += `\n*Total Estimado: ${formatMoney(total)}*`;
+            message += "\n\nPor favor, podem confirmar a disponibilidade e a entrega?";
+
+            const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         }
       };
 
       // Start App
       App.init();
+
     })();
   </script>
 </body>
