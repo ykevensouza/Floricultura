@@ -1,538 +1,640 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BellaFlor | Atelier Floral Premium</title>
-    <meta name="description" content="BellaFlor - Design floral exclusivo e presentes inesquecíveis.">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BellaFlor | Atelier Floral Premium</title>
+  <meta name="description" content="BellaFlor - Design floral exclusivo e presentes inesquecíveis." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity crossorigin="anonymous">
 
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* RESET */
+    :root {
+      --primary: #bf6c74;
+      --secondary: #2c3e50;
+      --accent: #d4a373;
+      --background: #fdfbf7;
+      --card-bg: #fff;
+      --success: #6ab04c;
+      --text-light: #7f8c8d;
+      --radius: 6px;
+      --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+      --font-heading: "Cinzel", serif;
+      --font-script: "Pinyon Script", cursive;
+      --font-body: "Lato", sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body,#root{height:100%}
+    body{
+      font-family:var(--font-body);
+      background:var(--background);
+      color:var(--secondary);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-y:auto;
+      transition:opacity .6s;
+      opacity:0;
+    }
+    body.loaded{opacity:1}
 
-    <style>
-        /* CSS Reset & Critical CSS */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        
-        :root {
-            --loader-color: #d4a373;
-        }
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:8px;height:8px}
+    ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:6px}
+    ::-webkit-scrollbar-track{background:#f1f1f1}
 
-        body { 
-            background-color: #fcfcfc;
-            color: #1a1a1a; 
-            overflow-x: hidden;
-            opacity: 0; transition: opacity 0.8s ease;
-        }
-        body.loaded { opacity: 1; }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #d4a373; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #b08968; }
+    /* Loader */
+    .loader{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
+      background:#fffdf9;z-index:9999;gap:18px;
+    }
+    .petal{font-size:3rem;color:var(--accent);animation:breathe 2s infinite}
+    @keyframes breathe{0%,100%{transform:scale(.9);opacity:.8}50%{transform:scale(1.05);opacity:1}}
 
-        /* Loader Animation */
-        .loader-wrapper {
-            position: fixed; inset: 0; background: #fffdf9; z-index: 9999;
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
-            transition: opacity 0.6s ease, visibility 0.6s;
-        }
-        .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
-        .petal-spinner { font-size: 4rem; color: var(--loader-color); animation: breathe 2s infinite ease-in-out; }
-        @keyframes breathe { 0%, 100% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
-    </style>
+    /* NAV */
+    header.nav{
+      position:fixed;left:0;right:0;top:0;height:72px;padding:12px 6%;
+      display:flex;align-items:center;justify-content:space-between;z-index:1000;
+      background:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.03);
+      transition:all .25s;
+    }
+    .brand h1{font-family:var(--font-heading);color:var(--primary);letter-spacing:2px;font-size:1.6rem}
+    .brand span{display:block;font-family:var(--font-script);color:var(--accent);margin-top:-6px;font-size:.95rem}
+    .nav-actions{display:flex;gap:18px;align-items:center}
+    .icon-btn{background:none;border:none;font-size:1.1rem;padding:6px;cursor:pointer;position:relative;color:var(--secondary)}
+    .icon-btn .badge{position:absolute;top:-6px;right:-6px;background:var(--primary);color:#fff;border-radius:50%;padding:3px 6px;font-size:.65rem}
+
+    /* HERO */
+    .hero{
+      height:88vh; min-height:520px; display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;
+      background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.08));
+      background-size:cover;background-position:center;
+      margin-top:72px;
+      color:#fff;
+    }
+    .hero h2{font-family:var(--font-script);font-size:clamp(2rem,6vw,4.2rem);margin-bottom:.3rem;text-shadow: 0 6px 18px rgba(0,0,0,.35)}
+    .hero p.lead{font-family:var(--font-heading);letter-spacing:2px;text-transform:uppercase;font-size:1rem;margin-bottom:28px}
+    .btn-primary{padding:14px 34px;border-radius:10px;background:var(--primary);color:#fff;border:none;font-weight:700;cursor:pointer}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff}
+
+    /* CATEGORIES */
+    .cats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:36px 6%;padding:6px 0}
+    .cat{background:none;border:none;padding:8px 12px;cursor:pointer;font-family:var(--font-heading);color:#999;border-bottom:3px solid transparent}
+    .cat.active{color:var(--primary);border-color:var(--primary);font-weight:700}
+
+    /* GRID */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:32px;padding:0 6% 80px;max-width:1600px;margin:0 auto}
+    .card{background:var(--card-bg);border-radius:var(--radius);overflow:hidden;box-shadow:none;transition:transform .35s,box-shadow .35s}
+    .card:hover{transform:translateY(-8px);box-shadow:var(--shadow)}
+    .card .img{height:320px;overflow:hidden;background:#eee}
+    .card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s}
+    .card:hover img{transform:scale(1.06)}
+    .card .info{padding:14px;text-align:center}
+    .cat-tag{font-size:.72rem;color:var(--accent);letter-spacing:1.6px;text-transform:uppercase;font-weight:700}
+    .card h3{font-family:var(--font-heading);font-size:1.05rem;margin:8px 0;color:var(--secondary)}
+    .price{color:var(--text-light);font-size:1rem}
+
+    /* SIDEBAR CART */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:2000;opacity:0;pointer-events:none;transition:.25s}
+    .overlay.show{opacity:1;pointer-events:all}
+    .cart{position:fixed;top:0;right:0;height:100vh;width:420px;max-width:96%;background:#fff;z-index:2050;transform:translateX(100%);transition:transform .35s;display:flex;flex-direction:column}
+    .cart.open{transform:translateX(0)}
+    .cart .header,.cart .footer{padding:20px;border-bottom:1px solid #eee}
+    .cart .body{padding:20px;overflow:auto;flex:1}
+    .cart-item{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+    .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:6px}
+    .cart-total{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-bottom:12px}
+
+    /* MODAL */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:2100;opacity:0;pointer-events:none;transition:.25s}
+    .modal.show{opacity:1;pointer-events:all}
+    .modal-card{background:#fff;border-radius:8px;max-width:1000px;width:100%;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,.25)}
+    @media (max-width:820px){.modal-card{grid-template-columns:1fr}}
+    .modal-img{background-size:cover;background-position:center;min-height:320px}
+    .modal-content{padding:32px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+
+    /* FOOTER */
+    footer.site{background:#f8f8f8;padding:60px 6%;text-align:center;border-top:1px solid #eee}
+    footer .social{display:flex;justify-content:center;gap:18px;font-size:1.3rem;color:#888;margin-bottom:18px}
+
+    /* Responsive tweaks */
+    @media (max-width:640px){
+      .hero{height:64vh;min-height:440px}
+      .card .img{height:220px}
+    }
+  </style>
 </head>
 <body>
-
-    <div id="root">
-        <div class="loader-wrapper">
-            <i class="fas fa-seedling petal-spinner"></i>
-            <p style="margin-top: 20px; font-family: 'Cinzel', serif; letter-spacing: 3px; color: #888; font-size: 0.8rem;">CULTIVANDO BELEZA...</p>
-        </div>
+  <div id="root">
+    <div class="loader" id="loader" aria-hidden="true">
+      <div class="petal"><i class="fas fa-seedling"></i></div>
+      <div style="font-family:var(--font-heading);letter-spacing:3px;color:#888;font-size:.9rem">CULTIVANDO BELEZA...</div>
     </div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo, useRef } = React;
-        const styled = window.styled;
+    <header class="nav" role="banner" aria-label="Navegação principal">
+      <div class="brand" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer">
+        <h1 id="store-name">BellaFlor</h1>
+        <span id="store-sub">Atelier Botânico</span>
+      </div>
+      <div class="nav-actions" role="navigation" aria-label="Ações">
+        <button class="icon-btn" id="wish-btn" aria-label="Itens salvos"><i class="far fa-heart"></i></button>
+        <button class="icon-btn" id="cart-btn" aria-label="Abrir carrinho"><i class="fas fa-shopping-bag"></i><span class="badge" id="cart-count" style="display:none">0</span></button>
+      </div>
+    </header>
 
-        // ==================================================================================
-        // ⚠️ ARQUIVO DE CONFIGURAÇÃO SIMULADO (PREPARADO PARA O CONFIG.JSON) ⚠️
-        // ==================================================================================
-        
-        const CONFIG = {
-            meta: {
-                version: "2.0",
-                last_updated: "2026-01-05"
-            },
-            store: {
-                info: {
-                    name: "BellaFlor",
-                    subtitle: "Atelier Botânico",
-                    city: "Artur Nogueira",
-                    since: "Desde 2010",
-                    whatsapp_number: "551938279999" // Formato internacional sem +
-                },
-                links: {
-                    instagram: "https://instagram.com",
-                    facebook: "https://facebook.com",
-                    email: "mailto:contato@bellaflor.com.br"
-                }
-            },
-            theme: {
-                colors: {
-                    primary: "#bf6c74",      // Rosa Antigo
-                    secondary: "#2c3e50",    // Azul Noturno (Texto forte)
-                    accent: "#d4a373",       // Dourado Matte
-                    background: "#fdfbf7",   // Papel Off-white
-                    card_bg: "#ffffff",
-                    success: "#6ab04c",
-                    text_light: "#7f8c8d"
-                },
-                fonts: {
-                    heading: "'Cinzel', serif",
-                    script: "'Pinyon Script', cursive",
-                    body: "'Lato', sans-serif"
-                },
-                ui: {
-                    radius: "2px", // Design mais quadrado/elegante
-                    shadow: "0 10px 40px -10px rgba(0,0,0,0.08)"
-                }
-            },
-            texts: {
-                hero: {
-                    title: "A Poesia das Flores",
-                    subtitle: "Arranjos autorais que traduzem sentimentos em Artur Nogueira. Do clássico ao contemporâneo.",
-                    cta: "Ver Coleção",
-                    bg_image: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1920&q=80"
-                },
-                footer: {
-                    copyright: "Todos os direitos reservados.",
-                    made_by: "Design Exclusivo"
-                },
-                cart: {
-                    title: "Seu Jardim",
-                    empty: "Sua cesta de flores está vazia no momento.",
-                    checkout: "Finalizar no WhatsApp",
-                    total: "Subtotal"
-                },
-                product: {
-                    currency: "R$",
-                    add_to_cart: "Adicionar à Cesta",
-                    quick_view: "Espiar"
-                }
-            },
-            catalog: {
-                categories: ["Todos", "Buquês", "Arranjos", "Box Luxo", "Orquídeas", "Secas & Preservadas"],
-                // Configuração para o Gerador de Mock (pode ser removido quando vier do JSON real)
-                mock_settings: {
-                    count: 24,
-                    base_price: 120
-                }
-            }
+    <main>
+      <section class="hero" id="hero" aria-label="Apresentação principal">
+        <div>
+          <p class="lead" id="hero-title">A Poesia das Flores</p>
+          <h2 id="hero-name">BellaFlor</h2>
+          <p class="lead" id="hero-sub" style="font-size:1rem;text-transform:none;max-width:680px;margin:12px auto 26px"></p>
+          <div style="display:flex;gap:12px;justify-content:center">
+            <button class="btn-primary" id="hero-cta">Ver Coleção</button>
+            <a id="hero-whatsapp" class="btn-outline" href="#" style="padding:12px 20px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;color:#fff;border:1px solid rgba(255,255,255,.5)"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          </div>
+        </div>
+      </section>
+
+      <nav class="cats" id="category-bar" aria-label="Categorias"></nav>
+
+      <section class="grid" id="products" aria-live="polite"></section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site" role="contentinfo">
+      <h2 id="footer-name" style="font-family:var(--font-heading);color:var(--primary);margin-bottom:16px">BellaFlor</h2>
+      <div class="social" aria-hidden="false">
+        <a id="link-instagram" href="#" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        <a id="link-whats" href="#" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+        <a id="link-email" href="#"><i class="far fa-envelope"></i></a>
+      </div>
+      <p style="color:#aaa;font-size:.85rem">© <span id="footer-year"></span> <span id="footer-c-name">BellaFlor</span>. <span id="footer-made">Design Exclusivo</span>.</p>
+    </footer>
+
+    <!-- Overlay & Cart Sidebar -->
+    <div class="overlay" id="overlay" tabindex="-1" aria-hidden="true"></div>
+    <aside class="cart" id="cart" aria-hidden="true" role="dialog" aria-label="Carrinho de compras">
+      <div class="header" style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0;font-family:var(--font-heading)">Seu Jardim</h3>
+        <button class="icon-btn" id="close-cart" aria-label="Fechar carrinho"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="body" id="cart-body">
+        <p id="cart-empty" style="color:#999;text-align:center;margin-top:40px">Sua cesta de flores está vazia no momento.</p>
+      </div>
+      <div class="footer">
+        <div class="cart-total"><span>Subtotal</span><span id="cart-total">R$ 0,00</span></div>
+        <a id="checkout-wp" href="#" target="_blank" style="display:block;padding:12px 14px;background:#25D366;color:#fff;text-align:center;border-radius:8px;text-decoration:none;font-weight:700">Finalizar no WhatsApp <i class="fab fa-whatsapp" style="margin-left:8px"></i></a>
+      </div>
+    </aside>
+
+    <!-- Product Modal -->
+    <div class="modal" id="modal" aria-hidden="true" role="dialog">
+      <div class="modal-card" role="document">
+        <div class="modal-img" id="modal-img" aria-hidden="true"></div>
+        <div class="modal-content">
+          <span id="modal-cat" style="text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:700"></span>
+          <h2 id="modal-title" style="font-family:var(--font-heading)"></h2>
+          <p id="modal-price" style="font-size:1.25rem;color:var(--primary);margin:6px 0"></p>
+          <p id="modal-desc" style="color:#666;line-height:1.6"></p>
+          <div style="display:flex;gap:12px;margin-top:14px">
+            <button class="btn-primary" id="modal-add" style="flex:1">Adicionar à Cesta</button>
+            <button class="btn-outline" id="modal-wish" style="flex:0;padding:10px 12px"><i class="far fa-heart"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /***************************************************************
+     * EXEMPLO DE config.json (opcional):
+     * Salve um arquivo chamado config.json ao lado deste index.html.
+     * O site tentará carregar esse arquivo primeiro; caso não exista,
+     * usará o DEFAULT_CONFIG abaixo.
+     *
+     * Estrutura mínima esperada (exemplo):
+     * {
+     *  "store": { "info": { "name":"BellaFlor", "subtitle":"Atelier Botânico", "whatsapp_number":"5519..." }, "links": { "instagram":"...", "email":"mailto:..." } },
+     *  "theme": { "colors": { "primary":"#bf6c74", "accent":"#d4a373", "background":"#fdfbf7" }, "fonts": { ... } },
+     *  "texts": { "hero": { "title":"A Poesia das Flores", "subtitle":"...", "cta":"Ver Coleção", "bg_image":"..." }, "cart": {...}, "product": {...} },
+     *  "catalog": { "categories": ["Todos","Buquês","Arranjos"], "mock_settings": { "count":24, "base_price":120 }, "products": [ /* opcional lista real de produtos */ ] }
+     * }
+     *
+     * Você pode editar: nomes, valores, imagens, categorias, textos, whatsapp, cores, fontes e número de produtos.
+     ***************************************************************/
+
+    // DEFAULT CONFIG (fallback)
+    const DEFAULT_CONFIG = {
+      meta: { version: "2.0", last_updated: "2026-01-05" },
+      store: {
+        info: { name: "BellaFlor", subtitle: "Atelier Botânico", city: "Artur Nogueira", since: "Desde 2010", whatsapp_number: "551938279999" },
+        links: { instagram: "https://instagram.com", facebook: "https://facebook.com", email: "mailto:contato@bellaflor.com.br" }
+      },
+      theme: {
+        colors: { primary: "#bf6c74", secondary: "#2c3e50", accent: "#d4a373", background:"#fdfbf7", card_bg:"#ffffff", success:"#6ab04c", text_light:"#7f8c8d" },
+        fonts: { heading: "'Cinzel', serif", script: "'Pinyon Script', cursive", body: "'Lato', sans-serif" },
+        ui: { radius: "6px", shadow: "0 10px 40px -10px rgba(0,0,0,0.08)" }
+      },
+      texts: {
+        hero: { title: "A Poesia das Flores", subtitle: "Arranjos autorais que traduzem sentimentos em Artur Nogueira. Do clássico ao contemporâneo.", cta: "Ver Coleção", bg_image: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1920&q=80" },
+        footer: { copyright:"Todos os direitos reservados.", made_by:"Design Exclusivo" },
+        cart: { title: "Seu Jardim", empty: "Sua cesta de flores está vazia no momento.", checkout: "Finalizar no WhatsApp", total: "Subtotal" },
+        product: { currency: "R$", add_to_cart: "Adicionar à Cesta", quick_view: "Espiar" }
+      },
+      catalog: {
+        categories: ["Todos", "Buquês", "Arranjos", "Box Luxo", "Orquídeas", "Secas & Preservadas"],
+        mock_settings: { count: 24, base_price: 120 },
+        // optional: provide "products": [ ... ] to fully control items without mock
+      }
+    };
+
+    // UTILIDADES
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const formatMoney = val => Number(val).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+
+    // Estado
+    let CONFIG = DEFAULT_CONFIG;
+    let PRODUCTS = [];
+    let activeCategory = null;
+    let CART = JSON.parse(localStorage.getItem('bellaCart')||'[]');
+    let WISH = JSON.parse(localStorage.getItem('bellaWish')||'[]');
+
+    // ELEMENTOS
+    const loader = $('#loader');
+    const root = document.getElementById('root');
+    const hero = $('#hero');
+    const productsEl = $('#products');
+    const catsEl = $('#category-bar');
+    const cartBtn = $('#cart-btn');
+    const wishBtn = $('#wish-btn');
+    const cartCountEl = $('#cart-count');
+    const cartSidebar = $('#cart');
+    const overlay = $('#overlay');
+    const cartBody = $('#cart-body');
+    const cartTotalEl = $('#cart-total');
+    const cartEmpty = $('#cart-empty');
+    const checkoutWp = $('#checkout-wp');
+    const modal = $('#modal');
+    const modalImg = $('#modal-img');
+    const modalTitle = $('#modal-title');
+    const modalDesc = $('#modal-desc');
+    const modalPrice = $('#modal-price');
+    const modalCat = $('#modal-cat');
+    const modalAdd = $('#modal-add');
+    const modalWish = $('#modal-wish');
+    const heroTitle = $('#hero-title');
+    const heroName = $('#hero-name');
+    const heroSub = $('#hero-sub');
+    const heroCta = $('#hero-cta');
+    const heroWp = $('#hero-whatsapp');
+
+    // CARREGAR CONFIG (tenta config.json primeiro)
+    async function loadConfig() {
+      try {
+        const res = await fetch('config.json', {cache: "no-store"});
+        if(res.ok){
+          const remote = await res.json();
+          // Merge simples: remote overrides defaults
+          CONFIG = deepMerge(DEFAULT_CONFIG, remote);
+          console.info('config.json carregado');
+        } else {
+          console.warn('config.json não encontrado, usando DEFAULT_CONFIG');
+        }
+      } catch (e) {
+        console.warn('Falha ao carregar config.json, usando DEFAULT_CONFIG', e);
+      } finally {
+        applyTheme();
+        initApp();
+      }
+    }
+
+    // DEEP MERGE (simples)
+    function deepMerge(a,b){
+      const out = JSON.parse(JSON.stringify(a));
+      for(const k in b){
+        if(b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])){
+          out[k] = deepMerge(out[k]||{}, b[k]);
+        } else out[k] = b[k];
+      }
+      return out;
+    }
+
+    // APLICAR VARIÁVEIS DE TEMA NO :root
+    function applyTheme(){
+      const t = CONFIG.theme;
+      if(t && t.colors){
+        for(const k in t.colors) document.documentElement.style.setProperty(`--${k}`, t.colors[k]);
+      }
+      if(t && t.fonts){
+        if(t.fonts.heading) document.documentElement.style.setProperty('--font-heading', t.fonts.heading);
+        if(t.fonts.script) document.documentElement.style.setProperty('--font-script', t.fonts.script);
+        if(t.fonts.body) document.documentElement.style.setProperty('--font-body', t.fonts.body);
+      }
+      if(t && t.ui){
+        if(t.ui.radius) document.documentElement.style.setProperty('--radius', t.ui.radius);
+        if(t.ui.shadow) document.documentElement.style.setProperty('--shadow', t.ui.shadow);
+      }
+    }
+
+    // GERAR MOCK DATA (caso não haja produtos reais no config)
+    function generateMock(count = 24, basePrice = 120){
+      const flowers = [
+        { name: 'Rosas Colombianas', key: 'rosa', priceMod: 1.5 },
+        { name: 'Hortênsias Azuis', key: 'hydrangea', priceMod: 1.2 },
+        { name: 'Orquídea Phalaenopsis', key: 'orchid', priceMod: 2.0 },
+        { name: 'Girassóis Vibrantes', key: 'sunflower', priceMod: 0.9 },
+        { name: 'Mix do Campo', key: 'wildflower', priceMod: 0.8 },
+        { name: 'Tulipas Holandesas', key: 'tulip', priceMod: 1.8 },
+        { name: 'Lisianthus Premium', key: 'lisianthus', priceMod: 1.1 },
+        { name: 'Folhagens Secas', key: 'dried', priceMod: 1.3 }
+      ];
+      const adjectives = ['Imperial','Aurora','Romance','Serenidade','Majestade','Poesia','Vintage','Minimal'];
+      const containers = ['em Vaso de Cristal','no Kraft','na Box Aveludada','Rústico','Hand-tied'];
+      const unsplashMap = {
+        'rosa': ['1562690868-60bbe7293e94','1518709268805-4e9042af9f23'],
+        'hydrangea': ['1508610048181-48f6704e3f36'],
+        'orchid': ['1566929341488-820845a76cb5'],
+        'sunflower': ['1470509037663-253afd7f0f51'],
+        'tulip': ['1520763185298-1b434c919102'],
+        'wildflower': ['1464698579707-353232147316'],
+        'dried': ['1533616688419-b7a58556e124']
+      };
+      return Array.from({length:count}, (_,i) => {
+        const f = flowers[i % flowers.length];
+        const adj = adjectives[i % adjectives.length];
+        const cont = containers[i % containers.length];
+        let cat = 'Arranjos';
+        if(cont.includes('Kraft')||cont.includes('Hand-tied')) cat='Buquês';
+        if(cont.includes('Box')) cat='Box Luxo';
+        if(f.name.includes('Orquídea')) cat='Orquídeas';
+        if(f.name.includes('Secas')) cat='Secas & Preservadas';
+        const price = (basePrice * f.priceMod + (Math.random()*40)).toFixed(2);
+        const coll = unsplashMap[f.key] || unsplashMap['wildflower'];
+        const image = `https://images.unsplash.com/photo-${coll[i % coll.length]}?auto=format&fit=crop&w=900&q=80`;
+        return {
+          id: `prod_${i+1}`,
+          name: `${f.name} ${adj}`,
+          subtitle: `${cont} • Design Exclusivo`,
+          category: cat,
+          price: price,
+          image: image,
+          description: `Uma composição artística elaborada com ${f.name} frescas e selecionadas. Ideal para expressar sentimentos profundos. Acompanha cartão de mensagem e instruções de cuidado.`
         };
+      });
+    }
 
-        // --- MOCK DATABASE GENERATOR (Simulação de Backend) ---
-        // Esta parte gera dados baseados no CONFIG.catalog.mock_settings
-        
-        const MOCK_DATA = (() => {
-            const flowers = [
-                { name: 'Rosas Colombianas', key: 'rosa', priceMod: 1.5 },
-                { name: 'Hortênsias Azuis', key: 'hydrangea', priceMod: 1.2 },
-                { name: 'Orquídea Phalaenopsis', key: 'orchid', priceMod: 2.0 },
-                { name: 'Girassóis Vibrantes', key: 'sunflower', priceMod: 0.9 },
-                { name: 'Mix do Campo', key: 'wildflower', priceMod: 0.8 },
-                { name: 'Tulipas Holandesas', key: 'tulip', priceMod: 1.8 },
-                { name: 'Lisianthus Premium', key: 'flower', priceMod: 1.1 },
-                { name: 'Folhagens Secas', key: 'dried', priceMod: 1.3 }
-            ];
+    // INICIALIZA APLICAÇÃO
+    function initApp(){
+      // Preenchimentos iniciais
+      $('#store-name').textContent = CONFIG.store.info.name || 'BellaFlor';
+      $('#store-sub').textContent = CONFIG.store.info.subtitle || '';
+      heroTitle.textContent = CONFIG.texts.hero.title || '';
+      heroName.textContent = CONFIG.store.info.name || '';
+      heroSub.textContent = CONFIG.texts.hero.subtitle || '';
+      heroCta.textContent = CONFIG.texts.hero.cta || 'Ver Coleção';
+      hero.style.backgroundImage = `linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.08)), url('${CONFIG.texts.hero.bg_image}')`;
 
-            const adjectives = ['Imperial', 'Aurora', 'Romance', 'Serenidade', 'Majestade', 'Poesia', 'Vintage', 'Minimal'];
-            const containers = ['em Vaso de Cristal', 'no Kraft', 'na Box Aveludada', 'Rústico', 'Hand-tied'];
+      $('#footer-year').textContent = new Date().getFullYear();
+      $('#footer-c-name').textContent = CONFIG.store.info.name || '';
+      $('#footer-made').textContent = CONFIG.texts.footer.made_by || '';
 
-            const getImage = (term, i) => {
-                // IDs curados do Unsplash para garantir beleza
-                const map = {
-                    'rosa': ['1562690868-60bbe7293e94', '1518709268805-4e9042af9f23'],
-                    'hydrangea': ['1508610048181-48f6704e3f36'],
-                    'orchid': ['1566929341488-820845a76cb5'],
-                    'sunflower': ['1470509037663-253afd7f0f51'],
-                    'tulip': ['1520763185298-1b434c919102'],
-                    'wildflower': ['1464698579707-353232147316'],
-                    'dried': ['1533616688419-b7a58556e124']
-                };
-                const key = Object.keys(map).find(k => term.toLowerCase().includes(k)) || 'wildflower';
-                const collection = map[key] || map['wildflower'];
-                return `https://images.unsplash.com/photo-${collection[i % collection.length]}?auto=format&fit=crop&w=800&q=80`;
-            };
+      $('#link-instagram').href = CONFIG.store.links.instagram || '#';
+      $('#link-whats').href = `https://wa.me/${CONFIG.store.info.whatsapp_number}`;
+      $('#link-email').href = CONFIG.store.links.email || '#';
+      heroWp.href = `https://wa.me/${CONFIG.store.info.whatsapp_number}`;
+      $('#hero-whatsapp').href = `https://wa.me/${CONFIG.store.info.whatsapp_number}`;
 
-            return Array.from({ length: CONFIG.catalog.mock_settings.count }, (_, i) => {
-                const flower = flowers[i % flowers.length];
-                const adj = adjectives[i % adjectives.length];
-                const container = containers[i % containers.length];
-                
-                // Categorização Automática Inteligente
-                let cat = 'Arranjos';
-                if(container.includes('Kraft') || container.includes('Hand-tied')) cat = 'Buquês';
-                if(container.includes('Box')) cat = 'Box Luxo';
-                if(flower.name.includes('Orquídea')) cat = 'Orquídeas';
-                if(flower.name.includes('Secas')) cat = 'Secas & Preservadas';
+      // Produtos: se config.catalog.products existir, usa; senão gera mock
+      if(CONFIG.catalog.products && Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length>0){
+        PRODUCTS = CONFIG.catalog.products.map((p,i)=>({...p, id:p.id||`prod_${i+1}`}));
+      } else {
+        const cnt = (CONFIG.catalog.mock_settings && CONFIG.catalog.mock_settings.count) || 24;
+        const base = (CONFIG.catalog.mock_settings && CONFIG.catalog.mock_settings.base_price) || 120;
+        PRODUCTS = generateMock(cnt, base);
+      }
 
-                const price = (CONFIG.catalog.mock_settings.base_price * flower.priceMod + (Math.random() * 40)).toFixed(2);
+      // Categorias
+      const cats = Array.from(new Set([CONFIG.catalog.categories[0] || 'Todos', ...(CONFIG.catalog.categories || [])]));
+      renderCategories(cats);
 
-                return {
-                    id: `prod_${i + 1}`,
-                    name: `${flower.name} ${adj}`,
-                    subtitle: `${container} • Design Exclusivo`,
-                    category: cat,
-                    price: price,
-                    image: getImage(flower.key, i),
-                    description: `Uma composição artística elaborada com ${flower.name} frescas e selecionadas. Ideal para expressar sentimentos profundos. Acompanha cartão de mensagem e instruções de cuidado. A durabilidade média é de 5 a 7 dias com os devidos cuidados.`
-                };
-            });
-        })();
+      // set initial category
+      activeCategory = cats[0];
 
-        // --- UTILS (Funções Auxiliares) ---
-        const formatMoney = (val) => {
-            return parseFloat(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        };
+      // eventos
+      heroCta.addEventListener('click', () => {
+        document.getElementById('products').scrollIntoView({behavior:'smooth'});
+      });
 
-        // ==================================================================================
-        // APLICAÇÃO REACT
-        // ==================================================================================
+      cartBtn.addEventListener('click', () => toggleCart(true));
+      wishBtn.addEventListener('click', () => alert(`${WISH.length} itens salvos`));
+      $('#close-cart').addEventListener('click', () => toggleCart(false));
+      overlay.addEventListener('click', ()=>{ closeModal(); toggleCart(false); });
 
-        // --- Styled Components ---
+      modalAdd.addEventListener('click', () => {
+        if(!modal.currentProduct) return;
+        addToCart(modal.currentProduct);
+        closeModal();
+        toggleCart(true);
+      });
+      modalWish.addEventListener('click', () => {
+        if(!modal.currentProduct) return;
+        toggleWish(modal.currentProduct);
+        updateModalWishState();
+      });
 
-        const Wrapper = styled.div`font-family: ${CONFIG.theme.fonts.body}; color: ${CONFIG.theme.colors.secondary};`;
+      // keyboard
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape'){ closeModal(); toggleCart(false); }
+      });
 
-        const Navbar = styled.nav`
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
-            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.03); transition: all 0.3s;
-            &.scrolled { padding: 10px 5%; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
+      // render
+      renderProducts();
+      renderCart();
+      updateCartCount();
+
+      // remove loader
+      setTimeout(()=>{ loader.classList.add('hidden'); document.body.classList.add('loaded'); loader.remove(); }, 550);
+    }
+
+    // RENDER CATEGORIES
+    function renderCategories(categories){
+      catsEl.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'cat' + (cat===activeCategory ? ' active' : '');
+        btn.textContent = cat;
+        btn.addEventListener('click', () => {
+          activeCategory = cat;
+          $$('.cat').forEach(n => n.classList.remove('active'));
+          btn.classList.add('active');
+          renderProducts();
+        });
+        catsEl.appendChild(btn);
+      });
+    }
+
+    // FILTRO E RENDER PRODUTOS
+    function getFiltered(){
+      if(!activeCategory || activeCategory === (CONFIG.catalog.categories[0] || 'Todos')) return PRODUCTS;
+      return PRODUCTS.filter(p => p.category === activeCategory);
+    }
+
+    function renderProducts(){
+      const list = getFiltered();
+      productsEl.innerHTML = '';
+      list.forEach((p,i) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.style.animation = `fadein .35s ${i*40}ms both`;
+        card.innerHTML = `
+          <div class="img" role="button" tabindex="0" aria-label="Ver ${escapeHtml(p.name)}">
+            <img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.opacity=.6;this.src='https://via.placeholder.com/900x600?text=Imagem'">
+          </div>
+          <div class="info">
+            <div class="cat-tag">${escapeHtml(p.category)}</div>
+            <h3>${escapeHtml(p.name)}</h3>
+            <div class="price">${formatMoney(p.price)}</div>
+          </div>
         `;
+        // abrir modal ao clicar na imagem ou info
+        card.querySelector('.img').addEventListener('click', () => openModal(p));
+        card.querySelector('.img').addEventListener('keydown', (e) => { if(e.key==='Enter') openModal(p); });
+        productsEl.appendChild(card);
+      });
+    }
 
-        const Brand = styled.div`
-            text-align: center; cursor: pointer;
-            h1 { font-family: ${CONFIG.theme.fonts.heading}; font-size: 1.8rem; letter-spacing: 2px; color: ${CONFIG.theme.colors.primary}; text-transform: uppercase; margin: 0; }
-            span { font-family: ${CONFIG.theme.fonts.script}; font-size: 1.1rem; color: ${CONFIG.theme.colors.accent}; display: block; margin-top: -5px; }
-        `;
+    // ESCAPE HTML (segurança básica)
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
 
-        const Actions = styled.div`
-            display: flex; gap: 25px; align-items: center;
-            i { font-size: 1.1rem; color: ${CONFIG.theme.colors.secondary}; cursor: pointer; transition: 0.2s; position: relative; }
-            i:hover { color: ${CONFIG.theme.colors.primary}; }
-            .badge { 
-                position: absolute; top: -8px; right: -8px; background: ${CONFIG.theme.colors.primary}; color: white; 
-                font-size: 0.6rem; padding: 2px 5px; border-radius: 50%; font-weight: bold; font-family: sans-serif;
-            }
-        `;
+    // MODAL
+    function openModal(prod){
+      modal.currentProduct = prod;
+      modalImg.style.backgroundImage = `url('${prod.image}')`;
+      modalTitle.textContent = prod.name;
+      modalDesc.textContent = prod.description;
+      modalPrice.textContent = formatMoney(prod.price);
+      modalCat.textContent = prod.category;
+      updateModalWishState();
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden','false');
+      // focus
+      modalAdd.focus();
+    }
+    function updateModalWishState(){
+      if(!modal.currentProduct) return;
+      const exists = WISH.find(i => i.id === modal.currentProduct.id);
+      modalWish.innerHTML = exists ? '<i class="fas fa-heart" style="color:var(--primary)"></i>' : '<i class="far fa-heart"></i>';
+    }
+    function closeModal(){
+      modal.currentProduct = null;
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden','true');
+    }
 
-        const Hero = styled.header`
-            height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.1)), url('${CONFIG.texts.hero.bg_image}') center/cover fixed;
-            margin-bottom: 60px; color: white; padding: 20px;
-        `;
+    // CART
+    function addToCart(prod){
+      CART.push(prod);
+      persistCart();
+      renderCart();
+      updateCartCount();
+    }
+    function removeFromCart(idx){
+      CART.splice(idx,1);
+      persistCart();
+      renderCart();
+      updateCartCount();
+    }
+    function persistCart(){ localStorage.setItem('bellaCart', JSON.stringify(CART)); }
+    function persistWish(){ localStorage.setItem('bellaWish', JSON.stringify(WISH)); }
 
-        const HeroText = styled.div`
-            h2 { font-family: ${CONFIG.theme.fonts.script}; font-size: clamp(3rem, 6vw, 5rem); color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.2); margin-bottom: 10px; }
-            p { font-family: ${CONFIG.theme.fonts.heading}; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; }
-        `;
+    function renderCart(){
+      cartBody.innerHTML = '';
+      if(CART.length===0){
+        cartBody.appendChild(cartEmpty);
+        cartEmpty.style.display='block';
+      } else {
+        cartEmpty.style.display='none';
+        CART.forEach((it,idx) => {
+          const el = document.createElement('div');
+          el.className = 'cart-item';
+          el.innerHTML = `<img src="${it.image}" alt="${escapeHtml(it.name)}" onerror="this.src='https://via.placeholder.com/80x80?text=Img'"><div style="flex:1"><div style="font-weight:700">${escapeHtml(it.name)}</div><div style="color:var(--primary);font-weight:700">${formatMoney(it.price)}</div></div><button class="icon-btn" aria-label="Remover item"><i class="far fa-trash-alt"></i></button>`;
+          el.querySelector('button').addEventListener('click', ()=> removeFromCart(idx));
+          cartBody.appendChild(el);
+        });
+      }
+      cartTotalEl.textContent = formatMoney(CART.reduce((a,c)=>a+Number(c.price),0));
+      // whatsapp link
+      const wp = buildWhatsAppLink();
+      checkoutWp.href = wp;
+    }
 
-        const Button = styled.button`
-            padding: 15px 40px; border: 1px solid ${props => props.outline ? CONFIG.theme.colors.secondary : 'transparent'};
-            background: ${props => props.outline ? 'transparent' : CONFIG.theme.colors.primary};
-            color: ${props => props.outline ? CONFIG.theme.colors.secondary : 'white'};
-            font-family: ${CONFIG.theme.fonts.heading}; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;
-            cursor: pointer; transition: 0.4s; border-radius: ${CONFIG.theme.ui.radius};
-            &:hover { background: ${CONFIG.theme.colors.secondary}; color: white; transform: translateY(-2px); border-color: transparent; }
-        `;
+    function toggleCart(open){
+      if(open){
+        cartSidebar.classList.add('open');
+        overlay.classList.add('show');
+        overlay.setAttribute('aria-hidden','false');
+        cartSidebar.setAttribute('aria-hidden','false');
+      } else {
+        cartSidebar.classList.remove('open');
+        overlay.classList.remove('show');
+        overlay.setAttribute('aria-hidden','true');
+        cartSidebar.setAttribute('aria-hidden','true');
+      }
+    }
 
-        const CategoryBar = styled.div`
-            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 50px; padding: 0 20px;
-        `;
+    function updateCartCount(){
+      if(CART.length>0){
+        cartCountEl.style.display='inline-block';
+        cartCountEl.textContent = CART.length;
+      } else cartCountEl.style.display='none';
+    }
 
-        const CatLink = styled.button`
-            background: none; border: none; font-family: ${CONFIG.theme.fonts.heading}; 
-            font-size: 0.9rem; letter-spacing: 1px; color: ${props => props.active ? CONFIG.theme.colors.primary : '#999'};
-            cursor: pointer; padding-bottom: 5px; border-bottom: 2px solid ${props => props.active ? CONFIG.theme.colors.primary : 'transparent'};
-            transition: 0.3s;
-            &:hover { color: ${CONFIG.theme.colors.primary}; }
-        `;
+    // WISHLIST
+    function toggleWish(prod){
+      const idx = WISH.findIndex(i => i.id === prod.id);
+      if(idx === -1) WISH.push(prod);
+      else WISH.splice(idx,1);
+      persistWish();
+    }
 
-        const Grid = styled.section`
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px;
-            padding: 0 8% 80px; max-width: 1600px; margin: 0 auto;
-        `;
+    // WhatsApp message builder
+    function buildWhatsAppLink(){
+      const wp = CONFIG.store.info.whatsapp_number;
+      let msg = `Olá, vim pelo site da *${CONFIG.store.info.name}*!%0A%0A`;
+      if(CART.length===0) msg += 'Ainda não selecionei produtos.%0A';
+      else {
+        CART.forEach(i => {
+          msg += `• ${i.name} - ${formatMoney(i.price)}%0A`;
+        });
+        msg += `%0A*Total: ${formatMoney(CART.reduce((a,c)=>a+Number(c.price),0))}*%0A`;
+      }
+      return `https://wa.me/${wp}?text=${msg}`;
+    }
 
-        const Card = styled.div`
-            background: ${CONFIG.theme.colors.card_bg}; border-radius: ${CONFIG.theme.ui.radius};
-            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-            &:hover { transform: translateY(-10px); box-shadow: ${CONFIG.theme.ui.shadow}; }
-            
-            .img-box { 
-                height: 400px; overflow: hidden; position: relative; border-radius: ${CONFIG.theme.ui.radius};
-                cursor: pointer;
-            }
-            img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; }
-            &:hover img { transform: scale(1.08); }
+    // small helper: set attr safely
+    function setAttrIf(el, attr, val){ if(el && val) el.setAttribute(attr,val); }
 
-            .overlay {
-                position: absolute; inset: 0; background: rgba(255,255,255,0.1); opacity: 0;
-                display: flex; align-items: center; justify-content: center;
-                transition: 0.3s;
-            }
-            &:hover .overlay { opacity: 1; }
+    // Start
+    loadConfig();
 
-            .info { padding: 20px 0; text-align: center; }
-            .cat-tag { font-size: 0.7rem; color: ${CONFIG.theme.colors.accent}; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
-            h3 { font-family: ${CONFIG.theme.fonts.heading}; font-size: 1.3rem; margin: 8px 0; color: ${CONFIG.theme.colors.secondary}; font-weight: 600; }
-            .price { font-family: ${CONFIG.theme.fonts.body}; color: ${CONFIG.theme.colors.text_light}; font-size: 1.1rem; }
-        `;
-
-        const Modal = styled.div`
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2000;
-            display: flex; align-items: center; justify-content: center; padding: 20px;
-            opacity: ${props => props.open ? 1 : 0}; pointer-events: ${props => props.open ? 'all' : 'none'}; transition: 0.3s;
-
-            .modal-content {
-                background: white; width: 1000px; max-width: 100%; max-height: 90vh; overflow-y: auto;
-                display: grid; grid-template-columns: 1fr 1fr; border-radius: ${CONFIG.theme.ui.radius};
-                box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-                @media(max-width: 768px) { grid-template-columns: 1fr; }
-            }
-            .modal-img { height: 100%; min-height: 300px; background-size: cover; background-position: center; }
-            .modal-details { padding: 50px; display: flex; flex-direction: column; justify-content: center; }
-        `;
-
-        const Sidebar = styled.div`
-            position: fixed; top: 0; right: 0; height: 100vh; width: 400px; max-width: 90%;
-            background: white; z-index: 2100; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            transform: translateX(${props => props.open ? '0' : '100%'}); transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            display: flex; flex-direction: column;
-            .header { padding: 25px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-            .body { flex: 1; overflow-y: auto; padding: 25px; }
-            .footer { padding: 25px; border-top: 1px solid #eee; background: #fafafa; }
-        `;
-
-        // --- App Component ---
-
-        const App = () => {
-            const [products, setProducts] = useState([]);
-            const [activeCat, setActiveCat] = useState(CONFIG.catalog.categories[0]);
-            const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('bellaCart')) || []);
-            const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('bellaWish')) || []);
-            const [modalData, setModalData] = useState(null);
-            const [isCartOpen, setCartOpen] = useState(false);
-            const [scrolled, setScrolled] = useState(false);
-
-            // Init
-            useEffect(() => {
-                // Simula fetch do banco de dados
-                setProducts(MOCK_DATA);
-                document.body.classList.add('loaded');
-                window.addEventListener('scroll', () => setScrolled(window.scrollY > 50));
-                return () => window.removeEventListener('scroll', () => {});
-            }, []);
-
-            // Persistence
-            useEffect(() => { localStorage.setItem('bellaCart', JSON.stringify(cart)) }, [cart]);
-            useEffect(() => { localStorage.setItem('bellaWish', JSON.stringify(wishlist)) }, [wishlist]);
-
-            // Logic
-            const addToCart = (prod) => {
-                setCart([...cart, prod]);
-                setCartOpen(true);
-            };
-
-            const removeFromCart = (index) => {
-                const newCart = [...cart];
-                newCart.splice(index, 1);
-                setCart(newCart);
-            };
-
-            const toggleWish = (prod) => {
-                const exists = wishlist.find(i => i.id === prod.id);
-                if(exists) setWishlist(wishlist.filter(i => i.id !== prod.id));
-                else setWishlist([...wishlist, prod]);
-            };
-
-            const getFilteredProducts = () => {
-                if(activeCat === CONFIG.catalog.categories[0]) return products;
-                return products.filter(p => p.category === activeCat);
-            };
-
-            const cartTotal = cart.reduce((acc, item) => acc + parseFloat(item.price), 0);
-            
-            const whatsappMsg = useMemo(() => {
-                let msg = `Olá, vim pelo site da *${CONFIG.store.info.name}*!\n\n${CONFIG.texts.cart.title}:\n`;
-                cart.forEach(i => msg += `• ${i.name} - ${formatMoney(i.price)}\n`);
-                msg += `\n*Total: ${formatMoney(cartTotal)}*`;
-                return `https://wa.me/${CONFIG.store.info.whatsapp_number}?text=${encodeURIComponent(msg)}`;
-            }, [cart, cartTotal]);
-
-            return (
-                <Wrapper>
-                    {/* Navigation */}
-                    <Navbar className={scrolled ? 'scrolled' : ''}>
-                        <div style={{width: '80px'}}>
-                            <i className="fas fa-bars" style={{cursor: 'pointer', fontSize: '1.2rem'}}></i>
-                        </div>
-                        <Brand onClick={() => window.scrollTo(0,0)}>
-                            <h1>{CONFIG.store.info.name}</h1>
-                            <span>{CONFIG.store.info.subtitle}</span>
-                        </Brand>
-                        <Actions>
-                            <i className={wishlist.length > 0 ? "fas fa-heart" : "far fa-heart"} onClick={() => alert(`${wishlist.length} itens salvos`)} style={{color: wishlist.length > 0 ? CONFIG.theme.colors.primary : ''}}></i>
-                            <i className="fas fa-shopping-bag" onClick={() => setCartOpen(true)}>
-                                {cart.length > 0 && <span className="badge">{cart.length}</span>}
-                            </i>
-                        </Actions>
-                    </Navbar>
-
-                    {/* Hero */}
-                    <Hero>
-                        <HeroText className="animate__animated animate__fadeInUp">
-                            <p>{CONFIG.texts.hero.title}</p>
-                            <h2>{CONFIG.store.info.name}</h2>
-                            <p style={{fontSize: '1rem', textTransform: 'none', maxWidth: '600px', margin: '0 auto 40px'}}>{CONFIG.texts.hero.subtitle}</p>
-                            <Button onClick={() => document.getElementById('collection').scrollIntoView({behavior: 'smooth'})}>
-                                {CONFIG.texts.hero.cta}
-                            </Button>
-                        </HeroText>
-                    </Hero>
-
-                    {/* Filters */}
-                    <CategoryBar id="collection">
-                        {CONFIG.catalog.categories.map(cat => (
-                            <CatLink key={cat} active={activeCat === cat} onClick={() => setActiveCat(cat)}>
-                                {cat}
-                            </CatLink>
-                        ))}
-                    </CategoryBar>
-
-                    {/* Grid */}
-                    <Grid>
-                        {getFilteredProducts().map((prod, i) => (
-                            <Card key={prod.id} className="animate__animated animate__fadeIn" style={{animationDelay: `${i*50}ms`}} onClick={() => setModalData(prod)}>
-                                <div className="img-box">
-                                    <img src={prod.image} alt={prod.name} loading="lazy" />
-                                    <div className="overlay">
-                                        <Button outline style={{borderColor: '#fff', color: '#fff', padding: '10px 25px', fontSize: '0.7rem'}}>{CONFIG.texts.product.quick_view}</Button>
-                                    </div>
-                                    {wishlist.find(w => w.id === prod.id) && 
-                                        <div style={{position: 'absolute', top: 10, right: 10, color: CONFIG.theme.colors.primary}}><i className="fas fa-heart"></i></div>
-                                    }
-                                </div>
-                                <div className="info">
-                                    <span className="cat-tag">{prod.category}</span>
-                                    <h3>{prod.name}</h3>
-                                    <div className="price">{formatMoney(prod.price)}</div>
-                                </div>
-                            </Card>
-                        ))}
-                    </Grid>
-
-                    {/* Footer */}
-                    <footer style={{background: '#f8f8f8', padding: '80px 20px', textAlign: 'center', borderTop: '1px solid #eaeaea'}}>
-                        <h2 style={{fontFamily: CONFIG.theme.fonts.heading, color: CONFIG.theme.colors.primary, marginBottom: '20px'}}>{CONFIG.store.info.name}</h2>
-                        <div style={{display: 'flex', justifyContent: 'center', gap: '20px', fontSize: '1.5rem', color: '#888', marginBottom: '30px'}}>
-                            <a href={CONFIG.store.links.instagram} target="_blank"><i className="fab fa-instagram"></i></a>
-                            <a href={`https://wa.me/${CONFIG.store.info.whatsapp_number}`} target="_blank"><i className="fab fa-whatsapp"></i></a>
-                            <a href={CONFIG.store.links.email}><i className="far fa-envelope"></i></a>
-                        </div>
-                        <p style={{color: '#aaa', fontSize: '0.8rem'}}>© 2024 {CONFIG.store.info.name}. {CONFIG.texts.footer.made_by}.</p>
-                    </footer>
-
-                    {/* Cart Sidebar */}
-                    <div style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 2050, opacity: isCartOpen ? 1 : 0, pointerEvents: isCartOpen ? 'all' : 'none', transition: '0.3s'}} onClick={() => setCartOpen(false)} />
-                    <Sidebar open={isCartOpen}>
-                        <div className="header">
-                            <h3 style={{fontFamily: CONFIG.theme.fonts.heading, margin: 0}}>{CONFIG.texts.cart.title}</h3>
-                            <i className="fas fa-times" onClick={() => setCartOpen(false)} style={{cursor: 'pointer'}}></i>
-                        </div>
-                        <div className="body">
-                            {cart.length === 0 ? (
-                                <p style={{textAlign: 'center', color: '#999', marginTop: '50px'}}>{CONFIG.texts.cart.empty}</p>
-                            ) : (
-                                cart.map((item, idx) => (
-                                    <div key={idx} style={{display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center'}}>
-                                        <img src={item.image} style={{width: '60px', height: '60px', borderRadius: '4px', objectFit: 'cover'}} />
-                                        <div style={{flex: 1}}>
-                                            <h4 style={{fontSize: '0.9rem', marginBottom: '5px'}}>{item.name}</h4>
-                                            <span style={{color: CONFIG.theme.colors.primary, fontWeight: 'bold'}}>{formatMoney(item.price)}</span>
-                                        </div>
-                                        <i className="far fa-trash-alt" onClick={() => removeFromCart(idx)} style={{color: '#ccc', cursor: 'pointer'}}></i>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                        <div className="footer">
-                            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontWeight: 'bold', fontSize: '1.1rem'}}>
-                                <span>{CONFIG.texts.cart.total}</span>
-                                <span>{formatMoney(cartTotal)}</span>
-                            </div>
-                            <a href={whatsappMsg} target="_blank" style={{
-                                display: 'block', padding: '18px', background: '#25D366', color: 'white', 
-                                textAlign: 'center', textDecoration: 'none', borderRadius: '4px', 
-                                fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem'
-                            }}>
-                                {CONFIG.texts.cart.checkout} <i className="fab fa-whatsapp" style={{marginLeft: '5px'}}></i>
-                            </a>
-                        </div>
-                    </Sidebar>
-
-                    {/* Product Modal */}
-                    <Modal open={!!modalData} onClick={() => setModalData(null)}>
-                        {modalData && (
-                            <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                <div className="modal-img" style={{backgroundImage: `url(${modalData.image})`}}></div>
-                                <div className="modal-details">
-                                    <span style={{color: CONFIG.theme.colors.accent, textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 'bold', fontSize: '0.8rem'}}>{modalData.category}</span>
-                                    <h2 style={{fontFamily: CONFIG.theme.fonts.heading, fontSize: '2.5rem', margin: '10px 0', lineHeight: 1.1}}>{modalData.name}</h2>
-                                    <p style={{fontSize: '1.5rem', color: CONFIG.theme.colors.primary, margin: '15px 0'}}>{formatMoney(modalData.price)}</p>
-                                    <p style={{color: '#666', lineHeight: 1.6, marginBottom: '30px'}}>{modalData.description}</p>
-                                    
-                                    <div style={{display: 'flex', gap: '15px'}}>
-                                        <Button onClick={() => { addToCart(modalData); setModalData(null); }} style={{flex: 1}}>
-                                            {CONFIG.texts.product.add_to_cart}
-                                        </Button>
-                                        <Button outline onClick={() => { toggleWish(modalData); }} style={{borderColor: '#ddd', color: wishlist.find(w => w.id === modalData.id) ? CONFIG.theme.colors.primary : '#888'}}>
-                                            <i className={wishlist.find(w => w.id === modalData.id) ? "fas fa-heart" : "far fa-heart"}></i>
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </Modal>
-
-                    {/* Floating WhatsApp */}
-                    <a href={`https://wa.me/${CONFIG.store.info.whatsapp_number}`} target="_blank" style={{
-                        position: 'fixed', bottom: '30px', right: '30px', width: '60px', height: '60px', 
-                        background: '#25D366', color: 'white', borderRadius: '50%', display: 'flex', 
-                        alignItems: 'center', justifyContent: 'center', fontSize: '2rem', 
-                        boxShadow: '0 10px 25px rgba(37,211,102,0.4)', zIndex: 1900, textDecoration: 'none',
-                        transition: 'transform 0.3s'
-                    }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1.0)'}>
-                        <i className="fab fa-whatsapp"></i>
-                    </a>
-                </Wrapper>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+    // Expose some helpers to window for quick manual editing in console (dev convenience)
+    window.Bella = {
+      get config(){return CONFIG},
+      set config(c){CONFIG=c; applyTheme(); initApp()},
+      get products(){return PRODUCTS},
+      set products(p){PRODUCTS=p; renderProducts()},
+      addToCart, removeFromCart, toggleWish
+    };
+  </script>
 </body>
 </html>
