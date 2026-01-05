@@ -1,20 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BellaFlor — Loja configurável</title>
-<meta name="description" content="Loja controlada por config.json — fallback seguro caso o JSON não carregue." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BellaFlor — Loja configurável (Melhorada)</title>
+  <meta name="description" content="BellaFlor — Loja totalmente controlável por config.json. Performance, acessibilidade e UX melhoradas." />
+  <meta name="theme-color" content="#bf6c74" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌷</text></svg>">
 
-<!-- Fonts & icons -->
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Preconnect / Prefetch -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity crossorigin="anonymous">
 
-<style>
-  /* ---------- Variáveis padrão (serão sobrescritas pelo config.json se existir) ---------- */
+  <style>
+  /* =========================
+     BellaFlor — Improved index.html
+     - Performance and accessibility improvements
+     - Search, sort, load more, keyboard support, focus trap in modal
+     - Larger mock catalog (configurable) and progressive reveal
+     - No public config editor. config.json is loaded from server when available.
+     - Comments in JS for maintainability
+     ========================= */
+
   :root{
     --brand-primary: #bf6c74;
     --brand-accent:  #d4a373;
@@ -23,16 +34,17 @@
     --bg: #fcfcfb;
     --surface: #ffffff;
     --radius: 10px;
-    --shadow: 0 12px 36px rgba(0,0,0,0.08);
+    --shadow: 0 14px 40px rgba(0,0,0,0.08);
     --max-width: 1200px;
 
     --ff-heading: "Cinzel", serif;
     --ff-script: "Pinyon Script", cursive;
     --ff-body: "Lato", sans-serif;
+
+    --card-image-height: 240px;
   }
 
-  /* ---------- Reset e base ---------- */
-  *,*::before,*::after{box-sizing:border-box}
+  *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0;
@@ -43,155 +55,192 @@
     -moz-osx-font-smoothing:grayscale;
     line-height:1.45;
     opacity:0;
-    transition:opacity .35s ease;
+    transition:opacity .32s ease;
   }
   body.ready{opacity:1}
+
+  .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
   .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
 
   /* Loader */
   .page-loader{
-    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
-    gap:12px;background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));z-index:9999;
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));z-index:9999;
   }
-  .petal{font-size:2.4rem;color:var(--brand-accent);animation:breathe 1.8s infinite}
-  @keyframes breathe{0%,100%{transform:scale(.96)}50%{transform:scale(1.05)}}
+  .petal{font-size:2.4rem;color:var(--brand-accent);animation:petal 1.8s infinite}
+  @keyframes petal{0%,100%{transform:scale(.96)}50%{transform:scale(1.05)}}
+  .loader-text{font-family:var(--ff-heading);letter-spacing:2px;color:#888;font-size:.88rem}
 
   /* Header */
   header.site-header{position:sticky;top:0;background:rgba(255,255,255,0.94);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,0.03);z-index:900}
   .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
-  .brand{cursor:pointer;display:flex;flex-direction:column}
-  .brand .name{font-family:var(--ff-heading);color:var(--brand-primary);margin:0}
-  .brand .sub{font-family:var(--ff-script);color:var(--brand-accent);margin-top:-6px;font-size:.95rem}
+  .brand{cursor:pointer;display:flex;flex-direction:column;gap:0}
+  .brand .name{font-family:var(--ff-heading);color:var(--brand-primary);margin:0;font-size:1.12rem}
+  .brand .sub{font-family:var(--ff-script);color:var(--brand-accent);margin-top:-6px;font-size:.92rem}
   nav.main-nav{display:flex;gap:12px;align-items:center}
   .nav-link{background:none;border:0;padding:8px 10px;cursor:pointer;color:var(--muted);font-weight:700;text-decoration:none}
   .nav-link.active{color:var(--brand-primary);border-bottom:2px solid var(--brand-primary)}
 
+  /* Toolbar (search + sort) */
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}
+  .search{flex:1;min-width:220px;display:flex;align-items:center;background:var(--surface);border-radius:10px;padding:6px 10px;border:1px solid rgba(0,0,0,0.04)}
+  .search input{border:0;outline:none;font-size:1rem;padding:8px;background:transparent;flex:1}
+  .select{padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:white}
+
   /* Hero */
-  .hero{min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 18px;border-bottom:1px solid rgba(0,0,0,0.03);color:white;background-size:cover;background-position:center}
-  .hero .lead{font-family:var(--ff-heading);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;color:rgba(255,255,255,0.95)}
+  .hero{min-height:56vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 18px;border-bottom:1px solid rgba(0,0,0,0.03);color:white;background-size:cover;background-position:center}
+  .hero .lead{font-family:var(--ff-heading);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:rgba(255,255,255,0.95)}
   .hero h1{font-family:var(--ff-script);font-size:clamp(2rem,5vw,3.6rem);margin:0.2rem 0;text-shadow:0 10px 30px rgba(0,0,0,0.28)}
-  .hero p.subtitle{max-width:840px;margin:12px auto 20px;color:rgba(255,255,255,0.92);font-family:var(--ff-heading)}
+  .hero p.subtitle{max-width:880px;margin:12px auto 20px;color:rgba(255,255,255,0.92);font-family:var(--ff-heading)}
   .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{padding:12px 20px;border-radius:10px;border:0;cursor:pointer;font-weight:700;transition:transform .18s ease}
+  .btn{padding:12px 20px;border-radius:10px;border:0;cursor:pointer;font-weight:700;transition:transform .12s ease}
   .btn.primary{background:var(--brand-primary);color:#fff}
   .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.18)}
 
-  /* Sections */
-  .site-section{padding:48px 0}
+  /* Section / grid */
+  .site-section{padding:36px 0}
   .section-header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-  .section-title{font-family:var(--ff-heading);font-size:1.1rem;margin:0}
+  .section-title{font-family:var(--ff-heading);font-size:1.12rem;margin:0}
   .section-sub{color:var(--muted);font-size:.95rem}
 
-  /* Grid & cards */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:20px}
-  .card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .18s}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:18px}
+
+  /* Card */
+  .card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .12s,box-shadow .12s}
   .card:hover{transform:translateY(-6px)}
-  .card .media{height:220px;background:#f4f4f4;overflow:hidden}
+  .card .media{height:var(--card-image-height);background:#f4f4f4;overflow:hidden;display:block}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .card-body{padding:14px}
-  .tag{font-size:.72rem;color:var(--brand-accent);text-transform:uppercase;letter-spacing:1.6px}
+  .card .card-body{padding:12px}
+  .tag{font-size:.72rem;color:var(--brand-accent);text-transform:uppercase;letter-spacing:1.4px}
   .card h3{font-family:var(--ff-heading);margin:6px 0 8px}
   .price{color:var(--muted);font-weight:700}
 
-  /* Cart */
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.48);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:120}
+  /* Cart & overlay */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.46);opacity:0;pointer-events:none;transition:opacity .18s;z-index:120}
   .overlay.show{opacity:1;pointer-events:all}
-  .cart{position:fixed;right:0;top:0;height:100vh;width:420px;max-width:96%;background:var(--surface);transform:translateX(110%);transition:transform .24s ease;z-index:130;display:flex;flex-direction:column}
+  .cart{position:fixed;right:0;top:0;height:100vh;width:420px;max-width:96%;background:var(--surface);transform:translateX(110%);transition:transform .24s;z-index:130;display:flex;flex-direction:column}
   .cart.open{transform:translateX(0)}
   .cart .head{padding:18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
   .cart .body{padding:18px;overflow:auto;flex:1}
   .cart .foot{padding:18px;border-top:1px solid #eee}
 
   /* Modal */
-  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:140}
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:opacity .18s;z-index:140}
   .modal.show{opacity:1;pointer-events:all}
   .modal-card{background:var(--surface);border-radius:12px;overflow:hidden;max-width:980px;width:100%;display:grid;grid-template-columns:1fr 1fr;box-shadow:var(--shadow)}
-  @media (max-width:820px){ .modal-card{grid-template-columns:1fr} }
+  @media (max-width:820px){.modal-card{grid-template-columns:1fr}}
 
   /* Footer */
   footer.site-footer{background:#fafafa;padding:40px 0;border-top:1px solid rgba(0,0,0,0.03)}
   .footer-inner{display:flex;flex-direction:column;align-items:center;gap:12px}
 
-  /* Accessibility helper */
-  .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
-
-  @media (max-width:900px){
-    .card .media{height:180px}
-    .hero{padding:36px 12px}
+  /* Responsive */
+  @media (max-width:960px){
+    :root{--card-image-height:200px}
+    .toolbar{flex-direction:column;align-items:stretch}
+    .search{width:100%}
   }
-</style>
+  </style>
 </head>
 <body>
-  <!-- Loader -->
+  <!-- Skip link for accessibility -->
+  <a class="sr-only" href="#main">Pular para conteúdo</a>
+
+  <!-- Page loader -->
   <div id="page-loader" class="page-loader" aria-hidden="false">
     <div class="petal" aria-hidden="true"><i class="fas fa-seedling" aria-hidden="true"></i></div>
-    <div class="muted" style="font-family:var(--ff-heading);letter-spacing:2px">CULTIVANDO BELEZA...</div>
+    <div class="loader-text">CULTIVANDO BELEZA...</div>
   </div>
 
   <!-- Header -->
   <header class="site-header" role="banner" aria-label="Cabeçalho">
     <div class="container nav-inner">
-      <div id="brand" class="brand" role="button" tabindex="0">
-        <div class="name" id="brandName">BellaFlor</div>
-        <div class="sub" id="brandSub">Atelier Botânico</div>
+      <div id="brand" class="brand" role="button" tabindex="0" aria-label="Ir ao topo">
+        <div id="brandName" class="name">BellaFlor</div>
+        <div id="brandSub" class="sub">Atelier Botânico</div>
       </div>
+
       <nav id="mainNav" class="main-nav" role="navigation" aria-label="Menu principal">
-        <!-- preenchido por config -->
+        <!-- injected -->
       </nav>
     </div>
   </header>
 
-  <!-- Main / Hero -->
-  <main id="main" role="main">
-    <section id="hero" class="hero" role="region" aria-label="Destaque">
+  <!-- Main -->
+  <main id="main" role="main" tabindex="-1">
+    <section id="hero" class="hero" aria-label="Destaque principal">
       <div class="container">
-        <div class="lead" id="heroLead">A Poesia das Flores</div>
+        <div id="heroLead" class="lead">A Poesia das Flores</div>
         <h1 id="heroTitle">BellaFlor</h1>
-        <p class="subtitle" id="heroSubtitle">Arranjos autorais que traduzem sentimentos.</p>
-        <div class="cta" id="heroCta"></div>
+        <p id="heroSubtitle" class="subtitle">Arranjos autorais que traduzem sentimentos.</p>
+        <div class="cta" id="heroCta" aria-hidden="false"></div>
       </div>
     </section>
 
-    <!-- Dynamic sections -->
-    <div id="sectionsRoot" class="container"></div>
+    <div class="container">
+      <!-- Toolbar: search, category, sort, load more -->
+      <div class="toolbar" aria-label="Controles de busca e filtros">
+        <div class="search" role="search" aria-label="Pesquisar produtos">
+          <i class="fas fa-search" aria-hidden="true" style="color:var(--muted);margin-right:8px"></i>
+          <input id="searchInput" type="search" placeholder="Pesquisar produtos (nome, categoria)..." aria-label="Pesquisar produtos">
+        </div>
+        <select id="categorySelect" class="select" aria-label="Filtrar por categoria">
+          <!-- populated -->
+        </select>
+        <select id="sortSelect" class="select" aria-label="Ordenar produtos">
+          <option value="relevant">Mais relevantes</option>
+          <option value="price_asc">Preço: menor → maior</option>
+          <option value="price_desc">Preço: maior → menor</option>
+          <option value="alpha">A → Z</option>
+        </select>
+      </div>
+
+      <!-- Dynamic sections (products etc.) -->
+      <div id="sectionsRoot">
+        <!-- sections injected here -->
+      </div>
+
+      <!-- Load more button -->
+      <div style="display:flex;justify-content:center;margin:18px 0">
+        <button id="loadMoreBtn" class="btn primary" style="display:none">Carregar mais</button>
+      </div>
+    </div>
   </main>
 
-  <!-- Overlay & Cart -->
+  <!-- Overlay and Cart -->
   <div id="overlay" class="overlay" aria-hidden="true"></div>
 
-  <aside id="cartPanel" class="cart" aria-hidden="true" role="dialog" aria-label="Carrinho">
+  <aside id="cartPanel" class="cart" aria-hidden="true" role="dialog" aria-label="Carrinho de compras">
     <div class="head">
       <strong id="cartTitle">Seu Jardim</strong>
-      <button id="btnCloseCart" class="icon-button" aria-label="Fechar carrinho"><i class="fas fa-times" aria-hidden="true"></i></button>
+      <button id="closeCartBtn" class="icon-button" aria-label="Fechar carrinho"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
-    <div class="body" id="cartBody">
-      <p id="cartEmpty" class="sr-only">Sua cesta de flores está vazia no momento.</p>
-    </div>
+    <div id="cartBody" class="body" aria-live="polite"></div>
     <div class="foot">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div class="muted" id="subtotalLabel">Subtotal</div>
+        <div id="subtotalLabel">Subtotal</div>
         <div id="subtotalValue">R$ 0,00</div>
       </div>
-      <a id="checkoutLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Finalizar no WhatsApp <i class="fab fa-whatsapp" style="margin-left:8px" aria-hidden="true"></i></a>
+      <a id="checkoutLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Finalizar no WhatsApp <i class="fab fa-whatsapp" aria-hidden="true" style="margin-left:8px"></i></a>
     </div>
   </aside>
 
-  <!-- Product Modal -->
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-label="Detalhes do produto">
+  <!-- Modal (product) -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
     <div class="modal-card" role="document">
-      <div id="modalImage" style="background-size:cover;background-position:center;min-height:300px"></div>
+      <div id="modalImage" class="left" style="background-size:cover;background-position:center;min-height:300px"></div>
       <div style="padding:20px">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div id="modalCategory" class="muted">Categoria</div>
-          <button id="modalClose" class="icon-button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i></button>
+          <button id="modalCloseBtn" class="icon-button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i></button>
         </div>
         <h3 id="modalTitle"></h3>
-        <div id="modalPrice" style="color:var(--brand-primary);font-size:1.2rem"></div>
+        <div id="modalPrice" style="color:var(--brand-primary);font-size:1.15rem"></div>
         <p id="modalDesc" class="muted"></p>
         <div style="display:flex;gap:10px;margin-top:14px">
-          <button id="modalAdd" class="btn primary" style="flex:1">Adicionar à Cesta</button>
-          <button id="modalWish" class="btn ghost" title="Salvar"><i class="far fa-heart" aria-hidden="true"></i></button>
+          <button id="modalAddBtn" class="btn primary" style="flex:1">Adicionar à Cesta</button>
+          <button id="modalWishBtn" class="btn ghost" title="Salvar"><i class="far fa-heart" aria-hidden="true"></i></button>
         </div>
       </div>
     </div>
@@ -209,388 +258,657 @@
     </div>
   </footer>
 
-<script>
-/*
-  Versão robusta e tolerante: carrega config.json se disponível, mas sempre
-  renderiza UI com DEFAULT_CONFIG como fallback.
-  -> Corrige o problema de "página em branco": em quaisquer erros o conteúdo
-     padrão aparece e o loader é removido.
-*/
+  <!-- Script: configuration engine + improvements -->
+  <script>
+  (function(){
+    'use strict';
 
-(function(){
-  'use strict';
+    /* -----------------------------
+       Utilities
+       ----------------------------- */
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+    const escapeHTML = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+    const toMoney = v => Number(v||0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-  /* ---------- Helpers ---------- */
-  const $ = (s, ctx = document) => ctx.querySelector(s);
-  const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
-  const escapeHTML = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-  const formatMoney = v => Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-
-  function mergeDeep(a,b){
-    const out = JSON.parse(JSON.stringify(a));
-    for(const k in b){
-      if(b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])){
-        out[k] = mergeDeep(out[k]||{}, b[k]);
-      } else out[k] = b[k];
-    }
-    return out;
-  }
-
-  /* ---------- DEFAULT CONFIG seguro ---------- */
-  const DEFAULT = {
-    meta: { version: "1.0" },
-    store: {
-      info: { name: "BellaFlor", subtitle: "Atelier Botânico", whatsapp_number: "551938279999" },
-      links: { instagram: "#", email: "mailto:contato@bellaflor.com.br" }
-    },
-    theme: {
-      colors: { primary:"#bf6c74", accent:"#d4a373", text:"#2c3e50", muted:"#7f8c8d", bg:"#fcfcfb", surface:"#ffffff" },
-      fonts: { heading:"'Cinzel', serif", script:"'Pinyon Script', cursive", body:"'Lato', sans-serif" }
-    },
-    texts: {
-      hero: {
-        lead: "A Poesia das Flores",
-        title: "BellaFlor",
-        subtitle: "Arranjos autorais que traduzem sentimentos.",
-        ctas: [{ type:"scroll", label:"Ver Coleção", target:"#products" }, { type:"link", label:"WhatsApp", href:"https://wa.me/551938279999" }],
-        background: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1600&q=80"
+    function mergeDeep(a,b){
+      const out = JSON.parse(JSON.stringify(a));
+      for(const k in b){
+        if(b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])){
+          out[k] = mergeDeep(out[k]||{}, b[k]);
+        } else out[k] = b[k];
       }
-    },
-    catalog: {
-      categories: ["Todos","Buquês","Arranjos","Box Luxo","Orquídeas","Secas & Preservadas"],
-      mock: { count: 12, basePrice: 120 }
-    },
-    sections: [
-      { id:"products", type:"products", title:"Coleção", subtitle:"Nossos arranjos", data:{limit:12} }
-    ],
-    footer: { made_by: "Design Exclusivo", social: [{icon:"instagram",href:"#"},{icon:"whatsapp",href:"https://wa.me/551938279999"}] }
-  };
+      return out;
+    }
 
-  /* ---------- Estado ---------- */
-  let CONFIG = DEFAULT;
-  let PRODUCTS = [];
-  let ACTIVE_CATEGORY = null;
-  let CART = JSON.parse(localStorage.getItem('bf_cart')||'[]');
-  let WISHLIST = JSON.parse(localStorage.getItem('bf_wish')||'[]');
-  let CURRENT_PRODUCT = null;
+    function debounce(fn, wait=250){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); } }
 
-  /* ---------- Theme application ---------- */
-  function applyTheme(){
-    try{
-      const t = CONFIG.theme || {};
-      if(t.colors) {
-        for(const key in t.colors) {
-          const varName = '--' + (key==='primary' ? 'brand-primary' : key);
-          document.documentElement.style.setProperty(varName, t.colors[key]);
+    /* -----------------------------
+       DEFAULT CONFIG (fallback)
+       Larger mock catalog count here as requested
+       ----------------------------- */
+    const DEFAULT_CONFIG = {
+      meta: { version: "1.2", name: "BellaFlor" },
+      store: {
+        info: { name: "BellaFlor", subtitle: "Atelier Botânico", whatsapp_number: "551938279999" },
+        links: { instagram: "#", email: "mailto:contato@bellaflor.com.br" }
+      },
+      theme: {
+        colors: { primary: "#bf6c74", accent: "#d4a373", text: "#2c3e50", muted:"#7f8c8d", bg:"#fcfcfb", surface:"#ffffff" },
+        fonts: { heading: "'Cinzel', serif", script: "'Pinyon Script', cursive", body: "'Lato', sans-serif" }
+      },
+      texts: {
+        hero: {
+          lead: "A Poesia das Flores",
+          title: "BellaFlor",
+          subtitle: "Arranjos autorais que traduzem sentimentos.",
+          ctas: [
+            { type: "scroll", label: "Ver Coleção", target: "#products" },
+            { type: "link", label: "WhatsApp", href: "https://wa.me/551938279999" }
+          ],
+          background: "https://images.unsplash.com/photo-1563241527-300027f88ea2?auto=format&fit=crop&w=1600&q=80"
         }
+      },
+      catalog: {
+        categories: ["Todos","Buquês","Arranjos","Box Luxo","Orquídeas","Secas & Preservadas"],
+        // increase mock count to 48 (user requested more products)
+        mock: { count: 48, basePrice: 120 }
+      },
+      sections: [
+        { id: "products", type: "products", title: "Coleção", subtitle: "Nossos arranjos e buquês", data: { limit: 12 } }
+      ],
+      footer: {
+        made_by: "Design Exclusivo",
+        social: [
+          { icon: "instagram", href: "#" },
+          { icon: "whatsapp", href: "https://wa.me/551938279999" }
+        ]
       }
-      if(t.fonts) {
-        if(t.fonts.body) document.body.style.fontFamily = t.fonts.body;
-      }
-    }catch(e){ console.warn('applyTheme error', e); }
-  }
+    };
 
-  /* ---------- Load config.json (non-blocking) ---------- */
-  async function loadConfig(){
-    try {
-      if(location.protocol === 'file:') { CONFIG = DEFAULT; return; }
-      const resp = await fetch('config.json', {cache:'no-store'});
-      if(!resp.ok){ CONFIG = DEFAULT; return; }
-      const json = await resp.json();
-      CONFIG = mergeDeep(DEFAULT, json || {});
-    } catch(e) {
-      console.warn('Não foi possível carregar config.json — fallback para DEFAULT.', e && e.message);
-      CONFIG = DEFAULT;
+    /* -----------------------------
+       State
+       ----------------------------- */
+    let CONFIG = DEFAULT_CONFIG;
+    let PRODUCTS = [];
+    let VISIBLE_COUNT = 0; // how many cards are shown
+    let PAGE_STEP = 12; // reveal chunk size
+    let CART = JSON.parse(localStorage.getItem('bf_cart') || '[]');
+    let WISH = JSON.parse(localStorage.getItem('bf_wish') || '[]');
+    let CURRENT_PRODUCT = null;
+
+    /* -----------------------------
+       DOM elements
+       ----------------------------- */
+    const pageLoader = $('#page-loader');
+    const brand = $('#brand');
+    const heroEl = $('#hero');
+    const heroCta = $('#heroCta');
+    const sectionsRoot = $('#sectionsRoot');
+    const categorySelect = $('#categorySelect');
+    const searchInput = $('#searchInput');
+    const sortSelect = $('#sortSelect');
+    const loadMoreBtn = $('#loadMoreBtn');
+
+    const overlay = $('#overlay');
+    const cartPanel = $('#cartPanel');
+    const cartBody = $('#cartBody');
+    const subtotalValue = $('#subtotalValue');
+    const checkoutLink = $('#checkoutLink');
+
+    const modal = $('#modal');
+    const modalImage = $('#modalImage');
+    const modalCategory = $('#modalCategory');
+    const modalTitle = $('#modalTitle');
+    const modalPrice = $('#modalPrice');
+    const modalDesc = $('#modalDesc');
+    const modalAddBtn = $('#modalAddBtn');
+    const modalWishBtn = $('#modalWishBtn');
+
+    /* -----------------------------
+       Theme application (CSS variables)
+       ----------------------------- */
+    function applyTheme(){
+      try {
+        const t = CONFIG.theme || {};
+        if(t.colors){
+          const map = { primary: '--brand-primary', accent: '--brand-accent', text: '--text', muted: '--muted', bg: '--bg', surface: '--surface' };
+          for(const k in t.colors) {
+            const varName = map[k] || `--${k}`;
+            document.documentElement.style.setProperty(varName, t.colors[k]);
+          }
+        }
+        if(t.fonts){
+          if(t.fonts.body) document.body.style.fontFamily = t.fonts.body;
+        }
+      } catch(e){ console.warn('applyTheme error', e); }
     }
-  }
 
-  /* ---------- Mock products generator ---------- */
-  function generateMocks(count=12, base=120){
-    const flowers = [
-      {name:'Rosas Colombianas',key:'rosa',mod:1.5},
-      {name:'Hortênsias Azuis',key:'hydrangea',mod:1.2},
-      {name:'Orquídea Phalaenopsis',key:'orchid',mod:2.0},
-      {name:'Girassóis Vibrantes',key:'sunflower',mod:0.9},
-      {name:'Tulipas Holandesas',key:'tulip',mod:1.8},
-      {name:'Mix do Campo',key:'wildflower',mod:0.8}
-    ];
-    const adjectives = ['Imperial','Aurora','Romance','Serenidade','Majestade','Poesia','Vintage'];
-    const containers = ['em Vaso','no Kraft','na Box Aveludada','Rústico','Hand-tied'];
-    const images = [
-      'https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1470509037663-253afd7f0f51?auto=format&fit=crop&w=900&q=80'
-    ];
-    return Array.from({length:count}, (_,i) => {
-      const f = flowers[i % flowers.length];
-      const adj = adjectives[i % adjectives.length];
-      const cont = containers[i % containers.length];
-      const price = (base * f.mod + Math.random()*30).toFixed(2);
-      return {
-        id: `prod_${i+1}`,
-        name: `${f.name} ${adj}`,
-        subtitle: `${cont} • Design Exclusivo`,
-        category: (cont.includes('Kraft')||cont.includes('Hand-tied')) ? 'Buquês' : 'Arranjos',
-        price: price,
-        image: images[i % images.length],
-        description: `Composição com ${f.name}. Cartão e cuidados inclusos.`
+    /* -----------------------------
+       Load config.json (safe)
+       - If page is served via file://, skip fetch (cannot always fetch)
+       - Silent fallback to DEFAULT_CONFIG
+       ----------------------------- */
+    async function loadConfig(){
+      try {
+        if(location.protocol === 'file:') { CONFIG = DEFAULT_CONFIG; return; }
+        const res = await fetch('config.json', { cache: 'no-store' });
+        if(!res.ok){ CONFIG = DEFAULT_CONFIG; return; }
+        const data = await res.json();
+        CONFIG = mergeDeep(DEFAULT_CONFIG, data || {});
+      } catch(e){
+        console.warn('config.json não carregado — usando padrão. Erro:', e && e.message);
+        CONFIG = DEFAULT_CONFIG;
+      }
+    }
+
+    /* -----------------------------
+       Products generator (large catalog)
+       ----------------------------- */
+    function generateMockProducts(count, basePrice){
+      const flowers = [
+        { name: 'Rosas Colombianas', key: 'rosa', mod: 1.5 },
+        { name: 'Hortênsias Azuis', key: 'hydrangea', mod: 1.2 },
+        { name: 'Orquídea Phalaenopsis', key: 'orchid', mod: 2.0 },
+        { name: 'Girassóis Vibrantes', key: 'sunflower', mod: 0.9 },
+        { name: 'Mix do Campo', key: 'wildflower', mod: 0.8 },
+        { name: 'Tulipas Holandesas', key: 'tulip', mod: 1.8 },
+        { name: 'Lisianthus Premium', key: 'lisianthus', mod: 1.1 },
+        { name: 'Folhagens Secas', key: 'dried', mod: 1.3 }
+      ];
+      const adjectives = ['Imperial','Aurora','Romance','Serenidade','Majestade','Poesia','Vintage','Minimal','Deluxe','Prime','Soft','Bright'];
+      const containers = ['em Vaso de Cristal','no Kraft','na Box Aveludada','Rústico','Hand-tied','Vaso Cerâmico','Bouquet Luxo'];
+
+      const unsplash = {
+        rosa: ['1562690868-60bbe7293e94','1518709268805-4e9042af9f23'],
+        hydrangea: ['1508610048181-48f6704e3f36'],
+        orchid: ['1566929341488-820845a76cb5'],
+        sunflower: ['1470509037663-253afd7f0f51'],
+        tulip: ['1520763185298-1b434c919102'],
+        wildflower: ['1464698579707-353232147316'],
+        dried: ['1533616688419-b7a58556e124'],
+        lisianthus: ['1524504388940-b6d4e1f63b28']
       };
-    });
-  }
 
-  /* ---------- Renderers ---------- */
-  function renderNav(){
-    const nav = $('#mainNav');
-    nav.innerHTML = '';
-    const items = CONFIG.nav || [{label:'Home', href:'#hero'}];
-    items.forEach(it => {
-      const a = document.createElement('a');
-      a.className = 'nav-link';
-      a.href = it.href || '#';
-      a.textContent = it.label || 'Item';
-      if(it.target) a.target = it.target;
-      nav.appendChild(a);
-    });
-  }
+      return Array.from({ length: count }, (_, i) => {
+        const f = flowers[i % flowers.length];
+        const adj = adjectives[i % adjectives.length];
+        const cont = containers[i % containers.length];
+        let cat = 'Arranjos';
+        if(cont.includes('Kraft') || cont.includes('Hand-tied') || cont.includes('Bouquet')) cat = 'Buquês';
+        if(cont.includes('Box')) cat = 'Box Luxo';
+        if(f.name.toLowerCase().includes('orquídea')) cat = 'Orquídeas';
+        const price = (basePrice * f.mod + (Math.random() * 60)).toFixed(2);
+        const coll = unsplash[f.key] || unsplash['wildflower'];
+        const image = `https://images.unsplash.com/photo-${coll[i % coll.length]}?auto=format&fit=crop&w=1200&q=80`;
+        return {
+          id: `prod_${i + 1}`,
+          name: `${f.name} ${adj}`,
+          subtitle: `${cont} • Design Exclusivo`,
+          category: cat,
+          price: price,
+          image: image,
+          description: `Uma composição artística com ${f.name} frescas e selecionadas. Acompanha cartão e instruções de cuidado.`
+        };
+      });
+    }
 
-  function renderHero(){
-    const h = CONFIG.texts && CONFIG.texts.hero ? CONFIG.texts.hero : DEFAULT.texts.hero;
-    const hero = $('#hero');
-    hero.style.backgroundImage = `linear-gradient(rgba(0,0,0,.22), rgba(0,0,0,.08)), url('${h.background || DEFAULT.texts.hero.background}')`;
-    $('#heroLead').textContent = h.lead || '';
-    $('#heroTitle').textContent = h.title || '';
-    $('#heroSubtitle').textContent = h.subtitle || '';
+    /* -----------------------------
+       Renderers
+       ----------------------------- */
 
-    const ctaRoot = $('#heroCta');
-    ctaRoot.innerHTML = '';
-    (h.ctas || []).forEach(cta => {
-      const el = document.createElement(cta.type === 'link' ? 'a' : 'button');
-      el.className = 'btn ' + (cta.style === 'ghost' ? 'ghost' : 'primary');
-      el.textContent = cta.label || 'Ação';
-      if(cta.type === 'link'){ el.href = cta.href || '#'; el.target = '_blank'; el.rel = 'noopener noreferrer'; }
-      else if(cta.type === 'scroll'){ el.addEventListener('click', ()=>{ const target = document.querySelector(cta.target || '#sectionsRoot'); if(target) target.scrollIntoView({behavior:'smooth'}); }); }
-      else if(cta.type === 'action' && cta.action === 'openCart'){ el.addEventListener('click', openCart); }
-      ctaRoot.appendChild(el);
-    });
-  }
+    function renderNav(){
+      const nav = $('#mainNav');
+      nav.innerHTML = '';
+      const items = CONFIG.nav && Array.isArray(CONFIG.nav) ? CONFIG.nav : [
+        { label: 'Home', href: '#hero' },
+        { label: 'Coleção', href: '#products' },
+        { label: 'Contato', href: '#footer' }
+      ];
+      items.forEach(it => {
+        const a = document.createElement('a');
+        a.className = 'nav-link';
+        a.href = it.href || '#';
+        a.textContent = it.label || 'Item';
+        if(it.target) a.target = it.target;
+        nav.appendChild(a);
+      });
+    }
 
-  function createProductCard(p){
-    const c = document.createElement('article');
-    c.className = 'card';
-    c.innerHTML = `
-      <div class="media"><img src="${escapeHTML(p.image||'')}" alt="${escapeHTML(p.name||'')}" loading="lazy" onerror="this.src='https://via.placeholder.com/900x600?text=Imagem'"></div>
-      <div class="card-body">
-        <div class="tag">${escapeHTML(p.category||'')}</div>
-        <h3>${escapeHTML(p.name||'Produto')}</h3>
-        <div class="price">${formatMoney(p.price)}</div>
-      </div>
-    `;
-    const media = c.querySelector('.media');
-    media.style.cursor = 'pointer';
-    media.addEventListener('click', ()=> openProductModal(p));
-    return c;
-  }
+    function renderHero(){
+      const h = CONFIG.texts && CONFIG.texts.hero ? CONFIG.texts.hero : DEFAULT_CONFIG.texts.hero;
+      $('#hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,.22), rgba(0,0,0,.08)), url('${h.background || DEFAULT_CONFIG.texts.hero.background}')`;
+      $('#heroLead').textContent = h.lead || '';
+      $('#heroTitle').textContent = h.title || '';
+      $('#heroSubtitle').textContent = h.subtitle || '';
 
-  function renderSections(){
-    const root = $('#sectionsRoot');
-    root.innerHTML = '';
-    const sections = CONFIG.sections || [];
-    sections.forEach(sec => {
-      const secEl = document.createElement('section');
-      secEl.className = 'site-section';
+      // populate CTA(s)
+      heroCta.innerHTML = '';
+      (h.ctas || []).forEach(cta => {
+        if(cta.type === 'link'){
+          const a = document.createElement('a');
+          a.className = 'btn ghost';
+          a.href = cta.href || '#';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = cta.label || 'Link';
+          heroCta.appendChild(a);
+        } else if(cta.type === 'scroll'){
+          const b = document.createElement('button');
+          b.className = 'btn primary';
+          b.textContent = cta.label || 'Ver';
+          b.addEventListener('click', ()=> {
+            const el = document.querySelector(cta.target || '#products');
+            if(el) el.scrollIntoView({ behavior: 'smooth' });
+          });
+          heroCta.appendChild(b);
+        } else {
+          const b = document.createElement('button');
+          b.className = 'btn primary';
+          b.textContent = cta.label || 'Ação';
+          heroCta.appendChild(b);
+        }
+      });
+    }
+
+    function populateCategorySelect(){
+      const catRoot = categorySelect;
+      catRoot.innerHTML = '';
+      const cats = Array.from(new Set([CONFIG.catalog.categories && CONFIG.catalog.categories[0] ? CONFIG.catalog.categories[0] : 'Todos', ...(CONFIG.catalog.categories || [])]));
+      cats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        catRoot.appendChild(opt);
+      });
+    }
+
+    function createProductCard(product){
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.setAttribute('data-name', product.name.toLowerCase());
+      card.setAttribute('data-category', (product.category || '').toLowerCase());
+      card.innerHTML = `
+        <div class="media" role="button" tabindex="0" aria-label="Ver ${escapeHTML(product.name)}">
+          <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/900x600?text=Imagem'">
+        </div>
+        <div class="card-body">
+          <div class="tag">${escapeHTML(product.category)}</div>
+          <h3>${escapeHTML(product.name)}</h3>
+          <div class="price">${toMoney(product.price)}</div>
+        </div>
+      `;
+      const media = card.querySelector('.media');
+      media.addEventListener('click', ()=> openModal(product));
+      media.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') openModal(product); });
+      return card;
+    }
+
+    // Renders product grid according to active filters, sort and visibleCount
+    function renderProductGrid(){
+      const section = document.createElement('section');
+      section.className = 'site-section';
+      section.id = 'products-section';
+
       const header = document.createElement('div');
       header.className = 'section-header';
-      const left = document.createElement('div');
-      left.innerHTML = `<h3 class="section-title">${escapeHTML(sec.title||'')}</h3><div class="section-sub">${escapeHTML(sec.subtitle||'')}</div>`;
-      header.appendChild(left);
-      secEl.appendChild(header);
+      header.innerHTML = `<h2 class="section-title">${escapeHTML(CONFIG.sections && CONFIG.sections[0] && CONFIG.sections[0].title || 'Coleção')}</h2><div class="section-sub">${escapeHTML(CONFIG.sections && CONFIG.sections[0] && CONFIG.sections[0].subtitle || '')}</div>`;
+      section.appendChild(header);
 
-      // supported types: products, grid, text, gallery
-      if(sec.type === 'products'){
-        const grid = document.createElement('div');
-        grid.id = sec.id || 'products';
-        grid.className = 'grid';
-        let items = PRODUCTS.slice();
-        if(sec.data && sec.data.category && sec.data.category !== 'Todos') items = items.filter(p => p.category === sec.data.category);
-        if(sec.data && sec.data.limit) items = items.slice(0, sec.data.limit);
-        items.forEach(p => grid.appendChild(createProductCard(p)));
-        secEl.appendChild(grid);
-      } else if(sec.type === 'grid'){
-        const grid = document.createElement('div'); grid.className = 'grid';
-        (sec.items||[]).forEach(item => {
-          const card = document.createElement('article'); card.className='card';
-          card.innerHTML = `<div class="media" style="background-image:url('${(item.image||'')}');background-size:cover;height:160px"></div><div class="card-body"><h3>${escapeHTML(item.title||'')}</h3><div class="price">${escapeHTML(item.subtitle||'')}</div></div>`;
-          grid.appendChild(card);
-        });
-        secEl.appendChild(grid);
-      } else if(sec.type === 'text'){
-        const p = document.createElement('div'); p.innerHTML = sec.html || `<p>${escapeHTML(sec.text||'')}</p>`;
-        secEl.appendChild(p);
-      } else if(sec.type === 'gallery'){
-        const grid = document.createElement('div'); grid.className='grid';
-        (sec.images||[]).forEach(src => {
-          const c = document.createElement('div'); c.className='card'; c.innerHTML=`<div class="media"><img src="${src}" alt=""></div>`;
-          grid.appendChild(c);
-        });
-        secEl.appendChild(grid);
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      grid.id = 'products';
+
+      // gather filters
+      const q = (searchInput.value || '').trim().toLowerCase();
+      const cat = (categorySelect.value || '').toLowerCase();
+      const sort = sortSelect.value;
+
+      let list = PRODUCTS.slice();
+
+      // filter by category
+      if(cat && cat !== 'todos') list = list.filter(p => (p.category || '').toLowerCase() === cat);
+
+      // filter by search
+      if(q) list = list.filter(p => (`${p.name} ${p.subtitle} ${p.category}`).toLowerCase().includes(q));
+
+      // sort
+      if(sort === 'price_asc') list.sort((a,b) => Number(a.price) - Number(b.price));
+      else if(sort === 'price_desc') list.sort((a,b) => Number(b.price) - Number(a.price));
+      else if(sort === 'alpha') list.sort((a,b) => a.name.localeCompare(b.name));
+      // else default relevance (original order)
+
+      // manage visible count / load more
+      const limit = VISIBLE_COUNT || (CONFIG.sections && CONFIG.sections[0] && CONFIG.sections[0].data && CONFIG.sections[0].data.limit) || PAGE_STEP;
+      const visibleList = list.slice(0, limit);
+
+      visibleList.forEach(p => grid.appendChild(createProductCard(p)));
+
+      section.appendChild(grid);
+      // replace or append to sectionsRoot
+      const existing = $('#products-section');
+      if(existing) existing.replaceWith(section);
+      else sectionsRoot.prepend(section);
+
+      // load more button visibility
+      if(list.length > limit){
+        loadMoreBtn.style.display = 'inline-flex';
       } else {
-        // fallback text
-        const p = document.createElement('div'); p.innerHTML = `<p>${escapeHTML(sec.text||'')}</p>`; secEl.appendChild(p);
+        loadMoreBtn.style.display = 'none';
       }
-
-      root.appendChild(secEl);
-    });
-  }
-
-  /* ---------- Modal + Cart ---------- */
-  function openProductModal(product){
-    CURRENT_PRODUCT = product;
-    const img = $('#modalImage'); if(img) img.style.backgroundImage = `url('${product.image}')`;
-    $('#modalCategory').textContent = product.category || '';
-    $('#modalTitle').textContent = product.name || '';
-    $('#modalPrice').textContent = formatMoney(product.price || 0);
-    $('#modalDesc').textContent = product.description || '';
-    $('#modal').classList.add('show'); $('#modal').setAttribute('aria-hidden','false');
-  }
-  function closeProductModal(){ CURRENT_PRODUCT = null; $('#modal').classList.remove('show'); $('#modal').setAttribute('aria-hidden','true'); }
-
-  function persistCart(){ try{ localStorage.setItem('bf_cart', JSON.stringify(CART)); }catch(e){} }
-  function persistWish(){ try{ localStorage.setItem('bf_wish', JSON.stringify(WISHLIST)); }catch(e){} }
-
-  function addToCart(product){
-    CART.push(product);
-    persistCart();
-    renderCart();
-    openCart();
-  }
-
-  function renderCart(){
-    const body = $('#cartBody'); body.innerHTML = '';
-    if(!CART.length){ $('#cartEmpty').classList.remove('sr-only'); } else { $('#cartEmpty').classList.add('sr-only'); }
-    CART.forEach((it, idx) => {
-      const row = document.createElement('div'); row.style.display='flex'; row.style.gap='12px'; row.style.marginBottom='12px'; row.style.alignItems='center';
-      row.innerHTML = `<img src="${escapeHTML(it.image||'')}" style="width:64px;height:64px;object-fit:cover;border-radius:6px" onerror="this.src='https://via.placeholder.com/80x80?text=Img'"><div style="flex:1"><div style="font-weight:700">${escapeHTML(it.name)}</div><div style="color:var(--brand-primary);font-weight:700">${formatMoney(it.price)}</div></div><button class="icon-button" aria-label="Remover"><i class="far fa-trash-alt"></i></button>`;
-      row.querySelector('button').addEventListener('click', ()=>{ CART.splice(idx,1); persistCart(); renderCart(); });
-      body.appendChild(row);
-    });
-    const total = CART.reduce((s,i)=>s+Number(i.price||0),0); $('#subtotalValue').textContent = formatMoney(total);
-    $('#checkoutLink').href = buildWhatsAppCheckout();
-    updateCartCount();
-  }
-
-  function updateCartCount(){
-    const el = document.getElementById('cartCount');
-    if(!el) return;
-    el.textContent = CART.length;
-    el.classList.toggle('sr-only', CART.length===0);
-  }
-
-  function openCart(){ $('#cartPanel').classList.add('open'); $('#overlay').classList.add('show'); $('#cartPanel').setAttribute('aria-hidden','false'); }
-  function closeCart(){ $('#cartPanel').classList.remove('open'); $('#overlay').classList.remove('show'); $('#cartPanel').setAttribute('aria-hidden','true'); }
-
-  function toggleWish(product){
-    const idx = WISHLIST.findIndex(w=>w.id===product.id);
-    if(idx === -1) WISHLIST.push(product); else WISHLIST.splice(idx,1);
-    persistWish();
-  }
-
-  function buildWhatsAppCheckout(){
-    const num = (CONFIG.store && CONFIG.store.info && CONFIG.store.info.whatsapp_number) ? CONFIG.store.info.whatsapp_number : '';
-    let msg = `Olá, vim pelo site da *${CONFIG.store.info.name || 'BellaFlor'}*.%0A%0A`;
-    if(!CART.length) msg += 'Ainda não selecionei produtos.%0A'; else { CART.forEach(i=> msg += `• ${i.name} - ${formatMoney(i.price)}%0A`); msg += `%0A*Total: ${formatMoney(CART.reduce((s,i)=>s+Number(i.price||0),0))}*%0A`; }
-    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
-  }
-
-  /* ---------- Footer ---------- */
-  function renderFooter(){
-    $('#footerYear').textContent = (new Date()).getFullYear();
-    $('#footerBrand').textContent = CONFIG.store.info.name || DEFAULT.store.info.name;
-    $('#footerMade').textContent = CONFIG.footer && CONFIG.footer.made_by ? CONFIG.footer.made_by : DEFAULT.footer.made_by;
-    const root = $('#footerSocial'); root.innerHTML = '';
-    (CONFIG.footer && Array.isArray(CONFIG.footer.social) ? CONFIG.footer.social : DEFAULT.footer.social).forEach(s=>{
-      const a = document.createElement('a'); a.href = s.href || '#'; a.target = '_blank'; a.rel='noopener noreferrer'; a.style.color='var(--muted)';
-      const icon = s.icon || 'link'; const map = {instagram:'fab fa-instagram', whatsapp:'fab fa-whatsapp', email:'far fa-envelope'};
-      const cls = map[icon] || 'fas fa-link'; a.innerHTML = `<i class="${cls}"></i>`;
-      root.appendChild(a);
-    });
-  }
-
-  /* ---------- Events & boot ---------- */
-  function wireEvents(){
-    // modal buttons
-    $('#modalClose').addEventListener('click', closeProductModal);
-    $('#modalAdd').addEventListener('click', ()=>{ if(CURRENT_PRODUCT) addToCart(CURRENT_PRODUCT); closeProductModal(); });
-    $('#modalWish').addEventListener('click', ()=>{ if(CURRENT_PRODUCT) toggleWish(CURRENT_PRODUCT); });
-
-    // cart buttons
-    $('#btnCloseCart').addEventListener('click', closeCart);
-    $('#overlay').addEventListener('click', ()=>{ closeCart(); closeProductModal(); });
-
-    // brand click -> top
-    $('#brand').addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
-    $('#brand').addEventListener('keydown', e=>{ if(e.key==='Enter') window.scrollTo({top:0,behavior:'smooth'}); });
-
-    // keyboard
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeProductModal(); closeCart(); }});
-  }
-
-  async function boot(){
-    try {
-      await loadConfig();
-      applyTheme();
-
-      // build PRODUCTS
-      if(Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length) PRODUCTS = CONFIG.catalog.products.map((p,i)=>({...p, id: p.id||`prod_${i+1}`}));
-      else PRODUCTS = generateMocks((CONFIG.catalog.mock && CONFIG.catalog.mock.count) || 12, (CONFIG.catalog.mock && CONFIG.catalog.mock.basePrice) || 120);
-
-      // render UI
-      renderNav();
-      renderHero();
-      renderSections();
-      renderCart();
-      renderFooter();
-      wireEvents();
-
-    } catch(e){
-      console.error('Erro na inicialização:', e);
-    } finally {
-      // remove loader e exibir conteúdo sempre (corrige "tela em branco")
-      const loader = document.getElementById('page-loader'); if(loader) loader.remove();
-      document.body.classList.add('ready');
     }
-  }
 
-  // protege erros globais e garante que a UI seja mostrada
-  window.addEventListener('error', function(evt){
-    console.error('Erro global:', evt && evt.message || evt);
-    const loader = document.getElementById('page-loader'); if(loader) loader.remove();
-    document.body.classList.add('ready');
-  });
-  window.addEventListener('unhandledrejection', function(evt){
-    console.error('Promise rejeitada:', evt && evt.reason || evt);
-    const loader = document.getElementById('page-loader'); if(loader) loader.remove();
-    document.body.classList.add('ready');
-  });
+    /* -----------------------------
+       Modal (focus trap + keyboard)
+       ----------------------------- */
+    function openModal(product){
+      CURRENT_PRODUCT = product;
+      modalImage.style.backgroundImage = `url('${product.image}')`;
+      modalCategory.textContent = product.category;
+      modalTitle.textContent = product.name;
+      modalPrice.textContent = toMoney(product.price);
+      modalDesc.textContent = product.description || '';
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      // trap focus: focus first actionable
+      modalAddBtn.focus();
+      // add listeners
+      document.addEventListener('keydown', modalKeyHandler);
+      trapFocus(modal);
+    }
 
-  // exposições úteis (somente para administrador / console)
-  window.BellaFlor = window.BellaFlor || {};
-  Object.defineProperty(window.BellaFlor, 'config', { get: ()=> CONFIG });
-  window.BellaFlor.applyConfig = function(obj){ // aplicar config através do console (dev)
-    try {
-      if(!obj || typeof obj !== 'object') throw new Error('applyConfig precisa de um objeto');
-      CONFIG = mergeDeep(DEFAULT, obj);
-      applyTheme();
-      PRODUCTS = Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length ? CONFIG.catalog.products : generateMocks(CONFIG.catalog.mock.count||12, CONFIG.catalog.mock.basePrice||120);
-      renderNav(); renderHero(); renderSections(); renderCart(); renderFooter();
-      console.info('Config aplicada via console.');
-    } catch(e){ console.error('applyConfig falhou', e); }
-  };
+    function closeModal(){
+      CURRENT_PRODUCT = null;
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      document.removeEventListener('keydown', modalKeyHandler);
+      releaseFocusTrap();
+    }
 
-  // start
-  boot();
+    function modalKeyHandler(e){
+      if(e.key === 'Escape') closeModal();
+    }
 
-})();
-</script>
+    // Focus trap (simple)
+    let lastFocused = null;
+    let focusableNodes = [];
+    let trapHandler = null;
+    function trapFocus(container){
+      lastFocused = document.activeElement;
+      focusableNodes = Array.from(container.querySelectorAll('button,a,input,select,textarea,[tabindex]:not([tabindex="-1"])')).filter(el => !el.disabled);
+      if(focusableNodes.length === 0) return;
+      trapHandler = function(e){
+        if(e.key !== 'Tab') return;
+        const first = focusableNodes[0];
+        const last = focusableNodes[focusableNodes.length - 1];
+        if(e.shiftKey){
+          if(document.activeElement === first){ e.preventDefault(); last.focus(); }
+        } else {
+          if(document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+      };
+      document.addEventListener('keydown', trapHandler);
+    }
+    function releaseFocusTrap(){
+      if(trapHandler) document.removeEventListener('keydown', trapHandler);
+      if(lastFocused) try{ lastFocused.focus(); }catch(e){}
+      lastFocused = null; focusableNodes = []; trapHandler = null;
+    }
+
+    /* -----------------------------
+       Cart logic
+       ----------------------------- */
+    function persistCart(){ try{ localStorage.setItem('bf_cart', JSON.stringify(CART)); } catch(e){} }
+    function persistWish(){ try{ localStorage.setItem('bf_wish', JSON.stringify(WISH)); } catch(e){} }
+
+    function addToCart(product){
+      CART.push(product);
+      persistCart();
+      renderCart();
+      openCart();
+      announceToast(`${product.name} adicionado(a) à cesta.`);
+    }
+
+    function removeFromCart(index){
+      CART.splice(index, 1);
+      persistCart();
+      renderCart();
+    }
+
+    function renderCart(){
+      cartBody.innerHTML = '';
+      if(!CART.length){
+        cartBody.innerHTML = '<p class="muted">Sua cesta de flores está vazia no momento.</p>';
+      } else {
+        CART.forEach((it, idx) => {
+          const row = document.createElement('div');
+          row.style.display = 'flex'; row.style.gap = '12px'; row.style.marginBottom = '12px'; row.style.alignItems = 'center';
+          row.innerHTML = `
+            <img src="${escapeHTML(it.image)}" alt="${escapeHTML(it.name)}" style="width:64px;height:64px;object-fit:cover;border-radius:6px" onerror="this.src='https://via.placeholder.com/80x80?text=Img'">
+            <div style="flex:1">
+              <div style="font-weight:700">${escapeHTML(it.name)}</div>
+              <div style="color:var(--brand-primary);font-weight:700">${toMoney(it.price)}</div>
+            </div>
+            <button class="icon-button" aria-label="Remover item"><i class="far fa-trash-alt" aria-hidden="true"></i></button>
+          `;
+          row.querySelector('button').addEventListener('click', ()=> removeFromCart(idx));
+          cartBody.appendChild(row);
+        });
+      }
+      const total = CART.reduce((s,i)=> s + Number(i.price || 0), 0);
+      subtotalValue.textContent = toMoney(total);
+      checkoutLink.href = buildWhatsAppLink();
+    }
+
+    function buildWhatsAppLink(){
+      const num = (CONFIG.store && CONFIG.store.info && CONFIG.store.info.whatsapp_number) ? CONFIG.store.info.whatsapp_number : '';
+      let msg = `Olá, vim pelo site da *${CONFIG.store.info.name || 'BellaFlor'}*.%0A%0A`;
+      if(!CART.length) msg += 'Ainda não selecionei produtos.%0A';
+      else {
+        CART.forEach(i => msg += `• ${i.name} - ${toMoney(i.price)}%0A`);
+        msg += `%0A*Total: ${toMoney(CART.reduce((s,i)=>s+Number(i.price||0),0))}*%0A`;
+      }
+      return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function openCart(){ cartPanel.classList.add('open'); overlay.classList.add('show'); cartPanel.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false'); }
+    function closeCart(){ cartPanel.classList.remove('open'); overlay.classList.remove('show'); cartPanel.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); }
+
+    /* -----------------------------
+       Wishlist toggle (persisted)
+       ----------------------------- */
+    function toggleWish(product){
+      const idx = WISH.findIndex(w => w.id === product.id);
+      if(idx === -1) WISH.push(product);
+      else WISH.splice(idx, 1);
+      persistWish();
+      announceToast(idx === -1 ? 'Salvo aos favoritos.' : 'Removido dos favoritos.');
+    }
+
+    /* -----------------------------
+       UX: toast (non-intrusive)
+       ----------------------------- */
+    let toastTimer = null;
+    function announceToast(msg){
+      let el = document.getElementById('bf-toast');
+      if(!el){
+        el = document.createElement('div');
+        el.id = 'bf-toast';
+        el.style.position = 'fixed';
+        el.style.right = '18px';
+        el.style.bottom = '18px';
+        el.style.background = 'rgba(34,34,34,0.92)';
+        el.style.color = '#fff';
+        el.style.padding = '10px 14px';
+        el.style.borderRadius = '10px';
+        el.style.boxShadow = '0 8px 24px rgba(0,0,0,0.18)';
+        el.style.zIndex = '1600';
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      el.style.opacity = '1';
+      if(toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>{ el.style.opacity = '0'; }, 2800);
+    }
+
+    /* -----------------------------
+       Search / sort / filters / load more
+       ----------------------------- */
+    function resetVisibleCount(){
+      VISIBLE_COUNT = CONFIG.sections && CONFIG.sections[0] && CONFIG.sections[0].data && CONFIG.sections[0].data.limit ? CONFIG.sections[0].data.limit : PAGE_STEP;
+    }
+
+    function loadMore(){
+      VISIBLE_COUNT += PAGE_STEP;
+      renderProductGrid();
+    }
+
+    /* -----------------------------
+       Accessibility: keyboard global
+       ----------------------------- */
+    function wireGlobalEvents(){
+      // close modal or cart with Esc
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape'){ closeModal(); closeCart(); }
+      });
+
+      // overlay click closes
+      overlay.addEventListener('click', ()=>{ closeCart(); closeModal(); });
+
+      // brand click to top
+      brand.addEventListener('click', ()=> window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      // modal buttons
+      $('#modalCloseBtn').addEventListener('click', closeModal);
+      modalAddBtn.addEventListener('click', ()=> { if(CURRENT_PRODUCT) addToCart(CURRENT_PRODUCT); closeModal(); });
+      modalWishBtn.addEventListener('click', ()=> { if(CURRENT_PRODUCT) toggleWish(CURRENT_PRODUCT); });
+
+      // cart close
+      $('#closeCartBtn').addEventListener('click', closeCart);
+
+      // search debounce
+      searchInput.addEventListener('input', debounce(()=> {
+        VISIBLE_COUNT = PAGE_STEP; // reset paging on new search
+        renderProductGrid();
+      }, 300));
+
+      categorySelect.addEventListener('change', ()=> { VISIBLE_COUNT = PAGE_STEP; renderProductGrid(); });
+      sortSelect.addEventListener('change', ()=> { VISIBLE_COUNT = PAGE_STEP; renderProductGrid(); });
+
+      loadMoreBtn.addEventListener('click', ()=> {
+        loadMore();
+        // smooth focus to last loaded
+        setTimeout(()=> {
+          const lastCard = document.querySelector('#products .card:last-child');
+          if(lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 120);
+      });
+    }
+
+    /* -----------------------------
+       Bootstrap sequence
+       ----------------------------- */
+    async function boot(){
+      try {
+        await loadConfig();
+        applyTheme();
+
+        // prepare PRODUCTS
+        if(Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length){
+          PRODUCTS = CONFIG.catalog.products.map((p, i) => ({ id: p.id || `prod_${i+1}`, ...p }));
+        } else {
+          // generate the larger catalog requested (DEFAULT_CONFIG.mock.count)
+          const count = (CONFIG.catalog && CONFIG.catalog.mock && CONFIG.catalog.mock.count) || DEFAULT_CONFIG.catalog.mock.count;
+          const base = (CONFIG.catalog && CONFIG.catalog.mock && CONFIG.catalog.mock.basePrice) || DEFAULT_CONFIG.catalog.mock.basePrice;
+          PRODUCTS = generateMockProducts(count, base);
+        }
+
+        // UI: render hero, nav, sections list, category select
+        renderNav();
+        renderHero();
+        populateCategorySelect();
+
+        // initial visible count & render
+        PAGE_STEP = CONFIG.sections && CONFIG.sections[0] && CONFIG.sections[0].data && CONFIG.sections[0].data.limit ? CONFIG.sections[0].data.limit : 12;
+        resetVisibleCount();
+        renderProductGrid();
+
+        // render footer social
+        renderFooter();
+
+        // cart initial and wire events
+        renderCart();
+        wireGlobalEvents();
+
+      } catch(e){
+        console.error('Erro durante boot:', e);
+      } finally {
+        // always remove loader and show page to avoid blank screen
+        if(pageLoader) pageLoader.remove();
+        document.body.classList.add('ready');
+      }
+    }
+
+    /* -----------------------------
+       Footer render
+       ----------------------------- */
+    function renderFooter(){
+      $('#footerYear').textContent = (new Date()).getFullYear();
+      $('#footerBrand').textContent = CONFIG.store.info && CONFIG.store.info.name ? CONFIG.store.info.name : DEFAULT_CONFIG.store.info.name;
+      $('#footerMade').textContent = CONFIG.footer && CONFIG.footer.made_by ? CONFIG.footer.made_by : DEFAULT_CONFIG.footer.made_by;
+      const socialRoot = $('#footerSocial');
+      socialRoot.innerHTML = '';
+      (CONFIG.footer && Array.isArray(CONFIG.footer.social) ? CONFIG.footer.social : DEFAULT_CONFIG.footer.social).forEach(s => {
+        const a = document.createElement('a');
+        a.href = s.href || '#';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.color = 'var(--muted)';
+        const map = { instagram: 'fab fa-instagram', whatsapp: 'fab fa-whatsapp', email: 'far fa-envelope' };
+        const cls = map[s.icon] || 'fas fa-link';
+        a.innerHTML = `<i class="${cls}" aria-hidden="true"></i>`;
+        socialRoot.appendChild(a);
+      });
+    }
+
+    /* -----------------------------
+       Expose small admin console API (safe)
+       - window.BellaFlor.applyConfig(obj) for dev only (no UI)
+       ----------------------------- */
+    window.BellaFlor = window.BellaFlor || {};
+    window.BellaFlor.applyConfig = function(obj){
+      try {
+        if(!obj || typeof obj !== 'object') throw new Error('applyConfig espera um objeto JSON');
+        CONFIG = mergeDeep(DEFAULT_CONFIG, obj);
+        applyTheme();
+        // recalc products
+        if(Array.isArray(CONFIG.catalog.products) && CONFIG.catalog.products.length) PRODUCTS = CONFIG.catalog.products;
+        else PRODUCTS = generateMockProducts(CONFIG.catalog.mock.count || DEFAULT_CONFIG.catalog.mock.count, CONFIG.catalog.mock.basePrice || DEFAULT_CONFIG.catalog.mock.basePrice);
+        populateCategorySelect();
+        resetVisibleCount();
+        renderHero();
+        renderProductGrid();
+        renderFooter();
+        renderCart();
+        console.info('Config aplicada via console (dev).');
+      } catch(e){
+        console.error('applyConfig falhou', e);
+      }
+    };
+
+    // start the app
+    boot();
+
+  })();
+  </script>
+
+  <!-- noscript fallback -->
+  <noscript>
+    <style>body{opacity:1} .page-loader{display:none}</style>
+    <div style="padding:30px;text-align:center;background:#fff;margin:16px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.06)">
+      <strong>JavaScript desativado:</strong> este site funciona melhor com JavaScript. Algumas funcionalidades (carrinho, busca) não estarão disponíveis.
+    </div>
+  </noscript>
 </body>
 </html>
+
