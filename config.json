@@ -26,7 +26,7 @@
   },
   "header": {
     "brandName": "BellaFlor",
-    "brandSub": "Atelier Botânico",
+    "brandSub": "Artur Nogueira",
     "navLinks": [
       { "label": "Coleção", "href": "#catalog" },
       { "label": "Quem Somos", "href": "#about" },
@@ -41,11 +41,11 @@
     "subtitle": "Arranjos autorais que traduzem sentimentos em formas e cores — entregues com cuidado e acabamento artesanal.",
     "badge": "Curadoria Artesanal",
     "ctaPrimary": { "text": "Ver Coleção", "href": "#catalog" },
-    "ctaSecondary": { "text": "Personalizar", "href": "https://wa.me/551938279999" }
+    "ctaSecondary": { "text": "Personalizar", "href": "https://wa.me/+5519998028205" }
   },
   "settings": {
     "itemsPerPage": 8,
-    "whatsappNumber": "551938279999",
+    "whatsappNumber": "5519998028205",
     "currency": { "code": "BRL", "locale": "pt-BR" },
     "defaultImage": "https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=900&q=80&fm=webp",
     "enableSections": {
