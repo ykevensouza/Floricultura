@@ -1,0 +1,293 @@
+{
+  "site": {
+    "title": "BellaFlor — Atelier Botânico | Loja Online",
+    "description": "Arranjos florais autorais, buquês e presentes botânicos. A BellaFlor traduz sentimentos em flores com design exclusivo e entrega especial.",
+    "url": "https://seusite.com/",
+    "lcpImage": "https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=1800&q=80&fm=webp",
+    "themeColor": "#bf6c74",
+    "ogImage": "https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=1200&q=80&fm=webp"
+  },
+  "theme": {
+    "brandPrimary": "#bf6c74",
+    "brandDark": "#a6555d",
+    "brandAccent": "#d4a373",
+    "text": "#2c3e50",
+    "muted": "#6c757d",
+    "bg": "#fbfaf9",
+    "surface": "#ffffff",
+    "radius": "12px",
+    "fonts": {
+      "heading": "Cinzel, serif",
+      "script": "Pinyon Script, cursive",
+      "body": "Lato, sans-serif"
+    },
+    "cardImageHeight": "280px",
+    "maxWidth": "1200px"
+  },
+  "header": {
+    "brandName": "BellaFlor",
+    "brandSub": "Atelier Botânico",
+    "navLinks": [
+      { "label": "Coleção", "href": "#catalog" },
+      { "label": "Quem Somos", "href": "#about" },
+      { "label": "Depoimentos", "href": "#testimonials" },
+      { "label": "Blog", "href": "#blog" },
+      { "label": "Contato", "href": "#contact" }
+    ]
+  },
+  "hero": {
+    "lead": "Arte Floral & Design",
+    "title": "A Poesia das Flores",
+    "subtitle": "Arranjos autorais que traduzem sentimentos em formas e cores — entregues com cuidado e acabamento artesanal.",
+    "badge": "Curadoria Artesanal",
+    "ctaPrimary": { "text": "Ver Coleção", "href": "#catalog" },
+    "ctaSecondary": { "text": "Personalizar", "href": "https://wa.me/551938279999" }
+  },
+  "settings": {
+    "itemsPerPage": 8,
+    "whatsappNumber": "551938279999",
+    "currency": { "code": "BRL", "locale": "pt-BR" },
+    "defaultImage": "https://images.unsplash.com/photo-1587317996237-eddd7e834d84?auto=format&fit=crop&w=900&q=80&fm=webp",
+    "enableSections": {
+      "featured": true,
+      "about": true,
+      "testimonials": true,
+      "blog": true,
+      "gallery": true,
+      "faq": true,
+      "newsletter": true
+    }
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Rosas Colombianas",
+      "category": "Buquês",
+      "price": 189.9,
+      "image": "https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Bouquet elegante com rosas colombianas selecionadas. Caixa de presente opcional.",
+      "mpLink": "#",
+      "badge": "Mais Vendido",
+      "inStock": true,
+      "sku": "RF-001"
+    },
+    {
+      "id": 2,
+      "name": "Orquídea Phalaenopsis",
+      "category": "Orquídeas",
+      "price": 245.0,
+      "image": "https://images.unsplash.com/photo-1597826368522-9f4a35226e99?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Orquídea Phalaenopsis branca em vaso premium — delicadeza e durabilidade.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "ORQ-002"
+    },
+    {
+      "id": 3,
+      "name": "Mix do Campo",
+      "category": "Arranjos",
+      "price": 120.0,
+      "image": "https://images.unsplash.com/photo-1586541679237-640a233b4997?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Arranjo rústico com flores do campo, ideal para presentes alegres.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "MC-003"
+    },
+    {
+      "id": 4,
+      "name": "Tulipas Holandesas",
+      "category": "Buquês",
+      "price": 210.0,
+      "image": "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Tulipas frescas, seleção da estação, embalagem minimalista.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "TL-004"
+    },
+    {
+      "id": 5,
+      "name": "Box Luxo Vermelho",
+      "category": "Box",
+      "price": 299.9,
+      "image": "https://images.unsplash.com/photo-1518709766631-a6a8f4b08224?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Caixa com arranjo premium e embalagem de luxo.",
+      "mpLink": "#",
+      "badge": "Premium",
+      "inStock": true,
+      "sku": "BX-005"
+    },
+    {
+      "id": 6,
+      "name": "Girassóis Vibrantes",
+      "category": "Arranjos",
+      "price": 98.0,
+      "image": "https://images.unsplash.com/photo-1464698579707-353232147316?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Arranjo alegre com girassóis de corte longo.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "GV-006"
+    },
+    {
+      "id": 7,
+      "name": "Lisianthus Branco",
+      "category": "Buquês",
+      "price": 145.5,
+      "image": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Buquê delicado com lisianthus branco e folhagens finas.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "LI-007"
+    },
+    {
+      "id": 8,
+      "name": "Terrário Suculenta",
+      "category": "Plantas",
+      "price": 85.0,
+      "image": "https://images.unsplash.com/photo-1501003856227-1f32b04a7b10?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Terrário com suculentas — presente duradouro e sustentável.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "TR-008"
+    },
+    {
+      "id": 9,
+      "name": "Cesta Café & Flores",
+      "category": "Cestas",
+      "price": 350.0,
+      "image": "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Cesta com itens gourmet e arranjo complementar.",
+      "mpLink": "#",
+      "badge": "Oferta",
+      "inStock": true,
+      "sku": "CS-009"
+    },
+    {
+      "id": 10,
+      "name": "Lavanda Seca",
+      "category": "Decoração",
+      "price": 65.0,
+      "image": "https://images.unsplash.com/photo-1445477085565-355f6a3b6b58?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Bunch de lavanda seca para uso decorativo e aromático.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "LV-010"
+    },
+    {
+      "id": 11,
+      "name": "Peônias (Sazonal)",
+      "category": "Premium",
+      "price": 450.0,
+      "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Peônias sazonais selecionadas (estoque limitado).",
+      "mpLink": "#",
+      "badge": "Sazonal",
+      "inStock": false,
+      "sku": "PN-011"
+    },
+    {
+      "id": 12,
+      "name": "Lírios Brancos",
+      "category": "Arranjos",
+      "price": 160.0,
+      "image": "https://images.unsplash.com/photo-1525373691095-35a0e1f17c45?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Arranjo sofisticado com lírios brancos e folhagens verdes.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "LG-012"
+    },
+    {
+      "id": 13,
+      "name": "Mini Suculenta (Vaso)",
+      "category": "Plantas",
+      "price": 45.0,
+      "image": "https://images.unsplash.com/photo-1525373691095-35a0e1f17c45?auto=format&fit=crop&w=600&q=60&fm=webp",
+      "desc": "Suculenta em vaso cerâmico — ótima lembrancinha.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "MS-013"
+    },
+    {
+      "id": 14,
+      "name": "Buquê Pastel",
+      "category": "Buquês",
+      "price": 175.0,
+      "image": "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Buquê em tons pastel, romântico e leve.",
+      "mpLink": "#",
+      "badge": "",
+      "inStock": true,
+      "sku": "BP-014"
+    },
+    {
+      "id": 15,
+      "name": "Arranjo Moderno",
+      "category": "Arranjos",
+      "price": 220.0,
+      "image": "https://images.unsplash.com/photo-1518709766631-a6a8f4b08224?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Arranjo contemporâneo com linhas limpas e folhagens exóticas.",
+      "mpLink": "#",
+      "badge": "Novo",
+      "inStock": true,
+      "sku": "AM-015"
+    },
+    {
+      "id": 16,
+      "name": "Box Romântico",
+      "category": "Box",
+      "price": 320.0,
+      "image": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80&fm=webp",
+      "desc": "Box especial para momentos românticos com flores e chocolates.",
+      "mpLink": "#",
+      "badge": "Mais Vendido",
+      "inStock": true,
+      "sku": "BR-016"
+    }
+  ],
+  "featured": {
+    "limit": 4,
+    "productIds": [1, 16, 5, 9]
+  },
+  "testimonials": [
+    { "name": "Mariana S.", "text": "O arranjo era ainda mais bonito pessoalmente. Entrega no horário e atendimento impecável." },
+    { "name": "Pedro L.", "text": "Comprei para o aniversário da minha mãe — ela amou. Recomendo muito!" },
+    { "name": "Ana C.", "text": "Qualidade excelente, flores frescas e embalagem bonita." }
+  ],
+  "blog": [
+    { "id": 1, "title": "Como conservar rosas por mais tempo", "excerpt": "Dicas práticas para conservar o frescor das rosas por mais dias.", "img": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=60&fm=webp", "href": "#" },
+    { "id": 2, "title": "Escolhendo arranjos para casamentos", "excerpt": "Tendências, paletas e como combinar com o espaço.", "img": "https://images.unsplash.com/photo-1525373691095-35a0e1f17c45?auto=format&fit=crop&w=800&q=60&fm=webp", "href": "#" },
+    { "id": 3, "title": "Flores para presentear no trabalho", "excerpt": "Sugestões discretas e elegantes para presentear colegas.", "img": "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=800&q=60&fm=webp", "href": "#" }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1525373691095-35a0e1f17c45?auto=format&fit=crop&w=600&q=60&fm=webp",
+    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=60&fm=webp",
+    "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=600&q=60&fm=webp",
+    "https://images.unsplash.com/photo-1445477085565-355f6a3b6b58?auto=format&fit=crop&w=600&q=60&fm=webp"
+  ],
+  "faq": [
+    { "q": "Como funciona a entrega?", "a": "Entregamos nas principais cidades com opções de horário. Para áreas fora da rota, confirmamos disponibilidade via WhatsApp." },
+    { "q": "Posso personalizar um arranjo?", "a": "Sim — use o botão \"Personalizar\" para iniciar uma conversa por WhatsApp com nossa equipe." },
+    { "q": "Há garantia de frescor?", "a": "Sim — orientamos sobre cuidados e, caso haja qualquer problema, entre em contato para avaliarmos uma solução." }
+  ],
+  "footer": {
+    "company": "BellaFlor Atelier",
+    "phone": "+551938279999",
+    "email": "contato@bellaflor.com",
+    "address": "Rua das Flores, 123 - Centro",
+    "social": {
+      "instagram": "https://instagram.com/seu_perfil",
+      "facebook": "https://facebook.com/seu_perfil",
+      "pinterest": "https://pinterest.com/seu_perfil"
+    },
+    "payments": ["visa", "mastercard", "paypal"],
+    "copyright": "© BellaFlor Atelier. Todos os direitos reservados."
+  }
+}
