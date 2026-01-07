@@ -1,293 +1,318 @@
 {
   "site": {
-    "title": "BellaFlor — Artur Nogueira | Floricultura & Coroas",
-    "description": "BellaFlor transforma momentos em memória: buquês, plantas e coroas feitas com curadoria artesanal. Flores que contam histórias, entregues com carinho em Artur Nogueira e região.",
-    "url": "https://seusite.com/",
-    "lcpImage": "https://www.pexels.com/photo/roses-bouquet-illustration-while-flowers-1370293/",
-    "themeColor": "#bf6c74",
-    "ogImage": "https://www.pexels.com/photo/roses-bouquet-illustration-while-flowers-1370293/"
+    "titulo": "BellaFlor Artur Nogueira | A Floricultura do Brasil",
+    "descricao": "BellaFlor Artur Nogueira - As mais belas flores. Enviamos para todo o Brasil.",
+    "url_canonica": "https://bellaflorartur.lojavirtual.com.br/",
+    "favicon": "https://cdn-icons-png.flaticon.com/512/346/346167.png"
   },
-  "theme": {
-    "brandPrimary": "#bf6c74",
-    "brandDark": "#a6555d",
-    "brandAccent": "#d4a373",
-    "text": "#2c3e50",
-    "muted": "#6c757d",
-    "bg": "#fbfaf9",
-    "surface": "#ffffff",
-    "radius": "12px",
-    "fonts": {
-      "heading": "Cinzel, serif",
-      "script": "Pinyon Script, cursive",
-      "body": "Lato, sans-serif"
-    },
-    "cardImageHeight": "280px",
-    "maxWidth": "1200px"
+  "tema": {
+    "cor_primaria": "#FF0063",
+    "cor_secundaria": "#333333",
+    "cor_fundo": "#FAFAFA",
+    "cor_branca": "#FFFFFF",
+    "fonte_principal": "'Poppins', sans-serif"
   },
-  "header": {
-    "brandName": "BellaFlor",
-    "brandSub": "Artur Nogueira",
-    "navLinks": [
-      { "label": "Coleção", "href": "#catalog" },
-      { "label": "Quem Somos", "href": "#about" },
-      { "label": "Depoimentos", "href": "#testimonials" },
-      { "label": "Blog", "href": "#blog" },
-      { "label": "Contato", "href": "#contact" }
+  "cabecalho": {
+    "logo_texto_principal": "BellaFlor",
+    "logo_texto_secundario": "Artur Nogueira",
+    "placeholder_busca": "Digite o que procura..."
+  },
+  "hero_banner": {
+    "imagem_fundo": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=2070&auto=format&fit=crop",
+    "titulo": "Flores que emocionam",
+    "subtitulo": "Presenteie quem você ama com a qualidade BellaFlor.",
+    "botao_texto": "Confira as Ofertas",
+    "botao_link": "#produtos"
+  },
+  "secao_categorias": {
+    "titulo": "Categorias",
+    "itens": [
+      {
+        "nome": "Rosas",
+        "imagem": "https://images.unsplash.com/photo-1559563362-c667ba5f5480?w=200"
+      },
+      {
+        "nome": "Orquídeas",
+        "imagem": "https://images.unsplash.com/photo-1566634579296-180df1441855?w=200"
+      },
+      {
+        "nome": "Girassóis",
+        "imagem": "https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=200"
+      },
+      {
+        "nome": "Cestas",
+        "imagem": "https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=200"
+      },
+      {
+        "nome": "Suculentas",
+        "imagem": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200"
+      }
     ]
   },
-  "hero": {
-    "lead": "Arte Floral & Design",
-    "title": "A Poesia das Flores — Presenteie Emoções",
-    "subtitle": "Arranjos autorais, plantas com personalidade e coroas singulares — cada peça pensada para tocar quem recebe.",
-    "badge": "Curadoria Artesanal",
-    "ctaPrimary": { "text": "Ver Coleção", "href": "#catalog" },
-    "ctaSecondary": { "text": "Personalizar", "href": "https://wa.me/5519998028205" }
+  "secao_produtos": {
+    "id_ancora": "produtos",
+    "titulo": "Destaques no Brasil",
+    "itens": [
+      {
+        "id": 1,
+        "nome": "Buquê 12 Rosas Vermelhas",
+        "categoria": "Romance",
+        "preco": "R$ 149,90",
+        "parcelamento": "3x de R$ 49,96 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1582794543139-8ac92a9abf30?w=500",
+        "tag_promocao": "Mais Vendido",
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_01"
+      },
+      {
+        "id": 2,
+        "nome": "Phalaenopsis Branca Premium",
+        "categoria": "Orquídeas",
+        "preco": "R$ 119,90",
+        "parcelamento": "2x de R$ 59,95 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1602621749836-e63084931f6d?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_02"
+      },
+      {
+        "id": 3,
+        "nome": "Arranjo Luz do Sol",
+        "categoria": "Girassóis",
+        "preco": "R$ 89,90",
+        "parcelamento": "2x de R$ 44,95 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_03"
+      },
+      {
+        "id": 4,
+        "nome": "Cesta Primavera Colorida",
+        "categoria": "Flores do Campo",
+        "preco": "R$ 95,00",
+        "parcelamento": "2x de R$ 47,50 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1563241527-3004b7be0fee?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_04"
+      },
+      {
+        "id": 5,
+        "nome": "Cesta de Café \"Bom Dia\"",
+        "categoria": "Cestas",
+        "preco": "R$ 189,90",
+        "parcelamento": "3x de R$ 63,30 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1605282939169-45952f9c9b58?w=500",
+        "tag_promocao": "Presente Ideal",
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_05"
+      },
+      {
+        "id": 6,
+        "nome": "Buquê de Astromélias",
+        "categoria": "Flores de Corte",
+        "preco": "R$ 69,90",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1596627793389-9b9355745499?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_06"
+      },
+      {
+        "id": 7,
+        "nome": "Vaso Lírio da Paz (G)",
+        "categoria": "Plantas",
+        "preco": "R$ 55,00",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1593487568720-92097fb460dc?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_07"
+      },
+      {
+        "id": 8,
+        "nome": "Box Rosas + Chocolates",
+        "categoria": "Luxo",
+        "preco": "R$ 229,00",
+        "parcelamento": "4x de R$ 57,25 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1549416878-b9ca95e99667?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_08"
+      },
+      {
+        "id": 9,
+        "nome": "Buquê Rosas Brancas",
+        "categoria": "Rosas",
+        "preco": "R$ 149,90",
+        "parcelamento": "3x de R$ 49,96 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_09"
+      },
+      {
+        "id": 10,
+        "nome": "Kalanchoe (Flor da Fortuna)",
+        "categoria": "Plantas",
+        "preco": "R$ 29,90",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1509420316987-d27b029818ae?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_10"
+      },
+      {
+        "id": 11,
+        "nome": "Kit Urso Pelúcia + Flor",
+        "categoria": "Presentes",
+        "preco": "R$ 89,90",
+        "parcelamento": "2x de R$ 44,95 sem juros",
+        "imagem": "https://plus.unsplash.com/premium_photo-1675716443562-b771d72a3da7?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_11"
+      },
+      {
+        "id": 12,
+        "nome": "Terrário de Suculentas",
+        "categoria": "Decoração",
+        "preco": "R$ 79,90",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_12"
+      },
+      {
+        "id": 13,
+        "nome": "Buquê Gérberas \"Alegria\"",
+        "categoria": "Flores",
+        "preco": "R$ 85,00",
+        "parcelamento": "2x de R$ 42,50 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1520638023360-6def43369781?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_13"
+      },
+      {
+        "id": 14,
+        "nome": "Vaso de Antúrio Vermelho",
+        "categoria": "Plantas",
+        "preco": "R$ 45,90",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1628198904576-904d49a56260?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_14"
+      },
+      {
+        "id": 15,
+        "nome": "Rosa Encantada na Cúpula",
+        "categoria": "Eternas",
+        "preco": "R$ 199,90",
+        "parcelamento": "3x de R$ 66,63 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1587411768638-ec71bdd29f9c?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_15"
+      },
+      {
+        "id": 16,
+        "nome": "Kit Vinho & Chocolates",
+        "categoria": "Kits",
+        "preco": "R$ 250,00",
+        "parcelamento": "4x de R$ 62,50 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_16"
+      },
+      {
+        "id": 17,
+        "nome": "Maço de Lisianthus Roxo",
+        "categoria": "Sofisticado",
+        "preco": "R$ 98,00",
+        "parcelamento": "2x de R$ 49,00 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1463941103031-1f9ba470c173?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_17"
+      },
+      {
+        "id": 18,
+        "nome": "Begônia Maculata (Vaso)",
+        "categoria": "Plantas",
+        "preco": "R$ 65,00",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1582299865611-37332247c4b1?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_18"
+      },
+      {
+        "id": 19,
+        "nome": "Arranjo Flores Secas Boho",
+        "categoria": "Decoração",
+        "preco": "R$ 110,00",
+        "parcelamento": "2x de R$ 55,00 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1518118014377-694774652433?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_19"
+      },
+      {
+        "id": 20,
+        "nome": "Bonsai Ficus 5 Anos",
+        "categoria": "Especiais",
+        "preco": "R$ 139,90",
+        "parcelamento": "3x de R$ 46,63 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1599598425947-520268508e7a?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_20"
+      },
+      {
+        "id": 21,
+        "nome": "Vaso de Tulipas Vermelhas",
+        "categoria": "Sazonal",
+        "preco": "R$ 59,90",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_21"
+      },
+      {
+        "id": 22,
+        "nome": "Vaso de Ciclamen",
+        "categoria": "Plantas",
+        "preco": "R$ 35,00",
+        "parcelamento": "À vista",
+        "imagem": "https://images.unsplash.com/photo-1614710892795-0373df1542f7?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_22"
+      },
+      {
+        "id": 23,
+        "nome": "Buquê Gigante 50 Rosas",
+        "categoria": "Premium",
+        "preco": "R$ 450,00",
+        "parcelamento": "6x de R$ 75,00 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1533616688419-07a58521a221?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_23"
+      },
+      {
+        "id": 24,
+        "nome": "Orquídea Chuva de Ouro",
+        "categoria": "Orquídeas",
+        "preco": "R$ 99,90",
+        "parcelamento": "2x de R$ 49,95 sem juros",
+        "imagem": "https://images.unsplash.com/photo-1518047910903-a212351cb7e5?w=500",
+        "tag_promocao": null,
+        "link_pagamento": "https://mpago.la/INSIRA_SEU_LINK_AQUI_24"
+      }
+    ]
   },
-  "settings": {
-    "itemsPerPage": 8,
-    "whatsappNumber": "5519998028205",
-    "currency": { "code": "BRL", "locale": "pt-BR" },
-    "defaultImage": "https://www.pexels.com/photo/roses-bouquet-illustration-while-flowers-1370293/",
-    "enableSections": {
-      "featured": true,
-      "about": true,
-      "testimonials": true,
-      "blog": true,
-      "gallery": true,
-      "faq": true,
-      "newsletter": true
-    }
+  "rodape": {
+    "titulo_sobre": "BellaFlor Artur Nogueira",
+    "texto_sobre": "Sua floricultura de confiança em Artur Nogueira. Trabalhamos com flores frescas, cestas de café da manhã e presentes personalizados para todas as ocasiões.",
+    "titulo_contato": "Contato"
   },
-  "products": [
-    {
-      "id": 1,
-      "name": "Buquê de Rosas (Clássico)",
-      "category": "Buquês",
-      "price": 189.9,
-      "image": "https://www.pexels.com/photo/decorative-roses-on-white-surface-1394628/",
-      "desc": "Buquê elegante com rosas selecionadas — perfeito para aniversários e declarações. Opcional: caixa-presente.",
-      "mpLink": "#",
-      "badge": "Mais Vendido",
-      "inStock": true,
-      "sku": "RF-001"
-    },
-    {
-      "id": 2,
-      "name": "Orquídea Phalaenopsis (Vaso Premium)",
-      "category": "Plantas",
-      "price": 245.0,
-      "image": "https://www.pexels.com/photo/close-up-photo-of-orchid-flower-1183266/",
-      "desc": "Orquídea Phalaenopsis em vaso premium — delicada, duradoura e com presença de destaque.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "ORQ-002"
-    },
-    {
-      "id": 3,
-      "name": "Arranjo Campo (Gérberas & Silvestres)",
-      "category": "Arranjos",
-      "price": 120.0,
-      "image": "https://www.pexels.com/photo/assorted-flowers-on-brown-wooden-table-931177/",
-      "desc": "Arranjo rústico e alegre com flores do campo — ideal para presentes descontraídos e decorações acolhedoras.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "MC-003"
-    },
-    {
-      "id": 4,
-      "name": "Astromélias (Alstroemérias) — 10 hastes",
-      "category": "Buquês",
-      "price": 210.0,
-      "image": "https://www.pexels.com/photo/pink-alstroemeria-flowers-931217/",
-      "desc": "Hastes de astromélia num arranjo cheio de cor e durabilidade — ótima relação beleza/valor.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "AL-004"
-    },
-    {
-      "id": 5,
-      "name": "Box Luxo (Rosas & Mimos)",
-      "category": "Box",
-      "price": 299.9,
-      "image": "https://www.pexels.com/photo/gift-box-with-red-roses-3028956/",
-      "desc": "Caixa presente com arranjo premium, embalagem sofisticada e opção de bilhete personalizado.",
-      "mpLink": "#",
-      "badge": "Premium",
-      "inStock": true,
-      "sku": "BX-005"
-    },
-    {
-      "id": 6,
-      "name": "Girassóis Vibrantes — Buquê",
-      "category": "Buquês",
-      "price": 98.0,
-      "image": "https://www.pexels.com/photo/sunflowers-on-wooden-surface-1166865/",
-      "desc": "Buquê alegre com girassóis de corte — transmite energia e leveza.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "GV-006"
-    },
-    {
-      "id": 7,
-      "name": "Antúrio (Vaso Decorativo)",
-      "category": "Plantas",
-      "price": 145.5,
-      "image": "https://www.pexels.com/photo/red-anthurium-plant-on-black-surface-45201/",
-      "desc": "Planta de vaso com folhagem brilhante e flor escultural — presença sofisticada para ambientes internos.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "AN-007"
-    },
-    {
-      "id": 8,
-      "name": "Terrário de Suculentas",
-      "category": "Plantas",
-      "price": 85.0,
-      "image": "https://www.pexels.com/photo/close-up-photo-of-succulent-plants-1459398/",
-      "desc": "Terrário com suculentas — presente sustentável, de baixa manutenção e decoração moderna.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "TR-008"
-    },
-    {
-      "id": 9,
-      "name": "Coroa de Flores Memorial (Simples)",
-      "category": "Coroa de flores",
-      "price": 420.0,
-      "image": "https://www.pexels.com/photo/white-flower-wreath-on-brown-surface-236966/",
-      "desc": "Coroa preservando respeito e delicadeza — opções de tamanho e fitas com mensagem.",
-      "mpLink": "#",
-      "badge": "Especial",
-      "inStock": true,
-      "sku": "CR-009"
-    },
-    {
-      "id": 10,
-      "name": "Lavanda Seca — Bunch",
-      "category": "Decoração",
-      "price": 65.0,
-      "image": "https://www.pexels.com/photo/dried-lavender-on-brown-wood-7357/",
-      "desc": "Fecho de lavanda seca para decorar e perfumar armários, mesas e cantinhos especiais.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "LV-010"
-    },
-    {
-      "id": 11,
-      "name": "Peônias (Sazonal)",
-      "category": "Premium",
-      "price": 450.0,
-      "image": "https://www.pexels.com/photo/pink-peony-flowers-1236799/",
-      "desc": "Peônias sazonais (estoque limitado) — poucas unidades por temporada, acabamento premium.",
-      "mpLink": "#",
-      "badge": "Sazonal",
-      "inStock": false,
-      "sku": "PN-011"
-    },
-    {
-      "id": 12,
-      "name": "Lírios Brancos — Arranjo",
-      "category": "Arranjos",
-      "price": 160.0,
-      "image": "https://www.pexels.com/photo/white-lily-flowers-33045/",
-      "desc": "Arranjo sofisticado com lírios brancos — ótimo para datas solenes ou comemorações elegantes.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "LG-012"
-    },
-    {
-      "id": 13,
-      "name": "Mini Suculenta (Vaso)",
-      "category": "Plantas",
-      "price": 45.0,
-      "image": "https://www.pexels.com/photo/small-succulent-on-white-pot-106399/",
-      "desc": "Suculenta em vaso cerâmico — lembrancinha prática e charmosa.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "MS-013"
-    },
-    {
-      "id": 14,
-      "name": "Buquê Pastel — Romantic",
-      "category": "Buquês",
-      "price": 175.0,
-      "image": "https://www.pexels.com/photo/pastel-roses-bouquet-371589/",
-      "desc": "Buquê em tons pastel, romântico e delicado — acabamento artesanal.",
-      "mpLink": "#",
-      "badge": "",
-      "inStock": true,
-      "sku": "BP-014"
-    },
-    {
-      "id": 15,
-      "name": "Arranjo Moderno — Folhagens & Exóticos",
-      "category": "Arranjos",
-      "price": 220.0,
-      "image": "https://www.pexels.com/photo/green-tropical-flowers-1809644/",
-      "desc": "Arranjo contemporâneo com linhas limpas, folhagens marcantes e flores selecionadas.",
-      "mpLink": "#",
-      "badge": "Novo",
-      "inStock": true,
-      "sku": "AM-015"
-    },
-    {
-      "id": 16,
-      "name": "Box Romântico — Edição Especial",
-      "category": "Box",
-      "price": 320.0,
-      "image": "https://www.pexels.com/photo/romantic-gift-box-forms-3028963/",
-      "desc": "Box com flores e mimos selecionados para surpreender em ocasiões românticas.",
-      "mpLink": "#",
-      "badge": "Mais Vendido",
-      "inStock": true,
-      "sku": "BR-016"
-    }
-  ],
-  "featured": {
-    "limit": 4,
-    "productIds": [1, 16, 5, 9]
+  "contato": {
+    "telefone_fixo": "(19) 3877-0000",
+    "whatsapp_display": "(19) 99802-8205",
+    "whatsapp_numero_puro": "5519998028205",
+    "cidade_estado": "Artur Nogueira - SP"
   },
-  "testimonials": [
-    { "name": "Mariana S.", "text": "O arranjo era ainda mais bonito pessoalmente. Entrega no horário e atendimento impecável." },
-    { "name": "Pedro L.", "text": "Comprei para o aniversário da minha mãe — ela amou. Recomendo muito!" },
-    { "name": "Ana C.", "text": "Qualidade excelente, flores frescas e embalagem bonita." }
-  ],
-  "blog": [
-    { "id": 1, "title": "Como conservar rosas por mais tempo", "excerpt": "Dicas práticas para conservar o frescor das rosas por mais dias.", "img": "https://www.pexels.com/photo/roses-bouquet-illustration-while-flowers-1370293/", "href": "#" },
-    { "id": 2, "title": "Escolhendo arranjos para casamentos", "excerpt": "Tendências, paletas e como combinar com o espaço.", "img": "https://www.pexels.com/photo/white-lily-flowers-33045/", "href": "#" },
-    { "id": 3, "title": "Flores para presentear no trabalho", "excerpt": "Sugestões discretas e elegantes para presentear colegas.", "img": "https://www.pexels.com/photo/assorted-flowers-on-brown-wooden-table-931177/", "href": "#" }
-  ],
-  "gallery": [
-    "https://www.pexels.com/photo/green-tropical-flowers-1809644/",
-    "https://www.pexels.com/photo/pastel-roses-bouquet-371589/",
-    "https://www.pexels.com/photo/assorted-flowers-on-brown-wooden-table-931177/",
-    "https://www.pexels.com/photo/close-up-photo-of-succulent-plants-1459398/"
-  ],
-  "faq": [
-    { "q": "Como funciona a entrega?", "a": "Entregamos nas principais cidades com opções de horário. Para áreas fora da rota, confirmamos disponibilidade via WhatsApp." },
-    { "q": "Posso personalizar um arranjo?", "a": "Sim — use o botão \"Personalizar\" para iniciar uma conversa por WhatsApp com nossa equipe." },
-    { "q": "Há garantia de frescor?", "a": "Sim — orientamos sobre cuidados e, caso haja qualquer problema, entre em contato para avaliarmos uma solução." }
-  ],
-  "footer": {
-    "company": "BellaFlor Atelier",
-    "phone": "+55 19 99802-8205",
-    "email": "contato@bellaflor.com",
-    "address": "Rua das Flores, 123 - Centro",
-    "social": {
-      "instagram": "https://www.instagram.com/bellaflorarturnogueira?igsh=MWt0NTY4dnE0bWZheQ==",
-      "facebook": "https://facebook.com/seu_perfil",
-      "pinterest": "https://pinterest.com/seu_perfil"
-    },
-    "payments": ["visa", "mastercard", "paypal"],
-    "copyright": "© BellaFlor Atelier. Todos os direitos reservados."
+  "redes_sociais": {
+    "instagram": "https://instagram.com/seu_instagram",
+    "facebook": "https://facebook.com/seu_facebook"
+  },
+  "horario_atendimento": {
+    "semana": "Segunda a Sexta: 08:00 - 18:00",
+    "sabado": "Sábado: 08:00 - 13:00",
+    "domingo": "Domingo: Fechado"
   }
 }
