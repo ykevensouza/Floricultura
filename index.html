@@ -646,7 +646,94 @@
                 </div>
             </div>
         </div>
-    </footer>
+        </footer>
+
+    <!-- ⬇️ SCRIPT CONTROLADO PELO config.json ⬇️ -->
+    <script>
+    (async () => {
+      try {
+        const res = await fetch('./config.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Erro ao carregar config.json');
+        const cfg = await res.json();
+        console.log('CONFIG OK', cfg);
+
+        /* ================= SITE / SEO ================= */
+        document.title = cfg.site.titulo;
+        document.querySelector('meta[name="description"]').content = cfg.site.descricao;
+        document.querySelector('link[rel="canonical"]').href = cfg.site.url_canonica;
+        document.querySelector('link[rel="icon"]').href = cfg.site.favicon;
+
+        /* ================= TEMA ================= */
+        const root = document.documentElement;
+        root.style.setProperty('--cor-primaria', cfg.tema.cor_primaria);
+        root.style.setProperty('--cor-secundaria', cfg.tema.cor_secundaria);
+        root.style.setProperty('--cor-fundo', cfg.tema.cor_fundo);
+        root.style.setProperty('--cor-branca', cfg.tema.cor_branca);
+
+        /* ================= HERO ================= */
+        document.getElementById('heroBanner').style.backgroundImage =
+          `url('${cfg.hero_banner.imagem_fundo}')`;
+        document.getElementById('heroTitulo').innerText = cfg.hero_banner.titulo;
+        document.getElementById('heroSubtitulo').innerText = cfg.hero_banner.subtitulo;
+
+        const heroBtn = document.getElementById('heroBotao');
+        heroBtn.innerText = cfg.hero_banner.botao_texto;
+        heroBtn.href = cfg.hero_banner.botao_link;
+
+        /* ================= CATEGORIAS ================= */
+        const catBox = document.getElementById('categoriasContainer');
+        cfg.secao_categorias.itens.forEach(cat => {
+          catBox.innerHTML += `
+            <div class="cat-circle">
+              <img src="${cat.imagem}" class="cat-img">
+              <div class="cat-name">${cat.nome}</div>
+            </div>
+          `;
+        });
+
+        /* ================= PRODUTOS ================= */
+        document.getElementById('produtosTitulo').innerText = cfg.secao_produtos.titulo;
+        const prodBox = document.getElementById('produtosContainer');
+
+        cfg.secao_produtos.itens.forEach(p => {
+          prodBox.innerHTML += `
+            <div class="produto-card">
+              ${p.tag_promocao ? `<div class="tag-promo">${p.tag_promocao}</div>` : ''}
+              <img src="${p.imagem}" class="produto-img">
+              <div class="produto-info">
+                <div>
+                  <span class="produto-cat">${p.categoria}</span>
+                  <div class="produto-nome">${p.nome}</div>
+                  <div class="produto-preco">${p.preco}</div>
+                  <div class="parcelamento">${p.parcelamento}</div>
+                </div>
+                <div class="acoes-produto">
+                  <a href="https://wa.me/${cfg.contato.whatsapp_numero_puro}" target="_blank"
+                     class="btn-base btn-whatsapp">
+                     <i class="fa-brands fa-whatsapp"></i> Whats
+                  </a>
+                  <a href="${p.link_pagamento}" target="_blank"
+                     class="btn-base btn-mp">
+                     <i class="fa-solid fa-credit-card"></i> Comprar
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        /* ================= RODAPÉ ================= */
+        document.getElementById('footerTitulo').innerText = cfg.rodape.titulo_sobre;
+        document.getElementById('footerTexto').innerText = cfg.rodape.texto_sobre;
+        document.getElementById('footerTelefone').innerText = cfg.contato.whatsapp_display;
+        document.getElementById('footerCidade').innerText = cfg.contato.cidade_estado;
+
+      } catch (e) {
+        console.error('ERRO CONFIG:', e);
+      }
+    })();
+    </script>
+    <!-- ⬆️ FIM SCRIPT ⬆️ -->
 
 </body>
 </html>
