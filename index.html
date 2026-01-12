@@ -1,185 +1,233 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <link rel="canonical" href="https://bellaflorartur.lojavirtual.com.br/">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/346/346167.png" type="image/x-icon" />
-    <meta name="description" content="BellaFlor Artur Nogueira - As mais belas flores. Enviamos para todo o Brasil.">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5.0, user-scalable=yes"/>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="BellaFlor Artur Nogueira - As mais belas flores e presentes. Entrega rápida e segura.">
     <title>BellaFlor Artur Nogueira | A Floricultura do Brasil</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" type="text/css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* --- CONFIGURAÇÕES GERAIS (Variáveis para facilitar mudança depois) --- */
         :root {
             --cor-primaria: #FF0063; 
-            --cor-secundaria: #333333;
-            --cor-fundo: #FAFAFA;
-            --cor-branca: #FFFFFF;
+            --cor-primaria-hover: #D60052;
+            --cor-texto: #333333;
+            --cor-cinza-claro: #F5F7FA;
+            --cor-borda: #EAEAEA;
             --cor-mp: #009EE3; /* Azul Mercado Pago */
             --cor-whats: #25D366; /* Verde WhatsApp */
+            --sombra-card: 0 8px 20px rgba(0,0,0,0.06);
+            --sombra-hover: 0 12px 25px rgba(0,0,0,0.12);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--cor-fundo);
-            color: var(--cor-secundaria);
+            background-color: var(--cor-cinza-claro);
+            color: var(--cor-texto);
+            padding-bottom: 80px; /* Espaço para botão flutuante mobile */
         }
 
-        /* Topo */
-        header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .topo-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 15px; }
-        .logo h1 { color: var(--cor-primaria); font-size: 24px; display: flex; align-items: center; gap: 10px; text-decoration: none; margin: 0;}
-        .logo a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;}
-        .search-bar { flex: 1; margin: 0 20px; display: flex; max-width: 500px;}
-        .search-bar input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 20px 0 0 20px; outline: none; }
-        .search-bar button { padding: 10px 20px; background: var(--cor-primaria); color: white; border: none; border-radius: 0 20px 20px 0; cursor: pointer; }
-        .user-actions { display: flex; gap: 20px; font-size: 14px; align-items: center; }
-        .user-actions i { font-size: 20px; color: var(--cor-primaria); cursor: pointer; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
 
-        /* Banner */
+        /* --- CABEÇALHO --- */
+        header { 
+            background: #fff; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+        }
+        .topo-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 15px 20px; 
+        }
+        
+        .logo a { display: flex; align-items: center; gap: 12px; }
+        .logo h1 { font-size: 22px; color: var(--cor-primaria); margin: 0; line-height: 1; }
+        .logo span { font-size: 12px; color: #777; font-weight: 400; display: block; margin-top: 2px;}
+
+        /* Barra de Busca */
+        .search-bar { flex: 1; margin: 0 40px; display: flex; max-width: 500px; position: relative; }
+        .search-bar input { 
+            width: 100%; padding: 12px 20px; border: 2px solid var(--cor-borda); 
+            border-radius: 50px; outline: none; font-family: inherit; transition: 0.3s;
+        }
+        .search-bar input:focus { border-color: var(--cor-primaria); }
+        .search-bar button { 
+            position: absolute; right: 5px; top: 5px; bottom: 5px;
+            width: 40px; background: var(--cor-primaria); color: white; border: none; 
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        .user-actions { display: flex; gap: 20px; font-size: 18px; color: #555; }
+        .user-actions i:hover { color: var(--cor-primaria); transform: scale(1.1); transition: 0.2s; cursor: pointer;}
+
+        /* --- HERO BANNER --- */
         .hero-banner {
-            width: 100%;
-            height: 350px;
+            width: 100%; height: 400px;
             background-image: url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white; position: relative;
         }
-        .hero-overlay { background: rgba(0,0,0,0.4); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .hero-content { position: relative; z-index: 2; max-width: 600px; padding: 20px;}
-        .hero-content h2 { font-size: 42px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .btn-cta { background: var(--cor-primaria); color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px; font-weight: bold; transition: 0.3s; display: inline-block; }
-        .btn-cta:hover { background: #d60052; transform: scale(1.05); }
+        .hero-overlay { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .hero-content { position: relative; z-index: 2; padding: 20px; animation: fadeInUp 1s ease; }
+        
+        .hero-content h2 { font-size: 48px; margin-bottom: 15px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .hero-content p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; }
+        
+        .btn-cta { 
+            background: var(--cor-primaria); color: white; padding: 15px 40px; 
+            border-radius: 50px; font-weight: 600; font-size: 16px; 
+            box-shadow: 0 4px 15px rgba(255, 0, 99, 0.4);
+        }
+        .btn-cta:hover { background: white; color: var(--cor-primaria); transform: translateY(-3px); }
 
-        /* Layout */
-        .container { max-width: 1140px; margin: 0 auto; padding: 20px; }
+        /* --- LAYOUT GERAL --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         
-        /* Grid de Produtos Otimizado */
-        .section-title { text-align: center; margin: 50px 0 30px; color: var(--cor-secundaria); font-size: 28px; position: relative; }
-        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--cor-primaria); margin: 10px auto 0; }
-        
+        .section-title { 
+            text-align: center; margin-bottom: 40px; 
+            font-size: 28px; color: var(--cor-texto); font-weight: 700; 
+            position: relative; 
+        }
+        .section-title::after { 
+            content: ''; display: block; width: 50px; height: 4px; 
+            background: var(--cor-primaria); margin: 15px auto 0; border-radius: 2px; 
+        }
+
+        /* --- CATEGORIAS --- */
+        .categorias-scroll { 
+            display: flex; gap: 20px; overflow-x: auto; 
+            padding-bottom: 20px; justify-content: center; flex-wrap: wrap; 
+        }
+        .cat-item { text-align: center; cursor: pointer; group: hover; transition: 0.3s;}
+        .cat-img-wrapper { 
+            width: 100px; height: 100px; border-radius: 50%; overflow: hidden; 
+            border: 3px solid transparent; transition: 0.3s; margin: 0 auto 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .cat-item:hover .cat-img-wrapper { border-color: var(--cor-primaria); transform: scale(1.05); }
+        .cat-item img { width: 100%; height: 100%; object-fit: cover; }
+        .cat-name { font-weight: 600; font-size: 14px; color: #555; }
+
+        /* --- GRID DE PRODUTOS (PREPARADO PARA JSON) --- */
         .produtos-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 25px; 
-            margin-top: 20px; 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+            gap: 30px; 
         }
-        
+
         .produto-card { 
-            background: white; 
-            border-radius: 8px; 
-            overflow: hidden; 
-            border: 1px solid #eee;
-            transition: 0.3s; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative;
+            background: white; border-radius: 12px; overflow: hidden; 
+            box-shadow: var(--sombra-card); transition: 0.3s; 
+            display: flex; flex-direction: column; position: relative; border: 1px solid transparent;
         }
-        .produto-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1); transform: translateY(-5px); border-color: transparent; }
-        
-        /* Etiqueta de Promoção */
-        .tag-promo { position: absolute; top: 10px; left: 10px; background: #4CAF50; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .produto-card:hover { transform: translateY(-8px); box-shadow: var(--sombra-hover); border-color: #f0f0f0; }
 
-        .produto-img { width: 100%; height: 220px; object-fit: cover; background: #f9f9f9; }
-        .produto-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .produto-cat { font-size: 11px; text-transform: uppercase; color: #999; margin-bottom: 5px; font-weight: 600; }
-        .produto-nome { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #333; line-height: 1.3; }
-        .produto-preco { font-size: 20px; color: var(--cor-primaria); font-weight: bold; margin-bottom: 12px; }
-        .parcelamento { font-size: 11px; color: #888; margin-bottom: 15px; }
-        
-        /* Área dos Botões */
-        .acoes-produto {
-            display: flex;
-            gap: 8px;
-            margin-top: auto;
+        /* Etiqueta Promocional */
+        .tag-promo { 
+            position: absolute; top: 15px; left: 15px; z-index: 10;
+            background: #4CAF50; color: white; padding: 5px 12px; 
+            border-radius: 20px; font-size: 11px; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
+        .produto-img-container { width: 100%; height: 250px; overflow: hidden; position: relative; background: #f9f9f9; }
+        .produto-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .produto-card:hover .produto-img { transform: scale(1.1); }
+
+        .produto-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .produto-cat { font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 600; margin-bottom: 5px; }
+        .produto-nome { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: var(--cor-texto); line-height: 1.4; height: 44px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+        
+        .produto-preco-box { margin-bottom: 15px; }
+        .produto-preco { font-size: 22px; color: var(--cor-primaria); font-weight: 700; }
+        .parcelamento { font-size: 12px; color: #888; margin-top: 3px; }
+
+        /* Ações */
+        .acoes-produto { display: flex; gap: 10px; margin-top: auto; }
+        
         .btn-base { 
-            flex: 1;
-            padding: 10px 5px; 
-            border: none;
-            color: white; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border-radius: 5px; 
-            transition: 0.3s; 
-            text-align: center; 
-            text-decoration: none; 
-            font-size: 12px; /* Fonte levemente menor para caber dois botões */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            box-sizing: border-box;
+            flex: 1; padding: 10px; border-radius: 8px; font-weight: 600; 
+            font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; border: none;
         }
-
-        /* Botão WhatsApp */
-        .btn-whatsapp {
-            background-color: white;
-            color: var(--cor-whats);
-            border: 1px solid var(--cor-whats);
-        }
-        .btn-whatsapp:hover {
-            background-color: var(--cor-whats);
-            color: white;
-        }
-
-        /* Botão Mercado Pago */
-        .btn-mp {
-            background-color: var(--cor-mp);
-            color: white;
-            border: 1px solid var(--cor-mp);
-        }
-        .btn-mp:hover {
-            background-color: #007bb3;
-            border-color: #007bb3;
-        }
-
-        /* Categorias Redondas */
-        .categorias-scroll { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 40px; }
-        .cat-circle { width: 100px; text-align: center; cursor: pointer; }
-        .cat-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid transparent; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .cat-circle:hover .cat-img { border-color: var(--cor-primaria); transform: scale(1.05); }
-        .cat-name { margin-top: 8px; font-size: 13px; font-weight: 500; }
-
-        footer { background: #222; color: #fff; padding: 40px 0; margin-top: 60px; font-size: 14px; }
-        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
         
+        .btn-whatsapp { 
+            background: white; color: var(--cor-whats); border: 1px solid var(--cor-whats); 
+        }
+        .btn-whatsapp:hover { background: #f0fff4; }
+
+        .btn-mp { 
+            background: var(--cor-mp); color: white; 
+        }
+        .btn-mp:hover { background: #008ac7; box-shadow: 0 4px 10px rgba(0, 158, 227, 0.3); }
+
+        /* --- FOOTER --- */
+        footer { background: #222; color: #ddd; padding: 50px 0 20px; margin-top: 60px; font-size: 14px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; padding: 0 20px; max-width: 1200px; margin: 0 auto;}
+        .footer-col h4 { color: white; margin-bottom: 20px; font-size: 16px; border-left: 3px solid var(--cor-primaria); padding-left: 10px;}
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a:hover { color: var(--cor-primaria); padding-left: 5px; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #444; color: #777; }
+
+        /* --- BOTÃO FLUTUANTE WHATSAPP --- */
+        .float-wa {
+            position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px;
+            background-color: var(--cor-whats); color: #FFF; border-radius: 50px;
+            text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999;
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+        }
+        .float-wa:hover { background-color: #1ebc57; transform: scale(1.1); }
+
+        /* --- RESPONSIVIDADE --- */
         @media (max-width: 768px) {
             .topo-container { flex-direction: column; gap: 15px; }
             .search-bar { width: 100%; margin: 10px 0; }
-            .produtos-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .produto-img { height: 160px; }
+            .hero-content h2 { font-size: 32px; }
+            .hero-banner { height: 300px; }
+            .categorias-scroll { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
+            .produtos-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 10px; }
+            .produto-img-container { height: 160px; }
             .produto-nome { font-size: 14px; }
-            .btn-base { font-size: 10px; padding: 8px 4px; flex-direction: column; gap: 2px;}
-            .btn-base i { font-size: 14px; }
+            .produto-preco { font-size: 18px; }
+            .btn-base { font-size: 0; padding: 8px; } /* Esconde texto no mobile, mostra só ícone */
+            .btn-base i { font-size: 18px; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-
-<body class="home">
+<body>
 
     <header>
         <div class="topo-container">
             <div class="logo">
-                <a href="/">
+                <a href="#">
                     <i class="fa-solid fa-seedling fa-2x" style="color: var(--cor-primaria);"></i>
-                    <h1>BellaFlor<br><span style="font-size: 12px; color: #555;">Artur Nogueira</span></h1>
+                    <div>
+                        <h1>BellaFlor</h1>
+                        <span>Artur Nogueira</span>
+                    </div>
                 </a>
             </div>
 
             <div class="search-bar">
-                <input type="text" placeholder="Digite o que procura...">
+                <input type="text" placeholder="Qual flor você procura hoje?">
                 <button><i class="fas fa-search"></i></button>
             </div>
 
@@ -190,550 +238,230 @@
         </div>
     </header>
 
-    <section class="conteudoLoja">
-        
-        <div class="hero-banner">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h2>Flores que emocionam</h2>
-                <p>Presenteie quem você ama com a qualidade BellaFlor.</p>
-                <a href="#produtos" class="btn-cta">Confira as Ofertas</a>
-            </div>
+    <section class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h2>Flores que emocionam</h2>
+            <p>Os arranjos mais apaixonantes de Artur Nogueira com entrega expressa.</p>
+            <a href="#produtos" class="btn-cta">Ver Ofertas</a>
         </div>
-
-        <div class="container">
-            
-            <h3 class="section-title">Categorias</h3>
-            <div class="categorias-scroll">
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1559563362-c667ba5f5480?w=200" class="cat-img">
-                    <div class="cat-name">Rosas</div>
-                </div>
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1566634579296-180df1441855?w=200" class="cat-img">
-                    <div class="cat-name">Orquídeas</div>
-                </div>
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=200" class="cat-img">
-                    <div class="cat-name">Girassóis</div>
-                </div>
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=200" class="cat-img">
-                    <div class="cat-name">Cestas</div>
-                </div>
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200" class="cat-img">
-                    <div class="cat-name">Suculentas</div>
-                </div>
-            </div>
-
-            <h3 class="section-title" id="produtos">Destaques no Brasil</h3>
-            <div class="produtos-grid">
-                
-                <div class="produto-card">
-                    <div class="tag-promo">Mais Vendido</div>
-                    <img src="https://images.unsplash.com/photo-1582794543139-8ac92a9abf30?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Romance</span>
-                            <div class="produto-nome">Buquê 12 Rosas Vermelhas</div>
-                            <div class="produto-preco">R$ 149,90</div>
-                            <div class="parcelamento">3x de R$ 49,96 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1602621749836-e63084931f6d?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Orquídeas</span>
-                            <div class="produto-nome">Phalaenopsis Branca Premium</div>
-                            <div class="produto-preco">R$ 119,90</div>
-                            <div class="parcelamento">2x de R$ 59,95 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Girassóis</span>
-                            <div class="produto-nome">Arranjo Luz do Sol</div>
-                            <div class="produto-preco">R$ 89,90</div>
-                            <div class="parcelamento">2x de R$ 44,95 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1563241527-3004b7be0fee?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Flores do Campo</span>
-                            <div class="produto-nome">Cesta Primavera Colorida</div>
-                            <div class="produto-preco">R$ 95,00</div>
-                            <div class="parcelamento">2x de R$ 47,50 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <div class="tag-promo">Presente Ideal</div>
-                    <img src="https://images.unsplash.com/photo-1605282939169-45952f9c9b58?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Cestas</span>
-                            <div class="produto-nome">Cesta de Café "Bom Dia"</div>
-                            <div class="produto-preco">R$ 189,90</div>
-                            <div class="parcelamento">3x de R$ 63,30 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1596627793389-9b9355745499?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Flores de Corte</span>
-                            <div class="produto-nome">Buquê de Astromélias</div>
-                            <div class="produto-preco">R$ 69,90</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1593487568720-92097fb460dc?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Plantas</span>
-                            <div class="produto-nome">Vaso Lírio da Paz (G)</div>
-                            <div class="produto-preco">R$ 55,00</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1549416878-b9ca95e99667?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Luxo</span>
-                            <div class="produto-nome">Box Rosas + Chocolates</div>
-                            <div class="produto-preco">R$ 229,00</div>
-                            <div class="parcelamento">4x de R$ 57,25 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Rosas</span>
-                            <div class="produto-nome">Buquê Rosas Brancas</div>
-                            <div class="produto-preco">R$ 149,90</div>
-                            <div class="parcelamento">3x de R$ 49,96 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1509420316987-d27b029818ae?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Plantas</span>
-                            <div class="produto-nome">Kalanchoe (Flor da Fortuna)</div>
-                            <div class="produto-preco">R$ 29,90</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://plus.unsplash.com/premium_photo-1675716443562-b771d72a3da7?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Presentes</span>
-                            <div class="produto-nome">Kit Urso Pelúcia + Flor</div>
-                            <div class="produto-preco">R$ 89,90</div>
-                            <div class="parcelamento">2x de R$ 44,95 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Decoração</span>
-                            <div class="produto-nome">Terrário de Suculentas</div>
-                            <div class="produto-preco">R$ 79,90</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1520638023360-6def43369781?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Flores</span>
-                            <div class="produto-nome">Buquê Gérberas "Alegria"</div>
-                            <div class="produto-preco">R$ 85,00</div>
-                            <div class="parcelamento">2x de R$ 42,50 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1628198904576-904d49a56260?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Plantas</span>
-                            <div class="produto-nome">Vaso de Antúrio Vermelho</div>
-                            <div class="produto-preco">R$ 45,90</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1587411768638-ec71bdd29f9c?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Eternas</span>
-                            <div class="produto-nome">Rosa Encantada na Cúpula</div>
-                            <div class="produto-preco">R$ 199,90</div>
-                            <div class="parcelamento">3x de R$ 66,63 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Kits</span>
-                            <div class="produto-nome">Kit Vinho & Chocolates</div>
-                            <div class="produto-preco">R$ 250,00</div>
-                            <div class="parcelamento">4x de R$ 62,50 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1463941103031-1f9ba470c173?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Sofisticado</span>
-                            <div class="produto-nome">Maço de Lisianthus Roxo</div>
-                            <div class="produto-preco">R$ 98,00</div>
-                            <div class="parcelamento">2x de R$ 49,00 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1582299865611-37332247c4b1?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Plantas</span>
-                            <div class="produto-nome">Begônia Maculata (Vaso)</div>
-                            <div class="produto-preco">R$ 65,00</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1518118014377-694774652433?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Decoração</span>
-                            <div class="produto-nome">Arranjo Flores Secas Boho</div>
-                            <div class="produto-preco">R$ 110,00</div>
-                            <div class="parcelamento">2x de R$ 55,00 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1599598425947-520268508e7a?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Especiais</span>
-                            <div class="produto-nome">Bonsai Ficus 5 Anos</div>
-                            <div class="produto-preco">R$ 139,90</div>
-                            <div class="parcelamento">3x de R$ 46,63 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                 <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1520763185298-1b434c919102?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Sazonal</span>
-                            <div class="produto-nome">Vaso de Tulipas Vermelhas</div>
-                            <div class="produto-preco">R$ 59,90</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1614710892795-0373df1542f7?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Plantas</span>
-                            <div class="produto-nome">Vaso de Ciclamen</div>
-                            <div class="produto-preco">R$ 35,00</div>
-                            <div class="parcelamento">À vista</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="produto-card">
-                    <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500" class="produto-img">
-                    <div class="produto-info">
-                        <div>
-                            <span class="produto-cat">Especiais</span>
-                            <div class="produto-nome">Arranjo Misto "Gratidão"</div>
-                            <div class="produto-preco">R$ 130,00</div>
-                            <div class="parcelamento">3x de R$ 43,33 sem juros</div>
-                        </div>
-                        <div class="acoes-produto">
-                            <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Whats</a>
-                            
-                            <a href="COLOQUE_O_LINK_DO_MP_AQUI" class="btn-base btn-mp" target="_blank"><i class="fa-solid fa-credit-card"></i> Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div> </div>
     </section>
 
-    <footer>
-        <div class="container footer-content">
-            <div>
-                <h4>BellaFlor Artur Nogueira</h4>
-                <p>CNPJ: 00.000.000/0001-00</p>
-                <p>Rua das Flores, 123 - Artur Nogueira / SP</p>
+    <div class="container">
+        
+        <h3 class="section-title">Nossas Categorias</h3>
+        <div class="categorias-scroll" id="container-categorias">
+            <div class="cat-item">
+                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1559563362-c667ba5f5480?w=200"></div>
+                <div class="cat-name">Rosas</div>
             </div>
-            <div>
-                <h4>Contato</h4>
-                <p>(19) 99999-9999</p>
-                <p>contato@bellaflor.com.br</p>
+            <div class="cat-item">
+                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1566634579296-180df1441855?w=200"></div>
+                <div class="cat-name">Orquídeas</div>
             </div>
-            <div>
-                <h4>Siga-nos</h4>
-                <div style="font-size: 20px; display: flex; gap: 15px;">
-                    <i class="fa-brands fa-instagram"></i>
-                    <i class="fa-brands fa-facebook"></i>
-                </div>
+            <div class="cat-item">
+                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=200"></div>
+                <div class="cat-name">Girassóis</div>
+            </div>
+            <div class="cat-item">
+                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=200"></div>
+                <div class="cat-name">Cestas</div>
+            </div>
+            <div class="cat-item">
+                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200"></div>
+                <div class="cat-name">Suculentas</div>
             </div>
         </div>
-        </footer>
 
-    <!-- ⬇️ SCRIPT CONTROLADO PELO config.json ⬇️ -->
-    <script>
-    (async () => {
-      try {
-        const res = await fetch('./config.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Erro ao carregar config.json');
-        const cfg = await res.json();
-        console.log('CONFIG OK', cfg);
-
-        /* ================= SITE / SEO ================= */
-        document.title = cfg.site.titulo;
-        document.querySelector('meta[name="description"]').content = cfg.site.descricao;
-        document.querySelector('link[rel="canonical"]').href = cfg.site.url_canonica;
-        document.querySelector('link[rel="icon"]').href = cfg.site.favicon;
-
-        /* ================= TEMA ================= */
-        const root = document.documentElement;
-        root.style.setProperty('--cor-primaria', cfg.tema.cor_primaria);
-        root.style.setProperty('--cor-secundaria', cfg.tema.cor_secundaria);
-        root.style.setProperty('--cor-fundo', cfg.tema.cor_fundo);
-        root.style.setProperty('--cor-branca', cfg.tema.cor_branca);
-
-        /* ================= HERO ================= */
-        document.getElementById('heroBanner').style.backgroundImage =
-          `url('${cfg.hero_banner.imagem_fundo}')`;
-        document.getElementById('heroTitulo').innerText = cfg.hero_banner.titulo;
-        document.getElementById('heroSubtitulo').innerText = cfg.hero_banner.subtitulo;
-
-        const heroBtn = document.getElementById('heroBotao');
-        heroBtn.innerText = cfg.hero_banner.botao_texto;
-        heroBtn.href = cfg.hero_banner.botao_link;
-
-        /* ================= CATEGORIAS ================= */
-        const catBox = document.getElementById('categoriasContainer');
-        cfg.secao_categorias.itens.forEach(cat => {
-          catBox.innerHTML += `
-            <div class="cat-circle">
-              <img src="${cat.imagem}" class="cat-img">
-              <div class="cat-name">${cat.nome}</div>
-            </div>
-          `;
-        });
-
-        /* ================= PRODUTOS ================= */
-        document.getElementById('produtosTitulo').innerText = cfg.secao_produtos.titulo;
-        const prodBox = document.getElementById('produtosContainer');
-
-        cfg.secao_produtos.itens.forEach(p => {
-          prodBox.innerHTML += `
+        <h3 class="section-title" id="produtos">Destaques da Semana</h3>
+        <div class="produtos-grid" id="container-produtos">
+            
             <div class="produto-card">
-              ${p.tag_promocao ? `<div class="tag-promo">${p.tag_promocao}</div>` : ''}
-              <img src="${p.imagem}" class="produto-img">
-              <div class="produto-info">
-                <div>
-                  <span class="produto-cat">${p.categoria}</span>
-                  <div class="produto-nome">${p.nome}</div>
-                  <div class="produto-preco">${p.preco}</div>
-                  <div class="parcelamento">${p.parcelamento}</div>
+                <div class="tag-promo">Mais Vendido</div>
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1582794543139-8ac92a9abf30?w=500" class="produto-img">
                 </div>
-                <div class="acoes-produto">
-                  <a href="https://wa.me/${cfg.contato.whatsapp_numero_puro}" target="_blank"
-                     class="btn-base btn-whatsapp">
-                     <i class="fa-brands fa-whatsapp"></i> Whats
-                  </a>
-                  <a href="${p.link_pagamento}" target="_blank"
-                     class="btn-base btn-mp">
-                     <i class="fa-solid fa-credit-card"></i> Comprar
-                  </a>
+                <div class="produto-info">
+                    <span class="produto-cat">Romance</span>
+                    <div class="produto-nome">Buquê 12 Rosas Vermelhas Importadas</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 149,90</div>
+                        <div class="parcelamento">3x de R$ 49,96 sem juros</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="https://wa.me/5519999999999?text=Olá, quero o Buquê de Rosas!" target="_blank" class="btn-base btn-whatsapp">
+                            <i class="fa-brands fa-whatsapp"></i> <span>Whats</span>
+                        </a>
+                        <a href="#" class="btn-base btn-mp">
+                            <i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span>
+                        </a>
+                    </div>
                 </div>
-              </div>
             </div>
-          `;
-        });
 
-        /* ================= RODAPÉ ================= */
-        document.getElementById('footerTitulo').innerText = cfg.rodape.titulo_sobre;
-        document.getElementById('footerTexto').innerText = cfg.rodape.texto_sobre;
-        document.getElementById('footerTelefone').innerText = cfg.contato.whatsapp_display;
-        document.getElementById('footerCidade').innerText = cfg.contato.cidade_estado;
+            <div class="produto-card">
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1602621749836-e63084931f6d?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Orquídeas</span>
+                    <div class="produto-nome">Phalaenopsis Branca Premium (Pote 15)</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 119,90</div>
+                        <div class="parcelamento">2x de R$ 59,95 sem juros</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
 
-      } catch (e) {
-        console.error('ERRO CONFIG:', e);
-      }
-    })();
+            <div class="produto-card">
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Girassóis</span>
+                    <div class="produto-nome">Arranjo Luz do Sol no Vaso</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 89,90</div>
+                        <div class="parcelamento">2x de R$ 44,95 sem juros</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1549416878-b9ca95e99667?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Luxo</span>
+                    <div class="produto-nome">Box Rosas + Ferrero Rocher</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 229,00</div>
+                        <div class="parcelamento">4x de R$ 57,25 sem juros</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="produto-card">
+                <div class="tag-promo">Oferta</div>
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1593487568720-92097fb460dc?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Plantas</span>
+                    <div class="produto-nome">Lírio da Paz (Purifica o Ar)</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 55,00</div>
+                        <div class="parcelamento">À vista</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1587411768638-ec71bdd29f9c?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Eternas</span>
+                    <div class="produto-nome">A Bela e a Fera (Rosa na Cúpula)</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 199,90</div>
+                        <div class="parcelamento">3x de R$ 66,63 sem juros</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Decoração</span>
+                    <div class="produto-nome">Terrário de Suculentas Vidro</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 79,90</div>
+                        <div class="parcelamento">À vista</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
+
+             <div class="produto-card">
+                <div class="produto-img-container">
+                    <img src="https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=500" class="produto-img">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-cat">Kits</span>
+                    <div class="produto-nome">Kit Vinho Premium + Flores</div>
+                    <div class="produto-preco-box">
+                        <div class="produto-preco">R$ 250,00</div>
+                        <div class="parcelamento">4x de R$ 62,50 sem juros</div>
+                    </div>
+                    <div class="acoes-produto">
+                        <a href="#" class="btn-base btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> <span>Whats</span></a>
+                        <a href="#" class="btn-base btn-mp"><i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span></a>
+                    </div>
+                </div>
+            </div>
+
+        </div> </div> <a href="https://wa.me/5519999999999" class="float-wa" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Sobre a BellaFlor</h4>
+                <p>Desde 2010 entregando sentimentos em forma de flores em Artur Nogueira e região.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Links Úteis</h4>
+                <ul>
+                    <li><a href="#">Minha Conta</a></li>
+                    <li><a href="#">Rastrear Pedido</a></li>
+                    <li><a href="#">Política de Entrega</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Atendimento</h4>
+                <ul>
+                    <li>(19) 3877-0000</li>
+                    <li>contato@bellaflor.com.br</li>
+                    <li>Rua das Flores, 123 - Centro</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2024 BellaFlor Artur Nogueira. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script>
+        // No futuro, aqui entra o código que lê o config.json e preenche
+        // os IDs 'container-produtos' e 'container-categorias' automaticamente.
+        console.log("Sistema pronto para receber config.json");
     </script>
-    <!-- ⬆️ FIM SCRIPT ⬆️ -->
-
 </body>
 </html>
