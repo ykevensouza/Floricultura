@@ -1,13 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="BellaFlor Artur Nogueira - As mais belas flores e presentes.">
-    <title>BellaFlor Artur Nogueira | A Floricultura do Brasil</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BellaFlor Artur Nogueira - Entregamos arranjos, rosas, orquídeas e cestas de café da manhã com amor e agilidade.">
+    <meta name="theme-color" content="#FF0063">
+    <title>BellaFlor Artur Nogueira | Floricultura Online</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.bellaflor.com.br/">
+    <meta property="og:title" content="BellaFlor Artur Nogueira | A Floricultura do Brasil">
+    <meta property="og:description" content="Flores frescas, cestas e presentes exclusivos. Compre online e receba em casa.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1200">
+
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=2070&auto=format&fit=crop">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" media="print" onload="this.media='all'">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Florist",
+      "name": "BellaFlor Artur Nogueira",
+      "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946",
+      "telephone": "551938770000",
+      "email": "contato@bellaflor.com.br",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rua das Flores, 123",
+        "addressLocality": "Artur Nogueira",
+        "addressRegion": "SP",
+        "postalCode": "13160-000",
+        "addressCountry": "BR"
+      },
+      "priceRange": "$$"
+    }
+    </script>
 
     <style>
         /* --- CONFIGURAÇÕES GERAIS --- */
@@ -25,6 +56,8 @@
 
         * { box-sizing: border-box; }
 
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -36,6 +69,20 @@
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; padding: 0; margin: 0; }
+        img { max-width: 100%; display: block; }
+        button { font-family: inherit; }
+
+        /* Acessibilidade: Hidden visualmente mas disponível para leitores de tela */
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+        }
+
+        /* Foco acessível para navegação via teclado */
+        :focus-visible {
+            outline: 3px solid var(--cor-primaria);
+            outline-offset: 2px;
+        }
 
         /* --- CABEÇALHO --- */
         header { 
@@ -58,21 +105,28 @@
         .logo h1 { font-size: 22px; color: var(--cor-primaria); margin: 0; line-height: 1; }
         .logo span { font-size: 12px; color: #777; font-weight: 400; display: block; margin-top: 2px;}
 
-        /* Barra de Busca */
+        /* Barra de Busca Otimizada */
         .search-bar { flex: 1; margin: 0 40px; display: flex; max-width: 500px; position: relative; }
         .search-bar input { 
             width: 100%; padding: 12px 20px; border: 2px solid var(--cor-borda); 
             border-radius: 50px; outline: none; font-family: inherit; transition: 0.3s;
+            font-size: 16px; /* Evita zoom no iOS */
         }
         .search-bar input:focus { border-color: var(--cor-primaria); }
         .search-bar button { 
             position: absolute; right: 5px; top: 5px; bottom: 5px;
             width: 40px; background: var(--cor-primaria); color: white; border: none; 
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s;
         }
+        .search-bar button:hover { background: var(--cor-primaria-hover); }
 
         .user-actions { display: flex; gap: 20px; font-size: 18px; color: #555; }
-        .user-actions i:hover { color: var(--cor-primaria); transform: scale(1.1); transition: 0.2s; cursor: pointer;}
+        .user-actions button { 
+            background: none; border: none; cursor: pointer; font-size: 18px; color: #555; padding: 5px;
+            transition: 0.2s;
+        }
+        .user-actions button:hover { color: var(--cor-primaria); transform: scale(1.1); }
 
         /* --- HERO BANNER --- */
         .hero-banner {
@@ -91,7 +145,7 @@
         .btn-cta { 
             background: var(--cor-primaria); color: white; padding: 15px 40px; 
             border-radius: 50px; font-weight: 600; font-size: 16px; 
-            box-shadow: 0 4px 15px rgba(255, 0, 99, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 0, 99, 0.4); display: inline-block;
         }
         .btn-cta:hover { background: white; color: var(--cor-primaria); transform: translateY(-3px); }
 
@@ -108,12 +162,21 @@
             background: var(--cor-primaria); margin: 15px auto 0; border-radius: 2px; 
         }
 
-        /* --- CATEGORIAS --- */
+        /* --- CATEGORIAS (UX Melhorada) --- */
         .categorias-scroll { 
             display: flex; gap: 20px; overflow-x: auto; 
-            padding-bottom: 20px; justify-content: center; flex-wrap: wrap; 
+            padding-bottom: 20px; justify-content: center; flex-wrap: wrap;
+            /* Scroll snap para mobile */
+            scroll-snap-type: x mandatory;
         }
-        .cat-item { text-align: center; cursor: pointer; transition: 0.3s;}
+        
+        /* Transformando em botão para semântica correta */
+        .cat-item { 
+            text-align: center; cursor: pointer; transition: 0.3s; 
+            background: none; border: none; padding: 0; margin: 0;
+            font-family: inherit;
+        }
+        
         /* Classe ativa para categoria selecionada */
         .cat-item.active .cat-img-wrapper { border-color: var(--cor-primaria); box-shadow: 0 0 15px rgba(255, 0, 99, 0.3); transform: scale(1.05); }
         .cat-item.active .cat-name { color: var(--cor-primaria); font-weight: 700; }
@@ -128,7 +191,6 @@
         .cat-item img { width: 100%; height: 100%; object-fit: cover; }
         .cat-name { font-weight: 600; font-size: 14px; color: #555; }
         
-        /* Icone para categoria "Todos" */
         .cat-icon-all { font-size: 30px; color: #777; }
 
         /* --- GRID DE PRODUTOS --- */
@@ -136,7 +198,8 @@
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
             gap: 30px; 
-            min-height: 400px; /* Evita pulo de layout se filtrar e não achar */
+            min-height: 400px; 
+            content-visibility: auto; /* Performance de renderização */
         }
 
         .produto-card { 
@@ -154,8 +217,10 @@
         }
         .tag-off { background: var(--cor-primaria); }
 
-        .produto-img-container { width: 100%; height: 250px; overflow: hidden; position: relative; background: #f9f9f9; }
-        .produto-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .produto-img-container { 
+            width: 100%; height: 250px; overflow: hidden; position: relative; background: #f9f9f9; 
+        }
+        .produto-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; will-change: transform; }
         .produto-card:hover .produto-img { transform: scale(1.1); }
 
         .produto-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
@@ -171,6 +236,7 @@
         .btn-base { 
             flex: 1; padding: 10px; border-radius: 8px; font-weight: 600; 
             font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; border: none;
+            text-align: center;
         }
         
         .btn-whatsapp { background: white; color: var(--cor-whats); border: 1px solid var(--cor-whats); }
@@ -179,7 +245,6 @@
         .btn-mp { background: var(--cor-mp); color: white; }
         .btn-mp:hover { background: #008ac7; box-shadow: 0 4px 10px rgba(0, 158, 227, 0.3); }
 
-        /* Mensagem de erro */
         .sem-produtos { grid-column: 1 / -1; text-align: center; padding: 50px; color: #777; font-size: 18px; }
 
         /* --- FOOTER --- */
@@ -196,8 +261,15 @@
             background-color: var(--cor-whats); color: #FFF; border-radius: 50px;
             text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999;
             z-index: 1000; display: flex; align-items: center; justify-content: center;
+            transition: transform 0.3s;
         }
         .float-wa:hover { background-color: #1ebc57; transform: scale(1.1); }
+        .float-wa:focus-visible { outline-color: #fff; }
+
+        /* --- REDUCED MOTION --- */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
 
         /* --- RESPONSIVIDADE --- */
         @media (max-width: 768px) {
@@ -205,13 +277,16 @@
             .search-bar { width: 100%; margin: 10px 0; }
             .hero-content h2 { font-size: 32px; }
             .hero-banner { height: 300px; }
-            .categorias-scroll { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
+            /* Ajuste de scroll para mobile */
+            .categorias-scroll { justify-content: flex-start; padding-left: 20px; padding-right: 20px; flex-wrap: nowrap; }
+            .cat-item { flex: 0 0 auto; }
+            
             .produtos-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 10px; }
             .produto-img-container { height: 160px; }
             .produto-nome { font-size: 14px; }
             .produto-preco { font-size: 18px; }
             .btn-base { font-size: 0; padding: 8px; }
-            .btn-base i { font-size: 18px; }
+            .btn-base i { font-size: 18px; margin: 0; }
         }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -223,8 +298,8 @@
     <header>
         <div class="topo-container">
             <div class="logo">
-                <a href="#">
-                    <i class="fa-solid fa-seedling fa-2x" style="color: var(--cor-primaria);"></i>
+                <a href="#" aria-label="BellaFlor Home">
+                    <i class="fa-solid fa-seedling fa-2x" style="color: var(--cor-primaria);" aria-hidden="true"></i>
                     <div>
                         <h1>BellaFlor</h1>
                         <span>Artur Nogueira</span>
@@ -232,69 +307,78 @@
                 </a>
             </div>
 
-            <div class="search-bar">
-                <input type="text" id="campo-busca" placeholder="Qual flor você procura hoje?">
-                <button onclick="filtrarPorBusca()"><i class="fas fa-search"></i></button>
+            <div class="search-bar" role="search">
+                <label for="campo-busca" class="sr-only">Buscar flores</label>
+                <input type="search" id="campo-busca" placeholder="Qual flor você procura hoje?">
+                <button onclick="filtrarPorBusca()" aria-label="Pesquisar">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
             </div>
 
             <div class="user-actions">
-                <i class="fa-regular fa-user" title="Minha Conta"></i>
-                <i class="fa-solid fa-cart-shopping" title="Carrinho"></i>
+                <button aria-label="Minha Conta"><i class="fa-regular fa-user"></i></button>
+                <button aria-label="Carrinho de Compras"><i class="fa-solid fa-cart-shopping"></i></button>
             </div>
         </div>
     </header>
 
-    <section class="hero-banner">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h2>Flores que emocionam</h2>
-            <p>Os arranjos mais apaixonantes de Artur Nogueira com entrega expressa.</p>
-            <a href="#produtos" class="btn-cta">Ver Ofertas</a>
+    <main>
+        <section class="hero-banner" aria-label="Banner Promocional">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h2>Flores que emocionam</h2>
+                <p>Os arranjos mais apaixonantes de Artur Nogueira com entrega expressa.</p>
+                <a href="#produtos" class="btn-cta">Ver Ofertas</a>
+            </div>
+        </section>
+
+        <div class="container">
+            
+            <section aria-labelledby="titulo-categorias">
+                <h3 id="titulo-categorias" class="section-title">Nossas Categorias</h3>
+                <nav class="categorias-scroll" id="container-categorias" aria-label="Categorias de produtos">
+                    <button class="cat-item active" onclick="filtrarCategoria('todos', this)" aria-label="Ver todos os produtos">
+                        <div class="cat-img-wrapper"><i class="fa-solid fa-border-all cat-icon-all"></i></div>
+                        <div class="cat-name">Todos</div>
+                    </button>
+                    <button class="cat-item" onclick="filtrarCategoria('rosas', this)" aria-label="Filtrar por Rosas">
+                        <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1559563362-c667ba5f5480?w=200&h=200&fit=crop" alt="Rosas" width="100" height="100" loading="lazy"></div>
+                        <div class="cat-name">Rosas</div>
+                    </button>
+                    <button class="cat-item" onclick="filtrarCategoria('orquideas', this)" aria-label="Filtrar por Orquídeas">
+                        <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1566634579296-180df1441855?w=200&h=200&fit=crop" alt="Orquídeas" width="100" height="100" loading="lazy"></div>
+                        <div class="cat-name">Orquídeas</div>
+                    </button>
+                    <button class="cat-item" onclick="filtrarCategoria('girassois', this)" aria-label="Filtrar por Girassóis">
+                        <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=200&h=200&fit=crop" alt="Girassóis" width="100" height="100" loading="lazy"></div>
+                        <div class="cat-name">Girassóis</div>
+                    </button>
+                    <button class="cat-item" onclick="filtrarCategoria('cestas', this)" aria-label="Filtrar por Cestas">
+                        <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=200&h=200&fit=crop" alt="Cestas" width="100" height="100" loading="lazy"></div>
+                        <div class="cat-name">Cestas</div>
+                    </button>
+                    <button class="cat-item" onclick="filtrarCategoria('plantas', this)" aria-label="Filtrar por Plantas">
+                        <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&h=200&fit=crop" alt="Plantas" width="100" height="100" loading="lazy"></div>
+                        <div class="cat-name">Plantas</div>
+                    </button>
+                    <button class="cat-item" onclick="filtrarCategoria('kits', this)" aria-label="Filtrar por Kits">
+                        <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=200&h=200&fit=crop" alt="Kits" width="100" height="100" loading="lazy"></div>
+                        <div class="cat-name">Kits</div>
+                    </button>
+                </nav>
+            </section>
+
+            <section aria-labelledby="titulo-produtos">
+                <h3 id="titulo-produtos" class="section-title">Nossos Produtos</h3>
+                <div class="produtos-grid" id="container-produtos" aria-live="polite">
+                    </div>
+            </section>
+
         </div>
-    </section>
+    </main>
 
-    <div class="container">
-        
-        <h3 class="section-title">Nossas Categorias</h3>
-        <div class="categorias-scroll" id="container-categorias">
-            <div class="cat-item active" onclick="filtrarCategoria('todos', this)">
-                <div class="cat-img-wrapper"><i class="fa-solid fa-border-all cat-icon-all"></i></div>
-                <div class="cat-name">Todos</div>
-            </div>
-            <div class="cat-item" onclick="filtrarCategoria('rosas', this)">
-                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1559563362-c667ba5f5480?w=200"></div>
-                <div class="cat-name">Rosas</div>
-            </div>
-            <div class="cat-item" onclick="filtrarCategoria('orquideas', this)">
-                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1566634579296-180df1441855?w=200"></div>
-                <div class="cat-name">Orquídeas</div>
-            </div>
-            <div class="cat-item" onclick="filtrarCategoria('girassois', this)">
-                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=200"></div>
-                <div class="cat-name">Girassóis</div>
-            </div>
-            <div class="cat-item" onclick="filtrarCategoria('cestas', this)">
-                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=200"></div>
-                <div class="cat-name">Cestas</div>
-            </div>
-            <div class="cat-item" onclick="filtrarCategoria('plantas', this)">
-                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200"></div>
-                <div class="cat-name">Plantas</div>
-            </div>
-             <div class="cat-item" onclick="filtrarCategoria('kits', this)">
-                <div class="cat-img-wrapper"><img src="https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=200"></div>
-                <div class="cat-name">Kits & Presentes</div>
-            </div>
-        </div>
-
-        <h3 class="section-title" id="produtos">Nossos Produtos</h3>
-        <div class="produtos-grid" id="container-produtos">
-            </div>
-
-    </div>
-
-    <a href="https://wa.me/5519999999999" class="float-wa" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
+    <a href="https://wa.me/5519999999999" class="float-wa" target="_blank" aria-label="Falar no WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
     </a>
 
     <footer>
@@ -305,19 +389,23 @@
             </div>
             <div class="footer-col">
                 <h4>Links Úteis</h4>
-                <ul>
-                    <li><a href="#">Minha Conta</a></li>
-                    <li><a href="#">Rastrear Pedido</a></li>
-                    <li><a href="#">Política de Entrega</a></li>
-                </ul>
+                <nav>
+                    <ul>
+                        <li><a href="#">Minha Conta</a></li>
+                        <li><a href="#">Rastrear Pedido</a></li>
+                        <li><a href="#">Política de Entrega</a></li>
+                    </ul>
+                </nav>
             </div>
             <div class="footer-col">
                 <h4>Atendimento</h4>
-                <ul>
-                    <li>(19) 3877-0000</li>
-                    <li>contato@bellaflor.com.br</li>
-                    <li>Rua das Flores, 123 - Centro</li>
-                </ul>
+                <address style="font-style: normal;">
+                    <ul>
+                        <li>(19) 3877-0000</li>
+                        <li>contato@bellaflor.com.br</li>
+                        <li>Rua das Flores, 123 - Centro</li>
+                    </ul>
+                </address>
             </div>
         </div>
         <div class="copyright">
@@ -326,129 +414,130 @@
     </footer>
 
     <script>
-        // --- BASE DE DADOS DE PRODUTOS (SIMULAÇÃO DE JSON) ---
+        // --- BASE DE DADOS OTIMIZADA ---
         const produtos = [
-            // ROSAS
-            { id: 1, nome: "Buquê 12 Rosas Vermelhas", cat: "rosas", preco: 149.90, img: "https://images.unsplash.com/photo-1582794543139-8ac92a9abf30?w=500", tag: "Mais Vendido" },
-            { id: 2, nome: "Buquê 24 Rosas Brancas", cat: "rosas", preco: 219.90, img: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=500", tag: null },
-            { id: 3, nome: "Box Luxo Rosas Colombianas", cat: "rosas", preco: 289.00, img: "https://images.unsplash.com/photo-1549416878-b9ca95e99667?w=500", tag: "Premium" },
-            { id: 4, nome: "Ramalhete 6 Rosas Champanhe", cat: "rosas", preco: 89.90, img: "https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=500", tag: null },
-            { id: 5, nome: "A Bela e a Fera (Na Cúpula)", cat: "rosas", preco: 199.90, img: "https://images.unsplash.com/photo-1587411768638-ec71bdd29f9c?w=500", tag: "Eterna" },
-
-            // ORQUÍDEAS
-            { id: 6, nome: "Phalaenopsis Branca Premium", cat: "orquideas", preco: 119.90, img: "https://images.unsplash.com/photo-1602621749836-e63084931f6d?w=500", tag: null },
-            { id: 7, nome: "Orquídea Azul Rara", cat: "orquideas", preco: 159.90, img: "https://images.unsplash.com/photo-1566634579296-180df1441855?w=500", tag: "Exclusivo" },
-            { id: 8, nome: "Mini Orquídea Lilás", cat: "orquideas", preco: 69.90, img: "https://images.unsplash.com/photo-1598528654276-d446eb908d16?w=500", tag: null },
-            { id: 9, nome: "Arranjo Orquídea Cascata", cat: "orquideas", preco: 249.00, img: "https://images.unsplash.com/photo-1534885320675-b08aa11a3d7b?w=500", tag: null },
-
-            // GIRASSÓIS
-            { id: 10, nome: "Arranjo Luz do Sol no Vaso", cat: "girassois", preco: 89.90, img: "https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=500", tag: "Oferta" },
-            { id: 11, nome: "Buquê Girassol + Astromélias", cat: "girassois", preco: 129.90, img: "https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=500", tag: null },
-            { id: 12, nome: "Girassol Unitário Decorado", cat: "girassois", preco: 35.00, img: "https://images.unsplash.com/photo-1508215885820-4585e56135c8?w=500", tag: null },
-
-            // CESTAS
-            { id: 13, nome: "Cesta Café da Manhã Clássica", cat: "cestas", preco: 189.90, img: "https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=500", tag: "Sucesso" },
-            { id: 14, nome: "Cesta Chocolates e Pelúcia", cat: "cestas", preco: 159.00, img: "https://images.unsplash.com/photo-1542384557-0e2b322303c5?w=500", tag: null },
-            { id: 15, nome: "Cesta de Queijos e Vinhos", cat: "cestas", preco: 299.00, img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500", tag: "Presentão" },
-
-            // PLANTAS E SUCULENTAS
-            { id: 16, nome: "Terrário de Suculentas Vidro", cat: "plantas", preco: 79.90, img: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=500", tag: null },
-            { id: 17, nome: "Lírio da Paz (Purifica o Ar)", cat: "plantas", preco: 55.00, img: "https://images.unsplash.com/photo-1593487568720-92097fb460dc?w=500", tag: "Promo" },
-            { id: 18, nome: "Zamioculca Pote G", cat: "plantas", preco: 95.00, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=500", tag: null },
-            { id: 19, nome: "Bonsai Ficus 5 Anos", cat: "plantas", preco: 180.00, img: "https://images.unsplash.com/photo-1599598425947-d35eb7fca792?w=500", tag: null },
-            { id: 20, nome: "Begônia Maculata", cat: "plantas", preco: 65.00, img: "https://images.unsplash.com/photo-1610488057209-1f4861118b62?w=500", tag: "Tendência" },
-
-            // KITS
-            { id: 21, nome: "Kit Vinho Premium + Flores", cat: "kits", preco: 250.00, img: "https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=500", tag: null },
-            { id: 22, nome: "Urso Gigante + Buquê P", cat: "kits", preco: 199.90, img: "https://images.unsplash.com/photo-1559415096-7b02925a5879?w=500", tag: null },
-            { id: 23, nome: "Kit Spa (Vela + Sabonetes)", cat: "kits", preco: 120.00, img: "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?w=500", tag: null },
-            { id: 24, nome: "Trio de Vasos Decorativos", cat: "kits", preco: 110.00, img: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=500", tag: null }
+            { id: 1, nome: "Buquê 12 Rosas Vermelhas", cat: "rosas", preco: 149.90, img: "https://images.unsplash.com/photo-1582794543139-8ac92a9abf30?w=500&h=500&fit=crop", tag: "Mais Vendido" },
+            { id: 2, nome: "Buquê 24 Rosas Brancas", cat: "rosas", preco: 219.90, img: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=500&h=500&fit=crop", tag: null },
+            { id: 3, nome: "Box Luxo Rosas Colombianas", cat: "rosas", preco: 289.00, img: "https://images.unsplash.com/photo-1549416878-b9ca95e99667?w=500&h=500&fit=crop", tag: "Premium" },
+            { id: 4, nome: "Ramalhete 6 Rosas Champanhe", cat: "rosas", preco: 89.90, img: "https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=500&h=500&fit=crop", tag: null },
+            { id: 5, nome: "A Bela e a Fera (Na Cúpula)", cat: "rosas", preco: 199.90, img: "https://images.unsplash.com/photo-1587411768638-ec71bdd29f9c?w=500&h=500&fit=crop", tag: "Eterna" },
+            { id: 6, nome: "Phalaenopsis Branca Premium", cat: "orquideas", preco: 119.90, img: "https://images.unsplash.com/photo-1602621749836-e63084931f6d?w=500&h=500&fit=crop", tag: null },
+            { id: 7, nome: "Orquídea Azul Rara", cat: "orquideas", preco: 159.90, img: "https://images.unsplash.com/photo-1566634579296-180df1441855?w=500&h=500&fit=crop", tag: "Exclusivo" },
+            { id: 8, nome: "Mini Orquídea Lilás", cat: "orquideas", preco: 69.90, img: "https://images.unsplash.com/photo-1598528654276-d446eb908d16?w=500&h=500&fit=crop", tag: null },
+            { id: 9, nome: "Arranjo Orquídea Cascata", cat: "orquideas", preco: 249.00, img: "https://images.unsplash.com/photo-1534885320675-b08aa11a3d7b?w=500&h=500&fit=crop", tag: null },
+            { id: 10, nome: "Arranjo Luz do Sol no Vaso", cat: "girassois", preco: 89.90, img: "https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=500&h=500&fit=crop", tag: "Oferta" },
+            { id: 11, nome: "Buquê Girassol + Astromélias", cat: "girassois", preco: 129.90, img: "https://images.unsplash.com/photo-1599733589046-9b8308b5b50d?w=500&h=500&fit=crop", tag: null },
+            { id: 12, nome: "Girassol Unitário Decorado", cat: "girassois", preco: 35.00, img: "https://images.unsplash.com/photo-1508215885820-4585e56135c8?w=500&h=500&fit=crop", tag: null },
+            { id: 13, nome: "Cesta Café da Manhã Clássica", cat: "cestas", preco: 189.90, img: "https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=500&h=500&fit=crop", tag: "Sucesso" },
+            { id: 14, nome: "Cesta Chocolates e Pelúcia", cat: "cestas", preco: 159.00, img: "https://images.unsplash.com/photo-1542384557-0e2b322303c5?w=500&h=500&fit=crop", tag: null },
+            { id: 15, nome: "Cesta de Queijos e Vinhos", cat: "cestas", preco: 299.00, img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&h=500&fit=crop", tag: "Presentão" },
+            { id: 16, nome: "Terrário de Suculentas Vidro", cat: "plantas", preco: 79.90, img: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=500&h=500&fit=crop", tag: null },
+            { id: 17, nome: "Lírio da Paz (Purifica o Ar)", cat: "plantas", preco: 55.00, img: "https://images.unsplash.com/photo-1593487568720-92097fb460dc?w=500&h=500&fit=crop", tag: "Promo" },
+            { id: 18, nome: "Zamioculca Pote G", cat: "plantas", preco: 95.00, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=500&h=500&fit=crop", tag: null },
+            { id: 19, nome: "Bonsai Ficus 5 Anos", cat: "plantas", preco: 180.00, img: "https://images.unsplash.com/photo-1599598425947-d35eb7fca792?w=500&h=500&fit=crop", tag: null },
+            { id: 20, nome: "Begônia Maculata", cat: "plantas", preco: 65.00, img: "https://images.unsplash.com/photo-1610488057209-1f4861118b62?w=500&h=500&fit=crop", tag: "Tendência" },
+            { id: 21, nome: "Kit Vinho Premium + Flores", cat: "kits", preco: 250.00, img: "https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?w=500&h=500&fit=crop", tag: null },
+            { id: 22, nome: "Urso Gigante + Buquê P", cat: "kits", preco: 199.90, img: "https://images.unsplash.com/photo-1559415096-7b02925a5879?w=500&h=500&fit=crop", tag: null },
+            { id: 23, nome: "Kit Spa (Vela + Sabonetes)", cat: "kits", preco: 120.00, img: "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?w=500&h=500&fit=crop", tag: null },
+            { id: 24, nome: "Trio de Vasos Decorativos", cat: "kits", preco: 110.00, img: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=500&h=500&fit=crop", tag: null }
         ];
 
-        // --- FUNÇÃO PARA RENDERIZAR OS PRODUTOS ---
+        // Formatador de Moeda Nativo (Mais rápido e seguro)
+        const formatadorBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        // --- FUNÇÃO RENDERIZAR OTIMIZADA ---
         function renderizarProdutos(lista) {
             const container = document.getElementById('container-produtos');
-            container.innerHTML = ''; // Limpa o container
+            container.innerHTML = ''; // Limpa container
 
             if (lista.length === 0) {
-                container.innerHTML = '<div class="sem-produtos">Nenhum produto encontrado nesta categoria.</div>';
+                container.innerHTML = '<div class="sem-produtos">Nenhum produto encontrado. Tente outro termo.</div>';
                 return;
             }
 
+            // Usar DocumentFragment para performance (1 único reflow no DOM)
+            const fragment = document.createDocumentFragment();
+
             lista.forEach(produto => {
-                const parcelas = Math.ceil(produto.preco / 50); // Lógica simples de parcela mínima
-                const valorParcela = (produto.preco / parcelas).toFixed(2).replace('.', ',');
+                const parcelas = Math.ceil(produto.preco / 50) || 1; 
+                const valorParcela = formatadorBRL.format(produto.preco / parcelas);
+                const precoFormatado = formatadorBRL.format(produto.preco);
+
+                const div = document.createElement('article');
+                div.className = 'produto-card';
                 
-                // Cria o HTML do Card
-                const html = `
-                    <div class="produto-card">
-                        ${produto.tag ? `<div class="tag-promo ${produto.tag === 'Oferta' ? 'tag-off' : ''}">${produto.tag}</div>` : ''}
-                        <div class="produto-img-container">
-                            <img src="${produto.img}" alt="${produto.nome}" class="produto-img">
+                // HTML Template String
+                div.innerHTML = `
+                    ${produto.tag ? `<div class="tag-promo ${produto.tag === 'Oferta' ? 'tag-off' : ''}">${produto.tag}</div>` : ''}
+                    <div class="produto-img-container">
+                        <img src="${produto.img}" alt="${produto.nome}" class="produto-img" width="500" height="500" loading="lazy">
+                    </div>
+                    <div class="produto-info">
+                        <span class="produto-cat">${produto.cat}</span>
+                        <h3 class="produto-nome" title="${produto.nome}">${produto.nome}</h3>
+                        <div class="produto-preco-box">
+                            <div class="produto-preco">${precoFormatado}</div>
+                            <div class="parcelamento">${parcelas > 1 ? `${parcelas}x de ${valorParcela} sem juros` : 'À vista no PIX'}</div>
                         </div>
-                        <div class="produto-info">
-                            <span class="produto-cat">${produto.cat}</span>
-                            <div class="produto-nome">${produto.nome}</div>
-                            <div class="produto-preco-box">
-                                <div class="produto-preco">R$ ${produto.preco.toFixed(2).replace('.', ',')}</div>
-                                <div class="parcelamento">${parcelas > 1 ? `${parcelas}x de R$ ${valorParcela} sem juros` : 'À vista no PIX'}</div>
-                            </div>
-                            <div class="acoes-produto">
-                                <a href="https://wa.me/5519999999999?text=Olá, tenho interesse no ${produto.nome}" target="_blank" class="btn-base btn-whatsapp">
-                                    <i class="fa-brands fa-whatsapp"></i> <span>Whats</span>
-                                </a>
-                                <a href="#" class="btn-base btn-mp">
-                                    <i class="fa-solid fa-bag-shopping"></i> <span>Comprar</span>
-                                </a>
-                            </div>
+                        <div class="acoes-produto">
+                            <a href="https://wa.me/5519999999999?text=Olá, tenho interesse no ${encodeURIComponent(produto.nome)}" 
+                               target="_blank" 
+                               class="btn-base btn-whatsapp"
+                               aria-label="Comprar ${produto.nome} pelo WhatsApp">
+                                <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span>Whats</span>
+                            </a>
+                            <button class="btn-base btn-mp" aria-label="Adicionar ${produto.nome} ao carrinho">
+                                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> <span>Comprar</span>
+                            </button>
                         </div>
                     </div>
                 `;
-                container.innerHTML += html;
+                fragment.appendChild(div);
             });
+
+            container.appendChild(fragment);
         }
 
-        // --- FUNÇÃO DE FILTRO POR CATEGORIA ---
+        // --- FILTRO POR CATEGORIA ---
         function filtrarCategoria(categoria, elementoClicado) {
-            // Atualiza visual do menu
-            document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.cat-item').forEach(el => {
+                el.classList.remove('active');
+                el.setAttribute('aria-pressed', 'false');
+            });
+            
             elementoClicado.classList.add('active');
+            elementoClicado.setAttribute('aria-pressed', 'true');
 
-            // Filtra os dados
-            if (categoria === 'todos') {
-                renderizarProdutos(produtos);
-            } else {
-                const filtrados = produtos.filter(p => p.cat === categoria);
-                renderizarProdutos(filtrados);
-            }
+            const filtrados = categoria === 'todos' 
+                ? produtos 
+                : produtos.filter(p => p.cat === categoria);
+            
+            renderizarProdutos(filtrados);
         }
 
-        // --- FUNÇÃO DE BUSCA (INPUT) ---
+        // --- BUSCA (Debounce opcional, mantido simples mas performático) ---
         function filtrarPorBusca() {
-            const termo = document.getElementById('campo-busca').value.toLowerCase();
+            const termo = document.getElementById('campo-busca').value.toLowerCase().trim();
+            if(!termo) return; // Não filtra se vazio
+
             const filtrados = produtos.filter(p => 
                 p.nome.toLowerCase().includes(termo) || 
                 p.cat.toLowerCase().includes(termo)
             );
-            renderizarProdutos(filtrados);
             
-            // Remove seleção das categorias visuais para indicar busca livre
+            renderizarProdutos(filtrados);
             document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
         }
 
-        // Listener para tecla Enter na busca
-        document.getElementById('campo-busca').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                filtrarPorBusca();
-            }
-        });
-
-        // --- INICIALIZAÇÃO ---
-        // Carrega todos os produtos ao abrir a página
-        window.onload = () => {
+        // Event Listeners Modernos
+        document.addEventListener('DOMContentLoaded', () => {
             renderizarProdutos(produtos);
-        };
 
+            // Listener para Enter na busca
+            document.getElementById('campo-busca').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') filtrarPorBusca();
+            });
+        });
     </script>
 </body>
 </html>
